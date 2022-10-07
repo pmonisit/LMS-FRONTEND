@@ -226,7 +226,7 @@ const Navbar = ({ onLogout }) => {
                       color="inherit"
                       onClick={handleCloseUserMenu}
                       LinkComponent={Link}
-                      to="/"
+                      to={`/profile`}
                     >
                       Profile
                     </Button>
