@@ -17,9 +17,19 @@ export const AccountFormContext = createContext({
   onSetProfessorForm: () => {},
   parentForm: {},
   onSetParentForm: () => {},
+  adminList: [],
+  onSetAdminList: () => {},
+  studentList: [],
+  onSetStudentList: () => {},
+  professorList: [],
+  onSetProfessorList: () => {},
+  parentList: [],
+  onSetParentList: () => {},
 });
 
 export const AccountFormProvider = ({ children }) => {
+  //----------States-----------------
+
   const [accountForm, setAccountForm] = useState({
     role: "",
     firstName: "",
@@ -59,6 +69,13 @@ export const AccountFormProvider = ({ children }) => {
   });
 
   const [step, setStep] = useState(0);
+
+  const [adminList, setAdminList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
+  const [professorList, setProfessorList] = useState([]);
+  const [parentList, setParentList] = useState([]);
+
+  //----------Methods-----------------------
 
   const HandleNext = () => {
     if (step !== steps.length - 1) {
@@ -103,6 +120,14 @@ export const AccountFormProvider = ({ children }) => {
         onSetProfessorForm: setProfessorForm,
         parentForm,
         onSetParentForm: setParentForm,
+        adminList,
+        onSetAdminList: setAdminList,
+        studentList,
+        onSetStudentList: setStudentList,
+        professorList,
+        onSetProfessorList: setProfessorList,
+        parentList,
+        onSetParentList: setParentList,
       }}
     >
       {children}
