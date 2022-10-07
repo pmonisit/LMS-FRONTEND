@@ -18,7 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
 // Services
-import * as accountService from "../services/accounts";
+import * as accountService from "../../services/accounts";
 
 const Navbar = ({ onLogout }) => {
   const currentUser = accountService.getCurrentUser();

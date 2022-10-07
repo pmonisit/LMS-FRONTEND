@@ -4,9 +4,9 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 // Material Components
 import { CssBaseline } from "@mui/material";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/shared/Navbar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Banner from "./components/Banner";
+import Banner from "./components/shared/Banner";
 
 // Pages
 import LoginPage from "./pages/LoginPage";
