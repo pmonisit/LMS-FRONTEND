@@ -26,6 +26,8 @@ import jwtDecode from "jwt-decode";
 
 // Context
 import { UserInterfaceContext } from "./context/shared/UserInterfaceContext";
+import Footer from "./components/shared/Footer";
+import Profile from "./components/shared/Profile";
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(
@@ -62,7 +64,6 @@ const App = () => {
       const decoded = jwtDecode(response.data.access_token);
       console.log(response.data.access_token);
       setAccessToken(response.data.access_token);
-      console.log(accessToken);
       // onOpenSnackbar({
       //   open: true,
       //   severity: "success",
@@ -118,9 +119,7 @@ const App = () => {
         />
         <Route
           path="/profile"
-          element={
-            accessToken ? <StudentProfilePage /> : <Navigate to="/login" />
-          }
+          element={accessToken ? <Profile /> : <Navigate to="/login" />}
         />
         <Route
           path="/enrolment"
@@ -129,6 +128,7 @@ const App = () => {
           }
         />
       </Routes>
+      <Footer />
     </ThemeProvider>
   );
 };

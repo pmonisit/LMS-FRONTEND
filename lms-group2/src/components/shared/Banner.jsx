@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import BannerLayout from "./BannerLayout";
+import Box from "@mui/material/Box";
 
 // Services
 import * as accountService from "../../services/accounts";
@@ -36,20 +37,22 @@ const Banner = () => {
       >
         Technological Institute of Seven Seven
       </Typography>
-      {accessToken ? (
-        ""
-      ) : (
-        <Button
-          color="secondary"
-          variant="contained"
-          size="large"
-          sx={{ minWidth: 200 }}
-          LinkComponent={Link}
-          to="/login"
-        >
-          Login
-        </Button>
-      )}
+      <Box>
+        {accessToken ? (
+          ""
+        ) : (
+          <Button
+            color="secondary"
+            variant="contained"
+            size="large"
+            sx={{ minWidth: 200 }}
+            LinkComponent={Link}
+            to="/login"
+          >
+            Login
+          </Button>
+        )}
+      </Box>
 
       <Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
         Opportunities for lifelong learning
