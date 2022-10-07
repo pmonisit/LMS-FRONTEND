@@ -1,5 +1,6 @@
 // React
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Material Components
 import Card from "@mui/material/Card";
@@ -12,15 +13,17 @@ import Button from "@mui/material/Button";
 import CardActions from "@mui/material/CardActions";
 
 // Service
-import * as accountService from "../../services/accounts";
+import * as accountService from "../../services/shared/accounts";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
       setUser(response.data);
     });
-  }, []);
+  }, [user]);
 
   if (user) {
     return (
@@ -31,7 +34,7 @@ const Profile = () => {
             <CardContent>
               <Grid container spacing={5}>
                 <Grid item xs={12}>
-                  <Typography>FIRST NAME: {user.firstName} </Typography>
+                  <Typography>FIRST NAME: {user.firstName}</Typography>
                   <Divider />
                 </Grid>
                 <Grid item xs={12}>
@@ -56,7 +59,11 @@ const Profile = () => {
               </Grid>
             </CardContent>
             <CardActions>
-              <Button>Edit</Button>
+              <Button
+                onClick={() => navigate(`/profile/edit/${user.accountId}`)}
+              >
+                Edit
+              </Button>
             </CardActions>
           </Card>
         </Grid>

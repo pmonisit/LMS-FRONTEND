@@ -20,7 +20,7 @@ import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import TestPage from "./services/TestPage";
 
 // Services
-import * as accountService from "./services/accounts";
+import * as accountService from "./services/shared/accounts";
 
 // JWT Decode
 import jwtDecode from "jwt-decode";
@@ -29,6 +29,7 @@ import jwtDecode from "jwt-decode";
 import { UserInterfaceContext } from "./context/shared/UserInterfaceContext";
 import Footer from "./components/shared/Footer";
 import Profile from "./components/shared/Profile";
+import BasicInfoForm from "./components/shared/BasicInfoForm";
 
 const App = () => {
   const [accessToken, setAccessToken] = useState(
@@ -121,6 +122,10 @@ const App = () => {
         <Route
           path="/profile"
           element={accessToken ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile/edit/:id"
+          element={accessToken ? <BasicInfoForm /> : <Navigate to="/login" />}
         />
         <Route
           path="/enrolment"
