@@ -1,9 +1,10 @@
 import http from "./http";
 import jwtDecode from "jwt-decode";
 
-export function getCurrentUser() {
-  return http.get("/account/currentuser");
-}
+// export function getCurrentUser() {
+
+//   return http.get("/account/currentuser");
+// }
 
 export function registerAdmin(
   firstName,

@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 //Material Components
@@ -16,15 +16,23 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import ListItemText from "@mui/material/ListItemText";
+import Switch from "@mui/material/Switch";
 
 // Services
 import * as accountService from "../../services/accounts";
 
+// Context
+import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
+
 const Navbar = ({ onLogout }) => {
-  const currentUser = accountService.getCurrentUser();
+  // const currentUser = accountService.getCurrentUser();
   const accessToken = accountService.getAccessToken();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { isDarkMode, toggleDarkMode } = useContext(UserInterfaceContext);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -202,6 +210,17 @@ const Navbar = ({ onLogout }) => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <Brightness4Icon fontSize="medium" />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Appearance: {isDarkMode ? "Dark" : "Light"}
+                    </ListItemText>
+                    <Typography variant="body2" color="text.secondary">
+                      <Switch value={isDarkMode} onChange={toggleDarkMode} />
+                    </Typography>
+                  </MenuItem>
                   <MenuItem>
                     <Button
                       color="inherit"
