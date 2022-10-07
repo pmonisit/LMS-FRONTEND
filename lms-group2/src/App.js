@@ -17,6 +17,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import StudentHomePage from "./pages/student/StudentHomePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
+import TestPage from "./services/TestPage";
 
 // Services
 import * as accountService from "./services/accounts";
@@ -127,6 +128,10 @@ const App = () => {
           element={
             accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
           }
+        />
+        <Route
+          path="/testpage"
+          element={accessToken ? <TestPage /> : <Navigate to="/login" />}
         />
       </Routes>
     </ThemeProvider>
