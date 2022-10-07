@@ -20,10 +20,9 @@ import AdbIcon from "@mui/icons-material/Adb";
 // Services
 import * as accountService from "../services/accounts";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
-const Navbar = () => {
+const Navbar = ({ onLogout }) => {
   const currentUser = accountService.getCurrentUser();
+  const accessToken = accountService.getAccessToken();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -177,7 +176,7 @@ const Navbar = () => {
           </Box>
 
           <Box>
-            {currentUser ? (
+            {accessToken ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -206,7 +205,7 @@ const Navbar = () => {
                   <MenuItem>
                     <Button
                       color="inherit"
-                      onClick={handleCloseNavMenu}
+                      onClick={handleCloseUserMenu}
                       LinkComponent={Link}
                       to="/"
                     >
@@ -216,7 +215,7 @@ const Navbar = () => {
                   <MenuItem>
                     <Button
                       color="inherit"
-                      onClick={handleCloseNavMenu}
+                      onClick={handleCloseUserMenu}
                       LinkComponent={Link}
                       to="/"
                     >
@@ -227,7 +226,10 @@ const Navbar = () => {
                   <MenuItem>
                     <Button
                       color="inherit"
-                      onClick={handleCloseNavMenu}
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        onLogout();
+                      }}
                       LinkComponent={Link}
                       to="/"
                     >

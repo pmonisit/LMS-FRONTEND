@@ -64,7 +64,6 @@ const LoginPage = ({ onLogin }) => {
       component="form"
       marginTop={4}
       onSubmit={handleSubmit}
-      item
     >
       <Grid item xs={10} sm={10} md={6} lg={4} xl={4}>
         <Card>

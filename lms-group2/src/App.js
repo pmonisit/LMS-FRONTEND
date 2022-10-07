@@ -44,9 +44,11 @@ const App = () => {
   const handleLogin = async (username, password) => {
     try {
       const response = await accountService.loginUser(username, password);
-      localStorage.setItem("accessToken", response.data.accessToken);
-      const decoded = jwtDecode(response.data.accessToken);
-      setAccessToken(response.data.accessToken);
+      localStorage.setItem("accessToken", response.data.access_token);
+      const decoded = jwtDecode(response.data.access_token);
+      console.log(response.data.access_token);
+      setAccessToken(response.data.access_token);
+      console.log(accessToken);
       navigate("/");
     } catch (error) {
       alert("Error logging in");
@@ -59,7 +61,16 @@ const App = () => {
       <Navbar onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Banner />} />
-        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route
+          path="/login"
+          element={
+            accessToken ? (
+              <Navigate to="/" />
+            ) : (
+              <LoginPage onLogin={handleLogin} />
+            )
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ThemeProvider>
