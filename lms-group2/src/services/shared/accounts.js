@@ -1,5 +1,4 @@
 import http from "./http";
-import jwtDecode from "jwt-decode";
 
 export function getCurrentUser() {
   return http.get("/account/currentuser");
@@ -31,18 +30,12 @@ export function getUserById(id) {
 
 export function getAccountId() {
   const accountId = http.get("/account/currentuser");
-
-  console.log(accountId);
   return accountId;
 }
 
-// export function getUserStatus() {
-//   const userStatus = localStorage.getItem("accessToken");
-//   if (userStatus) {
-//     const decoded = jwtDecode(userStatus);
-//     return decoded;
-//   }
-// }
+export function editUserPersonalInfo(id, userInfo) {
+  return http.put(`/account/edit/${id}`, userInfo);
+}
 
 export function logout() {
   localStorage.removeItem("accessToken");

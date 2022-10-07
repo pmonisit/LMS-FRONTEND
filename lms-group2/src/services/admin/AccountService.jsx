@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getCurrent() {
   return http.get("/account/currentuser");

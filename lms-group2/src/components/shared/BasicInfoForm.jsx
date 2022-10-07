@@ -1,0 +1,156 @@
+// React
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Material Components
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+
+// JOI
+import Joi from "joi";
+
+const BasicInfoForm = ({ onSubmit, initialValue }) => {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState(
+    initialValue || {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      gender: "",
+    }
+  );
+
+  const [errors, setErrors] = useState({});
+
+  const schema = Joi.object({
+    firstName: Joi.string().min(2).max(50).required(),
+    middleName: Joi.string(),
+    lastName: Joi.string().min(2).max(50).required(),
+    gender: Joi.string().min(1).max(10).required(),
+  });
+
+  const handleChange = (event) => {
+    setForm({ ...form, [event.currentTarget.name]: event.currentTarget.value });
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit(form);
+  };
+
+  const isFormInvalid = () => {
+    const result = schema.validate(form);
+    return !!result.error;
+  };
+
+  return (
+    <Grid
+      container
+      justifyContent="center"
+      component="form"
+      onSubmit={handleSubmit}
+    >
+      <Grid item xs={10} sm={10} md={6} lg={4} xl={4} mt={5}>
+        <Card>
+          <CardHeader title="Edit Basic Information" />
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="firstName"
+                  error={!!errors.firstName}
+                  helpertext={errors.firstName}
+                  value={form.firstName}
+                  onChange={handleChange}
+                  label="First Name"
+                  variant="standard"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="middleName"
+                  error={!!errors.middleName}
+                  helpertext={errors.middleName}
+                  value={form.middleName}
+                  onChange={handleChange}
+                  label=" Middle Name"
+                  variant="standard"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="lastName"
+                  error={!!errors.lastName}
+                  helperText={errors.lastName}
+                  value={form.lastName}
+                  onChange={handleChange}
+                  label=" Last Name"
+                  variant="standard"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  name="gender"
+                  error={!!errors.gender}
+                  helperText={errors.gender}
+                  onChange={handleChange}
+                  label=" Last Name"
+                  variant="standard"
+                  fullWidth
+                >
+                  <MenuItem value={"Male"}>Male</MenuItem>
+                  <MenuItem value={"Female"}>Female</MenuItem>
+                </Select>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              disabled={isFormInvalid()}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => navigate(`/profile`)}
+            >
+              Back
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default BasicInfoForm;

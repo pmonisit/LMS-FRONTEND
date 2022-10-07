@@ -22,7 +22,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 
 // Services
-import * as accountService from "../../services/accounts";
+import * as accountService from "../../services/shared/accounts";
 
 // Context
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
