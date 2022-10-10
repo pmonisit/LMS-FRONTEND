@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import * as React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
@@ -10,6 +10,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Banner from "./components/shared/Banner";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 // Pages
 import LoginPage from "./pages/LoginPage";
@@ -29,7 +31,7 @@ import jwtDecode from "jwt-decode";
 import { UserInterfaceContext } from "./context/shared/UserInterfaceContext";
 import Footer from "./components/shared/Footer";
 import Profile from "./components/shared/Profile";
-import BasicInfoForm from "./components/shared/BasicInfoForm";
+import EditProfileInfo from "./components/shared/EditProfileInfo";
 
 //EJ - Testing
 import GenericForm from "./components/admin/account/GenericForm";
@@ -40,7 +42,7 @@ import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
 
 const App = () => {
-  const [accessToken, setAccessToken] = useState(
+  const [accessToken, setAccessToken] = React.useState(
     accountService.getAccessToken()
   );
 
@@ -91,92 +93,103 @@ const App = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Navbar onLogout={handleLogout} />
-      <Snackbar
-        open={snackbarConfig.open}
-        autoHideDuration={6000}
-        anchorOrigin={{ horizontal: "center", vertical: "top" }}
-        onClose={onCloseSnackbar}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Navbar onLogout={handleLogout} />
+        <Snackbar
+          open={snackbarConfig.open}
+          autoHideDuration={6000}
+          anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
           onClose={onCloseSnackbar}
-          severity={snackbarConfig.severity}
-          sx={{ width: "100%" }}
         >
-          {snackbarConfig.message}
-        </MuiAlert>
-      </Snackbar>
-      <Routes>
-        <Route path="/" element={<Banner />} />
-        <Route
-          path="/login"
-          element={
-            accessToken ? (
-              <Navigate to="/" />
-            ) : (
-              <LoginPage onLogin={handleLogin} />
-            )
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route
-          path="/home"
-          element={accessToken ? <StudentHomePage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/profile"
-          element={accessToken ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/profile/edit/:id"
-          element={accessToken ? <BasicInfoForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/enrolment"
-          element={
-            accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
-          }
-        />
-        <Route
-          path="/testpage"
-          element={accessToken ? <TestPage /> : <Navigate to="/login" />}
-        />
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={onCloseSnackbar}
+            severity={snackbarConfig.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbarConfig.message}
+          </MuiAlert>
+        </Snackbar>
+        <Routes>
+          <Route path="/" element={<Banner />} />
+          <Route
+            path="/login"
+            element={
+              accessToken ? (
+                <Navigate to="/" />
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route
+            path="/home"
+            element={
+              accessToken ? <StudentHomePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/profile"
+            element={accessToken ? <Profile /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/profile/edit/:id"
+            element={
+              accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/enrolment"
+            element={
+              accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/testpage"
+            element={accessToken ? <TestPage /> : <Navigate to="/login" />}
+          />
 
-        {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
+          {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
-        <Route
-          path="/admin/admin-list"
-          element={accessToken ? <AdminListPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admin/student-list"
-          element={accessToken ? <StudentListPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admin/professor-list"
-          element={
-            accessToken ? <ProfessorListPage /> : <Navigate to="/login" />
-          }
-        />
-        <Route
-          path="/admin/parent-list"
-          element={accessToken ? <ParentListPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admin/add-user"
-          element={accessToken ? <GenericForm /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admin/user/:id/edit"
-          element={accessToken ? <EditUserPage /> : <Navigate to="/login" />}
-        />
-      </Routes>
-      <Footer />
-    </ThemeProvider>
+          <Route
+            path="/admin/admin-list"
+            element={accessToken ? <AdminListPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/admin/student-list"
+            element={
+              accessToken ? <StudentListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/professor-list"
+            element={
+              accessToken ? <ProfessorListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/parent-list"
+            element={
+              accessToken ? <ParentListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/add-user"
+            element={accessToken ? <GenericForm /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/admin/user/:id/edit"
+            element={accessToken ? <EditUserPage /> : <Navigate to="/login" />}
+          />
+        </Routes>
+
+        <Footer />
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 };
 
