@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -8,11 +8,18 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import MultiStepper from "./MultiStepper";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
-
+import BasicDatePicker from "./BasicDatePicker";
+import { EventAvailableSharp } from "@mui/icons-material";
+import Selection from "./Selection";
+import { getStudents } from "../../../services/admin/AccountService";
 const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
   const accountFormContext = useContext(AccountFormContext);
   // const { gender, birthdate, status, active, childId, degreeId } =
   //   accountFormContext.accountForm;
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    getStudents().then((res) => setStudents(res.data));
+  }, []);
   const {
     role,
     firstName,
@@ -59,13 +66,17 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="birthdate"
                   onChange={handleChange}
                   value={birthdate}
                   label="Birthdate"
                   variant="standard"
                   fullWidth
+                /> */}
+                <BasicDatePicker
+                  accountForm={accountForm}
+                  onSetAccountForm={onSetAccountForm}
                 />
               </Grid>
 
@@ -81,13 +92,19 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
               </Grid>
               {role === "parent" && (
                 <Grid item xs={12}>
-                  <TextField
+                  {/* <TextField
                     name="childId"
                     onChange={handleChange}
                     value={childId}
                     label="Child Id"
                     variant="standard"
                     fullWidth
+                  /> */}
+                  <Selection
+                    childId={childId}
+                    list={students}
+                    accountForm={accountForm}
+                    onSetAccountForm={onSetAccountForm}
                   />
                 </Grid>
               )}

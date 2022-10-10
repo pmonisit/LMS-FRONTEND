@@ -1,17 +1,24 @@
 import React, { useEffect, useContext } from "react";
 import ListTable from "../../components/admin/account/ListTable";
 import { AccountFormContext } from "../../context/admin/account/AccountFormContext";
-import { getProfessors } from "../../services/admin/AccountService";
+import {
+  getProfessors,
+  getAccounts,
+} from "../../services/admin/AccountService";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 
 const ProfessorListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
-  const { professorList, onSetProfessorList } = accountFormContext;
+  const { professorList, onSetProfessorList, onSetAccountList } =
+    accountFormContext;
   useEffect(() => {
     getProfessors().then((res) => {
       onSetProfessorList(res.data);
+    });
+    getAccounts().then((res) => {
+      onSetAccountList(res.data);
     });
   });
   return (
