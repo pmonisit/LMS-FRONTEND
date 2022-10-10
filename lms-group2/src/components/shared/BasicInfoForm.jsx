@@ -10,32 +10,31 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // JOI
 import Joi from "joi";
 
 const BasicInfoForm = ({ onSubmit, initialValue }) => {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState(
     initialValue || {
       firstName: "",
       middleName: "",
       lastName: "",
       gender: "",
+      birthdate: "",
     }
   );
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
     firstName: Joi.string().min(2).max(50).required(),
-    middleName: Joi.string(),
+    middleName: Joi.string().min(0).optional(),
     lastName: Joi.string().min(2).max(50).required(),
-    gender: Joi.string().min(1).max(10).required(),
+    gender: Joi.string().min(1).max(1).required(),
+    birthdate: Joi.string().min(1).max(10).required(),
   });
 
   const handleChange = (event) => {
@@ -114,19 +113,28 @@ const BasicInfoForm = ({ onSubmit, initialValue }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <InputLabel>Gender</InputLabel>
-                <Select
+                <TextField
                   name="gender"
                   error={!!errors.gender}
                   helperText={errors.gender}
+                  value={form.gender}
                   onChange={handleChange}
-                  label=" Last Name"
+                  label="Gender"
                   variant="standard"
                   fullWidth
-                >
-                  <MenuItem value={"Male"}>Male</MenuItem>
-                  <MenuItem value={"Female"}>Female</MenuItem>
-                </Select>
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="birthdate"
+                  error={!!errors.birthdate}
+                  helperText={errors.birthdate}
+                  value={form.birthdate}
+                  onChange={handleChange}
+                  label="Birth Date"
+                  variant="standard"
+                  fullWidth
+                />
               </Grid>
             </Grid>
           </CardContent>
@@ -137,7 +145,7 @@ const BasicInfoForm = ({ onSubmit, initialValue }) => {
               fullWidth
               disabled={isFormInvalid()}
             >
-              Submit
+              Save
             </Button>
             <Button
               variant="outlined"

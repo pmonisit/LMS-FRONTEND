@@ -111,7 +111,7 @@ export const AccountFormProvider = ({ children }) => {
     //   setStep(step + 1);
     //   setAccountForm(accountForm);
     // }
-    console.log(accountForm);
+    // console.log(accountForm);
   };
 
   const steps = ["Personal Details", "Basic Details", "Finish"];
