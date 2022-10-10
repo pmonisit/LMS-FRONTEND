@@ -10,14 +10,29 @@ import MultiStepper from "./MultiStepper";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import RoleSelection from "./RoleSelection";
 
-const AccountForm = () => {
+const AccountForm = ({ accountForm, onSetAccountForm }) => {
   const accountFormContext = useContext(AccountFormContext);
-  const { role, firstName, middleName, lastName, username, password } =
-    accountFormContext.accountForm;
+  // const { role, firstName, middleName, lastName, username, password } =
+  //   accountFormContext.accountForm;
+
+  const {
+    role,
+    firstName,
+    middleName,
+    lastName,
+    gender,
+    birthdate,
+    status,
+    active,
+    username,
+
+    childId,
+    degreeId,
+  } = accountForm;
 
   const handleChange = (event) => {
-    accountFormContext.onSetAccountForm({
-      ...accountFormContext.accountForm,
+    onSetAccountForm({
+      ...accountForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -39,7 +54,11 @@ const AccountForm = () => {
                   variant="standard"
                   fullWidth
                 /> */}
-                <RoleSelection />
+                <RoleSelection
+                  role={role}
+                  accountForm={accountForm}
+                  onSetAccountForm={onSetAccountForm}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -78,16 +97,6 @@ const AccountForm = () => {
                   onChange={handleChange}
                   value={username}
                   label="Username"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="password"
-                  onChange={handleChange}
-                  value={password}
-                  label="Password"
                   variant="standard"
                   fullWidth
                 />

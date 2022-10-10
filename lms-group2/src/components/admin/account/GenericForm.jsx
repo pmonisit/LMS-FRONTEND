@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -15,10 +15,37 @@ import ProfessorForm from "./ProfessorForm";
 import AdminForm from "./AdminForm";
 import ParentForm from "./ParentForm";
 
-const GenericForm = () => {
+import {
+  addStudents,
+  addAdminAccount,
+  addParentAccount,
+  addProfessorAccount,
+  editAccountBio,
+} from "../../../services/admin/AccountService";
+
+const GenericForm = ({ initialValue, accountId }) => {
   const accountFormContext = useContext(AccountFormContext);
   const { step, steps } = accountFormContext;
-  const { role } = accountFormContext.accountForm;
+  // const { role } = accountFormContext.accountForm;
+
+  const [accountForm, setAccountForm] = useState(
+    initialValue
+      ? initialValue
+      : {
+          role: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          gender: "",
+          birthdate: "",
+
+          active: "",
+          username: "",
+
+          childId: "",
+          degreeId: "",
+        }
+  );
 
   return (
     <>
@@ -28,21 +55,41 @@ const GenericForm = () => {
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(accountFormContext.accountForm);
+          //console.log(accountFormContext.accountForm);
+          if (accountFormContext.isEdit) {
+            editAccountBio(accountId, accountForm).then((res) =>
+              console.log(res)
+            );
+            accountFormContext.onSetIsEdit(false);
+          } else {
+            switch (accountForm.role) {
+              case "student":
+                return addStudents(accountForm).then((res) => {
+                  console.log("From student");
+                  console.log(res);
+                });
 
-          switch (role) {
-            case "student":
-              return console.log(accountFormContext.studentForm);
-              break;
-            case "admin":
-              return console.log(accountFormContext.adminForm);
-              break;
-            case "professor":
-              return console.log(accountFormContext.professorForm);
-              break;
-            case "parent":
-              return console.log(accountFormContext.parentForm);
-              break;
+                break;
+              case "admin":
+                console.log(accountFormContext.adminForm);
+                return addAdminAccount(accountForm).then((res) => {
+                  console.log("From admin");
+                  console.log(res);
+                });
+                break;
+              case "professor":
+                return addProfessorAccount(accountForm).then((res) => {
+                  console.log("From professor");
+                  console.log(res);
+                });
+                break;
+              case "parent":
+                return addParentAccount(accountForm).then((res) => {
+                  console.log("From parent");
+                  console.log(res);
+                });
+                break;
+            }
           }
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
@@ -51,16 +98,26 @@ const GenericForm = () => {
           <MultiStepper />
         </Grid>
         <Grid item xs={12} md={12} sm={12}>
-          {accountFormContext.step === 0 && <AccountForm />}
-          {accountFormContext.step === 1 && <AccountForm2 />}
-          {accountFormContext.step === 2 && role === "student" && (
+          {accountFormContext.step === 0 && (
+            <AccountForm
+              accountForm={accountForm}
+              onSetAccountForm={setAccountForm}
+            />
+          )}
+          {accountFormContext.step === 1 && (
+            <AccountForm2
+              accountForm={accountForm}
+              onSetAccountForm={setAccountForm}
+            />
+          )}
+          {/* {accountFormContext.step === 2 && role === "student" && (
             <StudentForm />
           )}
           {accountFormContext.step === 2 && role === "professor" && (
             <ProfessorForm />
           )}
           {accountFormContext.step === 2 && role === "admin" && <AdminForm />}
-          {accountFormContext.step === 2 && role === "parent" && <ParentForm />}
+          {accountFormContext.step === 2 && role === "parent" && <ParentForm />} */}
         </Grid>
 
         <CardActions>

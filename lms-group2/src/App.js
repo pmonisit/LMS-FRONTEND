@@ -31,6 +31,14 @@ import Footer from "./components/shared/Footer";
 import Profile from "./components/shared/Profile";
 import BasicInfoForm from "./components/shared/BasicInfoForm";
 
+//EJ - Testing
+import GenericForm from "./components/admin/account/GenericForm";
+import AdminListPage from "./pages/admin/AdminListPage";
+import StudentListPage from "./pages/admin/StudentListPage";
+import ProfessorListPage from "./pages/admin/ProfessorListPage";
+import ParentListPage from "./pages/admin/ParentListPage";
+import EditUserPage from "./pages/admin/EditUserPage";
+
 const App = () => {
   const [accessToken, setAccessToken] = useState(
     accountService.getAccessToken()
@@ -136,6 +144,35 @@ const App = () => {
         <Route
           path="/testpage"
           element={accessToken ? <TestPage /> : <Navigate to="/login" />}
+        />
+
+        {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
+
+        <Route
+          path="/admin/admin-list"
+          element={accessToken ? <AdminListPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/student-list"
+          element={accessToken ? <StudentListPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/professor-list"
+          element={
+            accessToken ? <ProfessorListPage /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/admin/parent-list"
+          element={accessToken ? <ParentListPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/add-user"
+          element={accessToken ? <GenericForm /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/user/:id/edit"
+          element={accessToken ? <EditUserPage /> : <Navigate to="/login" />}
         />
       </Routes>
       <Footer />

@@ -9,13 +9,28 @@ import Button from "@mui/material/Button";
 import MultiStepper from "./MultiStepper";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-const AccountForm2 = () => {
+const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
   const accountFormContext = useContext(AccountFormContext);
-  const { gender, birthdate, status, active } = accountFormContext.accountForm;
+  // const { gender, birthdate, status, active, childId, degreeId } =
+  //   accountFormContext.accountForm;
+  const {
+    role,
+    firstName,
+    middleName,
+    lastName,
+    gender,
+    birthdate,
+
+    active,
+    username,
+    password,
+    childId,
+    degreeId,
+  } = accountForm;
 
   const handleChange = (event) => {
-    accountFormContext.onSetAccountForm({
-      ...accountFormContext.accountForm,
+    onSetAccountForm({
+      ...accountForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -53,16 +68,7 @@ const AccountForm2 = () => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="status"
-                  onChange={handleChange}
-                  value={status}
-                  label="Status"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   name="active"
@@ -73,6 +79,31 @@ const AccountForm2 = () => {
                   fullWidth
                 />
               </Grid>
+              {role === "parent" && (
+                <Grid item xs={12}>
+                  <TextField
+                    name="childId"
+                    onChange={handleChange}
+                    value={childId}
+                    label="Child Id"
+                    variant="standard"
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
+              {role === "student" && (
+                <Grid item xs={12}>
+                  <TextField
+                    name="degreeId"
+                    onChange={handleChange}
+                    value={degreeId}
+                    label="DegreeId"
+                    variant="standard"
+                    fullWidth
+                  />
+                </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>
