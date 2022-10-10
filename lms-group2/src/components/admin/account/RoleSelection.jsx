@@ -5,13 +5,18 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-const RoleSelection = ({ onHandleChange }) => {
+const RoleSelection = ({
+  onHandleChange,
+  role,
+  accountForm,
+  onSetAccountForm,
+}) => {
   const accountFormContext = useContext(AccountFormContext);
-  const { role } = accountFormContext.accountForm;
+  //const { role } = accountFormContext.accountForm;
 
   const handleChange = (event) => {
-    accountFormContext.onSetAccountForm({
-      ...accountFormContext.accountForm,
+    onSetAccountForm({
+      ...accountForm,
       role: event.target.value,
     });
   };

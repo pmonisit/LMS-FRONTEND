@@ -24,8 +24,8 @@ export function editAccountPW(username, id) {
   return http.put(`/account/changePW/${username}/${id}`);
 }
 
-export function editAccountBio(id) {
-  return http.put(`/account/edit/${id}`);
+export function editAccountBio(id, account) {
+  return http.put(`/account/edit/${id}`, account);
 }
 
 export function generateTempPW(id) {

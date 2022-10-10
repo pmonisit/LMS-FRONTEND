@@ -1,8 +1,11 @@
 import { createContext, useState } from "react";
+import * as adminService from "../../../services/admin/AccountService";
 
 export const AccountFormContext = createContext({
-  accountForm: {},
-  onSetAccountForm: () => {},
+  // accountForm: {},
+  // onSetAccountForm: () => {},
+  initialValue: {},
+  onSetIntitialValue: () => {},
   studentForm: {},
   onSetStudentForm: () => {},
   step: 0,
@@ -17,6 +20,8 @@ export const AccountFormContext = createContext({
   onSetProfessorForm: () => {},
   parentForm: {},
   onSetParentForm: () => {},
+  accountList: [],
+  onSetAccountList: () => {},
   adminList: [],
   onSetAdminList: () => {},
   studentList: [],
@@ -25,23 +30,31 @@ export const AccountFormContext = createContext({
   onSetProfessorList: () => {},
   parentList: [],
   onSetParentList: () => {},
+  isEdit: false,
+  onSetIsEdit: () => {},
 });
 
 export const AccountFormProvider = ({ children }) => {
   //----------States-----------------
-
-  const [accountForm, setAccountForm] = useState({
-    role: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    gender: "",
-    birthdate: "",
-    status: "",
-    active: "",
-    username: "",
-    password: "",
-  });
+  const [initialValue, setInitialValue] = useState({});
+  // const [accountForm, setAccountForm] = useState(
+  //   initialValue
+  //     ? initialValue
+  //     : {
+  //         role: "",
+  //         firstName: "",
+  //         middleName: "",
+  //         lastName: "",
+  //         gender: "",
+  //         birthdate: "",
+  //         status: "",
+  //         active: "",
+  //         username: "",
+  //         password: "",
+  //         childId: "",
+  //         degreeId: "",
+  //       }
+  // );
 
   const [studentForm, setStudentForm] = useState({
     studentId: "",
@@ -69,11 +82,12 @@ export const AccountFormProvider = ({ children }) => {
   });
 
   const [step, setStep] = useState(0);
-
+  const [accountList, setAccountList] = useState([]);
   const [adminList, setAdminList] = useState([]);
   const [studentList, setStudentList] = useState([]);
   const [professorList, setProfessorList] = useState([]);
   const [parentList, setParentList] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
 
   //----------Methods-----------------------
 
@@ -100,12 +114,14 @@ export const AccountFormProvider = ({ children }) => {
     console.log(accountForm);
   };
 
-  const steps = ["Personal Details", "Basic Details", "Role Details", "Finish"];
+  const steps = ["Personal Details", "Basic Details", "Finish"];
   return (
     <AccountFormContext.Provider
       value={{
-        accountForm,
-        onSetAccountForm: setAccountForm,
+        // accountForm,
+        // onSetAccountForm: setAccountForm,
+        initialValue,
+        onSetIntitialValue: setInitialValue,
         studentForm,
         onSetStudentForm: setStudentForm,
         step,
@@ -120,6 +136,8 @@ export const AccountFormProvider = ({ children }) => {
         onSetProfessorForm: setProfessorForm,
         parentForm,
         onSetParentForm: setParentForm,
+        accountList,
+        onSetAccountList: setAccountList,
         adminList,
         onSetAdminList: setAdminList,
         studentList,
@@ -128,6 +146,8 @@ export const AccountFormProvider = ({ children }) => {
         onSetProfessorList: setProfessorList,
         parentList,
         onSetParentList: setParentList,
+        isEdit,
+        onSetIsEdit: setIsEdit,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,19 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
+import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
 const ListTable = ({ details }) => {
+  const accountFormContext = useContext(AccountFormContext);
+  const handleEdit = (detail) => {
+    console.log(detail);
+  };
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -43,7 +40,17 @@ const ListTable = ({ details }) => {
               <TableCell align="center">{detail.firstName}</TableCell>
               <TableCell align="center">{detail.middleName}</TableCell>
               <TableCell align="center">{detail.accountId}</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="center">
+                <IconButton
+                  onClick={() => {
+                    accountFormContext.onSetIsEdit(true);
+                  }}
+                  LinkComponent={Link}
+                  to={`/admin/user/${detail.accountId}/edit`}
+                >
+                  <EditIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
