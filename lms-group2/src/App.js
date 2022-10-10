@@ -14,10 +14,11 @@ import Snackbar from "@mui/material/Snackbar";
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import StudentHomePage from "./pages/student/StudentHomePage";
+import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
-import TestPage from "./services/TestPage";
+import Courses from "./components/student/Courses";
+import StudentGrade from "./components/student/StudentGrade";
 
 // Services
 import * as accountService from "./services/accounts";
@@ -65,6 +66,7 @@ const App = () => {
       const decoded = jwtDecode(response.data.access_token);
       console.log(response.data.access_token);
       setAccessToken(response.data.access_token);
+
       // onOpenSnackbar({
       //   open: true,
       //   severity: "success",
@@ -115,8 +117,10 @@ const App = () => {
         />
         <Route path="*" element={<NotFoundPage />} />
         <Route
-          path="/home"
-          element={accessToken ? <StudentHomePage /> : <Navigate to="/login" />}
+          path="/dashboard"
+          element={
+            accessToken ? <StudentDashboardPage /> : <Navigate to="/login" />
+          }
         />
         <Route
           path="/profile"
@@ -129,8 +133,12 @@ const App = () => {
           }
         />
         <Route
-          path="/testpage"
-          element={accessToken ? <TestPage /> : <Navigate to="/login" />}
+          path="/courses"
+          element={accessToken ? <Courses /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/grades"
+          element={accessToken ? <StudentGrade /> : <Navigate to="/login" />}
         />
       </Routes>
       <Footer />
