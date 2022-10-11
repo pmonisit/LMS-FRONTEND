@@ -21,7 +21,7 @@ const Profile = () => {
 
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
-      setUser(response.data);
+      setUser(response.data[0]);
     });
   }, [user]);
 
@@ -36,7 +36,7 @@ const Profile = () => {
               </Grid>
               <Grid item xs={6} sm={6} textAlign="right">
                 <Tooltip title="Edit Info">
-                  <Link to={`/profile/edit/${user.accountId}`}>
+                  <Link to={`/profile/edit/${user[0]}`}>
                     <IconButton>
                       <EditIcon />
                     </IconButton>
@@ -55,7 +55,7 @@ const Profile = () => {
                 <Grid item xs={6} sm={6}>
                   <Typography variant="h6" gutterBottom>
                     {" "}
-                    {user.firstName}
+                    {user[2]}
                   </Typography>
                 </Grid>
 
@@ -67,7 +67,7 @@ const Profile = () => {
                 <Grid item xs={6} sm={6}>
                   <Typography variant="h6" gutterBottom>
                     {" "}
-                    {user.middleName}
+                    {user[3]}
                   </Typography>
                 </Grid>
 
@@ -79,7 +79,7 @@ const Profile = () => {
                 <Grid item xs={6} sm={6}>
                   <Typography variant="h6" gutterBottom>
                     {" "}
-                    {user.lastName}
+                    {user[4]}
                   </Typography>
                 </Grid>
 
@@ -91,7 +91,7 @@ const Profile = () => {
                 <Grid item xs={6} sm={6}>
                   <Typography variant="h6" gutterBottom>
                     {" "}
-                    {user.gender}
+                    {user[5]}
                   </Typography>
                 </Grid>
 
@@ -103,7 +103,7 @@ const Profile = () => {
                 <Grid item xs={6} sm={6}>
                   <Typography variant="h6" gutterBottom>
                     {" "}
-                    {user.birthdate}
+                    {user[6]}
                   </Typography>
                 </Grid>
               </Grid>

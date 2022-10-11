@@ -17,30 +17,6 @@ const columns = [
     width: 200,
     editable: false,
   },
-  {
-    field: "schedule",
-    headerName: "Schedule",
-    width: 150,
-    editable: false,
-  },
-  {
-    field: "section",
-    headerName: "Section",
-    width: 150,
-    editable: false,
-  },
-  {
-    field: "startDate",
-    headerName: "Start Date",
-    width: 150,
-    editable: false,
-  },
-  {
-    field: "isCurrent",
-    headerName: "Status",
-    width: 150,
-    editable: false,
-  },
 ];
 
 const ProfessorScheduleComponent = () => {
