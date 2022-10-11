@@ -1,5 +1,5 @@
 // React
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 //Material Components
@@ -28,11 +28,20 @@ import * as accountService from "../../services/shared/accounts";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 
 const Navbar = ({ onLogout }) => {
-  // const currentUser = accountService.getCurrentUser();
   const accessToken = accountService.getAccessToken();
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState("");
+
   const { isDarkMode, toggleDarkMode } = useContext(UserInterfaceContext);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  useEffect(() => {
+    accountService.getCurrentUser().then((response) => {
+      setUser(response.data);
+      setRole(response.data.role);
+    });
+  }, [role, user, anchorElNav, anchorElUser]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -232,14 +241,43 @@ const Navbar = ({ onLogout }) => {
                     </Button>
                   </MenuItem>
                   <MenuItem>
-                    <Button
-                      color="inherit"
-                      onClick={handleCloseUserMenu}
-                      LinkComponent={Link}
-                      to="/"
-                    >
-                      Dashboard
-                    </Button>
+                    {role === "admin" ? (
+                      <Button
+                        color="inherit"
+                        onClick={handleCloseUserMenu}
+                        LinkComponent={Link}
+                        to="/admin/admin-list"
+                      >
+                        Dashboard
+                      </Button>
+                    ) : role === "professor" ? (
+                      <Button
+                        color="inherit"
+                        onClick={handleCloseUserMenu}
+                        LinkComponent={Link}
+                        to={`/faculty/load/${user.accountId}`}
+                      >
+                        Dashboard
+                      </Button>
+                    ) : role === "student" ? (
+                      <Button
+                        color="inherit"
+                        onClick={handleCloseUserMenu}
+                        LinkComponent={Link}
+                        to="/dashboard"
+                      >
+                        Dashboard
+                      </Button>
+                    ) : (
+                      <Button
+                        color="inherit"
+                        onClick={handleCloseUserMenu}
+                        LinkComponent={Link}
+                        to="/"
+                      >
+                        Dashboard
+                      </Button>
+                    )}
                   </MenuItem>
 
                   <MenuItem>
