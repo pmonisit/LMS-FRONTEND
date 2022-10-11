@@ -42,6 +42,7 @@ import ProfessorListPage from "./pages/admin/ProfessorListPage";
 import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
 import UserDetails from "./components/admin/account/UserDetails";
+import ListOfStudentsPage from "./pages/professor/ListOfStudentsPage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -146,6 +147,13 @@ const App = () => {
               ) : (
                 <Navigate to="/login" />
               )
+            }
+          />
+
+          <Route
+            path="/professor/dashboard/studentLists/:id"
+            element={
+              accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
             }
           />
 

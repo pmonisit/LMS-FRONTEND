@@ -29,7 +29,7 @@ import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext"
 
 const Navbar = ({ onLogout }) => {
   const accessToken = accountService.getAccessToken();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
   const [role, setRole] = useState("");
 
   const { isDarkMode, toggleDarkMode } = useContext(UserInterfaceContext);
