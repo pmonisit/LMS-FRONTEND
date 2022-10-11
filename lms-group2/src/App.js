@@ -41,9 +41,6 @@ import StudentListPage from "./pages/admin/StudentListPage";
 import ProfessorListPage from "./pages/admin/ProfessorListPage";
 import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
-
-import ProfessorSchedulePage from "./pages/professor/ProfessorSchedulePage";
-
 import UserDetails from "./components/admin/account/UserDetails";
 
 const App = () => {
@@ -78,8 +75,6 @@ const App = () => {
     try {
       const response = await accountService.loginUser(username, password);
       localStorage.setItem("accessToken", response.data.access_token);
-      const decoded = jwtDecode(response.data.access_token);
-      console.log(response.data.access_token);
       setAccessToken(response.data.access_token);
       // onOpenSnackbar({
       //   open: true,
@@ -144,7 +139,7 @@ const App = () => {
 
           {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
           <Route
-            path="/faculty/schedule/:id"
+            path="/faculty/load/:id"
             element={
               accessToken ? <ProfessorSchedulePage /> : <Navigate to="/login" />
             }
