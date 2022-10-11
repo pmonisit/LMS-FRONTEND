@@ -37,14 +37,30 @@ const EditProfileInfo = () => {
           severity: "info",
           message: "No changes has been made.",
         });
-        navigate("/profile");
+        if (userInfo[1] === "admin") {
+          navigate(`/admin/admin-list`);
+        } else if (userInfo[1] === "professor") {
+          navigate(`/professor/dashboard/${userInfo[0]}`);
+        } else if (userInfo[1] === "student") {
+          navigate(`/dashboard`);
+        } else {
+          navigate(`/`);
+        }
       } else {
         onOpenSnackbar({
           open: true,
           severity: "success",
           message: "Your personal info has been updated",
         });
-        navigate("/profile");
+        if (userInfo[1] === "admin") {
+          navigate(`/admin/admin-list`);
+        } else if (userInfo[1] === "professor") {
+          navigate(`/professor/dashboard/${userInfo[0]}`);
+        } else if (userInfo[1] === "student") {
+          navigate(`/dashboard`);
+        } else {
+          navigate(`/`);
+        }
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
