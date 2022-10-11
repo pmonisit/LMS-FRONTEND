@@ -8,6 +8,10 @@ export function getLecture() {
   return http.get("/lecture/all");
 }
 
+export function getProfLoad() {
+  return http.get("/lecture/myprofload/all");
+}
+
 export function editLecture(id) {
   return http.put(`/lecture/edit/${id}`);
 }
