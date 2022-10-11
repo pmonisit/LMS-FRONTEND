@@ -16,8 +16,8 @@ export function setActive(id) {
   return http.put(`/account/changeActiveStatus/${id}`);
 }
 
-export function setChild(id) {
-  return http.put(`/account/changeChild/${id}`);
+export function setChild(id, account) {
+  return http.put(`/account/changeChild/${id}`, account);
 }
 
 export function editAccountPW(username, id) {

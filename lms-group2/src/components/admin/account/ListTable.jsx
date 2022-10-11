@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
@@ -41,6 +42,12 @@ const ListTable = ({ details }) => {
               <TableCell align="center">{detail.middleName}</TableCell>
               <TableCell align="center">{detail.accountId}</TableCell>
               <TableCell align="center">
+                <IconButton
+                  LinkComponent={Link}
+                  to={`/admin/user-details/${detail.accountId}`}
+                >
+                  <ArrowForwardIcon />
+                </IconButton>
                 <IconButton
                   onClick={() => {
                     accountFormContext.onSetIsEdit(true);
