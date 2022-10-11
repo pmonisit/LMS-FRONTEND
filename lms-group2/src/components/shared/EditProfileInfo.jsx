@@ -18,19 +18,19 @@ const EditProfileInfo = () => {
 
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
-      setUserInfo(response.data);
+      setUserInfo(response.data[0]);
     });
   }, [userInfo]);
 
   const handleEditInfo = async (form) => {
     try {
-      await accountService.editUserPersonalInfo(userInfo.accountId, form);
+      await accountService.editUserPersonalInfo(userInfo[0], form);
       if (
-        form.firstName === userInfo.firstName &&
-        form.middleName === userInfo.middleName &&
-        form.lastName === userInfo.lastName &&
-        form.gender === userInfo.gender &&
-        form.birthdate === userInfo.birthdate
+        form.firstName === userInfo[2] &&
+        form.middleName === userInfo[3] &&
+        form.lastName === userInfo[4] &&
+        form.gender === userInfo[5] &&
+        form.birthdate === userInfo[6]
       ) {
         onOpenSnackbar({
           open: true,
@@ -62,11 +62,11 @@ const EditProfileInfo = () => {
       <div>
         <BasicInfoForm
           initialValue={{
-            firstName: userInfo.firstName,
-            middleName: userInfo.middleName,
-            lastName: userInfo.lastName,
-            gender: userInfo.gender,
-            birthdate: userInfo.birthdate,
+            firstName: userInfo[2],
+            middleName: userInfo[3],
+            lastName: userInfo[4],
+            gender: userInfo[5],
+            birthdate: userInfo[6],
           }}
           onSubmit={handleEditInfo}
         />

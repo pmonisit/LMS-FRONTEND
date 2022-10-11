@@ -38,10 +38,10 @@ const Navbar = ({ onLogout }) => {
 
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
-      setUser(response.data);
-      setRole(response.data.role);
+      setUser(response.data[0]);
+      setRole(response.data[0][1]);
     });
-  }, [role, user, anchorElNav, anchorElUser]);
+  }, [role, anchorElNav, anchorElUser]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -255,7 +255,7 @@ const Navbar = ({ onLogout }) => {
                         color="inherit"
                         onClick={handleCloseUserMenu}
                         LinkComponent={Link}
-                        to={`/faculty/load/${user.accountId}`}
+                        to={`/faculty/load/${user[0]}`}
                       >
                         Dashboard
                       </Button>
@@ -287,8 +287,6 @@ const Navbar = ({ onLogout }) => {
                         handleCloseUserMenu();
                         onLogout();
                       }}
-                      LinkComponent={Link}
-                      to="/"
                     >
                       Logout
                     </Button>
