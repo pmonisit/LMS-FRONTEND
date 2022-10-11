@@ -8,8 +8,8 @@ export function getCourse() {
   return http.get("/course/all");
 }
 
-export function editCourse(id) {
-  return http.put(`/course/edit/${id}`);
+export function editCourse(id, course) {
+  return http.put(`/course/edit/${id}`, course);
 }
 
 export function addCourse(course) {

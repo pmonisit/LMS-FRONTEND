@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getDegreeById(id) {
   return http.get(`/degree/${id}`);
@@ -8,8 +8,8 @@ export function getDegree() {
   return http.get("/degree/all");
 }
 
-export function editDegree(id) {
-  return http.put(`/degree/edit/${id}`);
+export function editDegree(id, degree) {
+  return http.put(`/degree/edit/${id}`, degree);
 }
 
 export function addDegree(degree) {
