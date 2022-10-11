@@ -37,9 +37,6 @@ const CourseListTable = ({ details }) => {
               key={detail.courseId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {detail.courseId}
-              </TableCell>
               <TableCell align="center">{detail.courseCode}</TableCell>
               <TableCell align="center">{detail.courseName}</TableCell>
               <TableCell align="center">{detail.units}</TableCell>
