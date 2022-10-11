@@ -43,6 +43,12 @@ import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
 import UserDetails from "./components/admin/account/UserDetails";
 import ListOfStudentsPage from "./pages/professor/ListOfStudentsPage";
+import EditDegreePage from "./pages/admin/EditDegreePage";
+import EditCoursePage from "./pages/admin/EditCoursePage";
+import DegreeForm from "./components/admin/degree/DegreeForm";
+import CourseForm from "./components/admin/course/CourseForm";
+import DegreeListPage from "./pages/admin/DegreeListPage";
+import CourseListPage from "./pages/admin/CourseListPage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -161,6 +167,7 @@ const App = () => {
 
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
+          {/*-----------Users------------ */}
           <Route
             path="/admin/admin-list"
             element={accessToken ? <AdminListPage /> : <Navigate to="/login" />}
@@ -201,6 +208,43 @@ const App = () => {
             element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
           />
 
+          {/*-----------Degree------------ */}
+          <Route
+            path="/admin/add-degree"
+            element={accessToken ? <DegreeForm /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/admin/degree-list"
+            element={
+              accessToken ? <DegreeListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/degree/:id/edit"
+            element={
+              accessToken ? <EditDegreePage /> : <Navigate to="/login" />
+            }
+          />
+
+          {/*-----------Course------------ */}
+          <Route
+            path="/admin/add-course"
+            element={accessToken ? <CourseForm /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/admin/course-list"
+            element={
+              accessToken ? <CourseListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/course/:id/edit"
+            element={
+              accessToken ? <EditCoursePage /> : <Navigate to="/login" />
+            }
+          />
+          {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
           {/* {---------------------Students Routes- Author: Ja-----------------------------------------------} */}
           <Route
             path="/dashboard"
