@@ -40,6 +40,7 @@ import StudentListPage from "./pages/admin/StudentListPage";
 import ProfessorListPage from "./pages/admin/ProfessorListPage";
 import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
+import ProfessorSchedulePage from "./pages/professor/ProfessorSchedulePage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -136,6 +137,16 @@ const App = () => {
               accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
             }
           />
+
+          {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
+          <Route
+            path="/faculty/schedule/:id"
+            element={
+              accessToken ? <ProfessorSchedulePage /> : <Navigate to="/login" />
+            }
+          />
+
+          {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
 
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
