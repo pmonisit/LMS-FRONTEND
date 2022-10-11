@@ -231,16 +231,6 @@ const Navbar = ({ onLogout }) => {
                     </Typography>
                   </MenuItem>
                   <MenuItem>
-                    <Button
-                      color="inherit"
-                      onClick={handleCloseUserMenu}
-                      LinkComponent={Link}
-                      to={`/profile`}
-                    >
-                      Profile
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
                     {role === "admin" ? (
                       <Button
                         color="inherit"
@@ -255,7 +245,7 @@ const Navbar = ({ onLogout }) => {
                         color="inherit"
                         onClick={handleCloseUserMenu}
                         LinkComponent={Link}
-                        to={`/faculty/load/${user[0]}`}
+                        to={`/professor/dashboard/${user[0]}`}
                       >
                         Dashboard
                       </Button>

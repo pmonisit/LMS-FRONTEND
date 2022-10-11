@@ -20,7 +20,7 @@ import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import Courses from "./components/student/Courses";
 import StudentGrade from "./components/student/StudentGrade";
-import ProfessorSchedulePage from "./pages/professor/ProfessorSchedulePage";
+import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
 // Services
 import * as accountService from "./services/shared/accounts";
@@ -139,9 +139,13 @@ const App = () => {
 
           {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
           <Route
-            path="/faculty/load/:id"
+            path="/professor/dashboard/:id"
             element={
-              accessToken ? <ProfessorSchedulePage /> : <Navigate to="/login" />
+              accessToken ? (
+                <ProfessorDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 

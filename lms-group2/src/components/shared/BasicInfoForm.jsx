@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Material Components
@@ -12,10 +12,20 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+// Service
+import * as accountService from "../../services/shared/accounts";
+
 // JOI
 import Joi from "joi";
 
 const BasicInfoForm = ({ onSubmit, initialValue }) => {
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    accountService.getCurrentUser().then((response) => {
+      setUserInfo(response.data[0]);
+    });
+  }, [userInfo]);
+
   const [form, setForm] = useState(
     initialValue || {
       firstName: "",
@@ -150,7 +160,17 @@ const BasicInfoForm = ({ onSubmit, initialValue }) => {
             <Button
               variant="outlined"
               fullWidth
-              onClick={() => navigate(`/profile`)}
+              onClick={() => {
+                if (userInfo[1] === "admin") {
+                  navigate(`/admin/admin-list`);
+                } else if (userInfo[1] === "professor") {
+                  navigate(`/professor/dashboard/${userInfo[0]}`);
+                } else if (userInfo[1] === "student") {
+                  navigate(`/dashboard`);
+                } else {
+                  navigate(`/`);
+                }
+              }}
             >
               Back
             </Button>

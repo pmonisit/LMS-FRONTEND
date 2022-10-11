@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 // Material Components
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -27,12 +26,15 @@ const Profile = () => {
 
   if (user) {
     return (
-      <Grid container justifyContent="center" component="form" marginTop={4}>
-        <Grid item xs={10} sm={10} md={6} lg={4} xl={4}>
+      <Grid container justifyContent="center" component="form" marginTop={10}>
+        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
           <Card>
             <Grid container spacing={3}>
               <Grid item xs={6} sm={6}>
-                <CardHeader title="Personal Information" />
+                {/* <CardHeader title="Personal Information" /> */}
+                <Typography margin={2} variant="h6">
+                  Basic Info
+                </Typography>
               </Grid>
               <Grid item xs={6} sm={6} textAlign="right">
                 <Tooltip title="Edit Info">
@@ -48,60 +50,60 @@ const Profile = () => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom color="#b71c1c">
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     First Name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom>
                     {" "}
                     {user[2]}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom color="#b71c1c">
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     Middle Name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom>
                     {" "}
                     {user[3]}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom color="#b71c1c">
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     Last Name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom>
                     {" "}
                     {user[4]}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom color="#b71c1c">
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     Gender:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom>
                     {" "}
                     {user[5]}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom color="#b71c1c">
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     Birthdate
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom>
                     {" "}
                     {user[6]}
                   </Typography>

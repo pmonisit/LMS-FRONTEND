@@ -14,6 +14,7 @@ import Badge from "@mui/material/Badge";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
+import { Typography } from "@mui/material";
 
 const ProfessorScheduleComponent = () => {
   const [rows, setRows] = useState([]);
@@ -26,8 +27,11 @@ const ProfessorScheduleComponent = () => {
   }, [rows]);
 
   return (
-    <Grid container justifyContent="center" component="form" marginTop={4}>
-      <Grid item xs={10} sm={10} md={8} lg={8} xl={8}>
+    <Grid container justifyContent="center" component="form" marginTop={10}>
+      <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <Typography marginBottom={3} textAlign="center" variant="h6">
+          My Schedule
+        </Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
