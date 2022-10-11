@@ -5,6 +5,7 @@ import App from "./App";
 import { UserInterfaceProvider } from "./context/shared/UserInterfaceContext";
 import { AccountFormProvider } from "./context/admin/account/AccountFormContext";
 import { EnrolProvider } from "./context/student/EnrolContext";
+import { AdminProvider } from "./context/admin/account/adminContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,7 +14,9 @@ root.render(
       <UserInterfaceProvider>
         <AccountFormProvider>
           <EnrolProvider>
-            <App />
+            <AdminProvider>
+              <App />
+            </AdminProvider>
           </EnrolProvider>
         </AccountFormProvider>
       </UserInterfaceProvider>
