@@ -16,10 +16,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import StudentHomePage from "./pages/student/StudentHomePage";
-import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
-import TestPage from "./services/TestPage";
+import StudentDashboardPage from "./pages/student/StudentDashboardPage";
+import Courses from "./components/student/Courses";
+import StudentGrade from "./components/student/StudentGrade";
 
 // Services
 import * as accountService from "./services/shared/accounts";
@@ -40,7 +40,7 @@ import StudentListPage from "./pages/admin/StudentListPage";
 import ProfessorListPage from "./pages/admin/ProfessorListPage";
 import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
-import UserDetails from "./components/admin/account/UserDetails";
+import ProfessorSchedulePage from "./pages/professor/ProfessorSchedulePage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -128,12 +128,6 @@ const App = () => {
           />
           <Route path="*" element={<NotFoundPage />} />
           <Route
-            path="/home"
-            element={
-              accessToken ? <StudentHomePage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
             path="/profile"
             element={accessToken ? <Profile /> : <Navigate to="/login" />}
           />
@@ -143,16 +137,16 @@ const App = () => {
               accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
             }
           />
+
+          {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
           <Route
-            path="/enrolment"
+            path="/faculty/schedule/:id"
             element={
-              accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
+              accessToken ? <ProfessorSchedulePage /> : <Navigate to="/login" />
             }
           />
-          <Route
-            path="/testpage"
-            element={accessToken ? <TestPage /> : <Navigate to="/login" />}
-          />
+
+          {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
 
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
@@ -186,9 +180,31 @@ const App = () => {
             path="/admin/user/:id/edit"
             element={accessToken ? <EditUserPage /> : <Navigate to="/login" />}
           />
+
+          {/* {---------------------Students Routes- Author: Ja-----------------------------------------------} */}
           <Route
-            path="/admin/user-details/:id"
-            element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
+            path="/dashboard"
+            element={
+              accessToken ? <StudentDashboardPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/profile"
+            element={accessToken ? <Profile /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/enrolment"
+            element={
+              accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/courses"
+            element={accessToken ? <Courses /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/grades"
+            element={accessToken ? <StudentGrade /> : <Navigate to="/login" />}
           />
         </Routes>
 
