@@ -12,6 +12,10 @@ export function getProfLoad() {
   return http.get("/lecture/myprofload/all");
 }
 
+export function getStudentsPerLecture(lectureId) {
+  return http.get(`studentload/students/enrolled/${lectureId}`);
+}
+
 export function editLecture(id) {
   return http.put(`/lecture/edit/${id}`);
 }

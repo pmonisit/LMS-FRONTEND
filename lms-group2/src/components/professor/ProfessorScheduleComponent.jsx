@@ -1,5 +1,6 @@
 // React
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 // Material Components
 import Table from "@mui/material/Table";
@@ -11,10 +12,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Badge from "@mui/material/Badge";
+import GroupIcon from "@mui/icons-material/Group";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 const ProfessorScheduleComponent = () => {
   const [rows, setRows] = useState([]);
@@ -22,13 +26,12 @@ const ProfessorScheduleComponent = () => {
   useEffect(() => {
     lectureService.getProfLoad().then((response) => {
       setRows(response.data);
-      // console.log(response.data);
     });
   }, [rows]);
 
   return (
     <Grid container justifyContent="center" component="form" marginTop={10}>
-      <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+      <Grid item xs={10} sm={10} md={11} lg={11} xl={11}>
         <Typography marginBottom={3} textAlign="center" variant="h6">
           My Schedule
         </Typography>
@@ -36,6 +39,7 @@ const ProfessorScheduleComponent = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>Student Lists</TableCell>
                 <TableCell>Lecture ID</TableCell>
                 <TableCell>Section</TableCell>
                 <TableCell>Course Code</TableCell>
@@ -49,6 +53,15 @@ const ProfessorScheduleComponent = () => {
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row[0]}>
+                  <TableCell align="center">
+                    <Tooltip title="View Students">
+                      <Link to={`/professor/dashboard/studentLists/${row[0]}`}>
+                        <IconButton>
+                          <GroupIcon />
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>{row[0]}</TableCell>
                   <TableCell>{row[7]}</TableCell>
                   <TableCell>{row[1]}</TableCell>
