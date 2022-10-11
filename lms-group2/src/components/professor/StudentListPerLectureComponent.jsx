@@ -15,6 +15,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import StarIcon from "@mui/icons-material/Star";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
@@ -57,6 +59,7 @@ const StudentListPerLectureComponent = () => {
                 <TableCell>First Name</TableCell>
                 <TableCell>Middle Name</TableCell>
                 <TableCell>Last Name</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -65,6 +68,23 @@ const StudentListPerLectureComponent = () => {
                   <TableCell>{row[1]}</TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>{row[3]}</TableCell>
+                  <TableCell>
+                    {" "}
+                    <Tooltip title="Encode Grade">
+                      <Link to={`/professor/dashboard/${user[0]}`}>
+                        <IconButton>
+                          <StarIcon />
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                    <Tooltip title="Evaluate Student">
+                      <Link to={`/professor/dashboard/${user[0]}`}>
+                        <IconButton>
+                          <AppRegistrationIcon />
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
