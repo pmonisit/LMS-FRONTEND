@@ -1,5 +1,7 @@
+import Profile from "../../components/shared/Profile";
+
 const StudentProfilePage = () => {
-  return <div>Student Profile Page</div>;
+  return <Profile />;
 };
 
 export default StudentProfilePage;
