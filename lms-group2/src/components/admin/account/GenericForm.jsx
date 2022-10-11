@@ -21,6 +21,7 @@ import {
   addParentAccount,
   addProfessorAccount,
   editAccountBio,
+  setChild,
 } from "../../../services/admin/AccountService";
 
 const GenericForm = ({ initialValue, accountId }) => {
@@ -60,7 +61,12 @@ const GenericForm = ({ initialValue, accountId }) => {
             editAccountBio(accountId, accountForm).then((res) =>
               console.log(res)
             );
+            if (accountForm.role === "parent") {
+              setChild(accountId, accountForm).then((res) => console.log(res));
+              console.log("set child id");
+            }
             accountFormContext.onSetIsEdit(false);
+            console.log(accountId, accountForm);
           } else {
             switch (accountForm.role) {
               case "student":
