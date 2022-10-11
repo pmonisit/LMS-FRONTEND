@@ -1,5 +1,5 @@
 // React
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
@@ -19,10 +19,11 @@ import NotFoundPage from "./pages/NotFoundPage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import Courses from "./components/student/Courses";
-import StudentGrade from "./components/student/StudentGrade";
+import StudentGradePage from "./pages/student/StudentGradePage";
 
 // Services
 import * as accountService from "./services/shared/accounts";
+import * as service from "./services/admin/AccountService";
 
 // JWT Decode
 import jwtDecode from "jwt-decode";
@@ -42,7 +43,7 @@ import ParentListPage from "./pages/admin/ParentListPage";
 import EditUserPage from "./pages/admin/EditUserPage";
 
 const App = () => {
-  const [accessToken, setAccessToken] = React.useState(
+  const [accessToken, setAccessToken] = useState(
     accountService.getAccessToken()
   );
 
@@ -171,6 +172,7 @@ const App = () => {
           />
 
           {/* {---------------------Students Routes- Author: Ja-----------------------------------------------} */}
+
           <Route
             path="/dashboard"
             element={
@@ -193,7 +195,9 @@ const App = () => {
           />
           <Route
             path="/grades"
-            element={accessToken ? <StudentGrade /> : <Navigate to="/login" />}
+            element={
+              accessToken ? <StudentGradePage /> : <Navigate to="/login" />
+            }
           />
         </Routes>
 
