@@ -15,10 +15,11 @@ import Badge from "@mui/material/Badge";
 import GroupIcon from "@mui/icons-material/Group";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
-import { Button, Typography } from "@mui/material";
 
 const ProfessorScheduleComponent = () => {
   const [rows, setRows] = useState([]);
@@ -79,14 +80,11 @@ const ProfessorScheduleComponent = () => {
                     {row[5]} - {row[6]}
                   </TableCell>
                   <TableCell>{row[8]}</TableCell>
-                  <TableCell align="center">
+                  <TableCell>
                     {row[9] ? (
-                      <Badge badgeContent={"OnGoing"} color="success"></Badge>
+                      <Chip label="On-Going" color="success" />
                     ) : (
-                      <Badge
-                        badgeContent={"Completed"}
-                        color="secondary"
-                      ></Badge>
+                      <Chip label="Completed" color="error" />
                     )}
                   </TableCell>
                 </TableRow>

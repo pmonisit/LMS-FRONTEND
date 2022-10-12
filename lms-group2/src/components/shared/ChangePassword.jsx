@@ -21,8 +21,13 @@ import * as accountService from "../../services/shared/accounts";
 // JOI
 import Joi from "joi";
 
-const ChangePassword = ({ onSave }) => {
+const ChangePassword = () => {
   const [userInfo, setUserInfo] = useState(null);
+  const [errors, setErrors] = useState({});
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     oldPassword: "",
     newPassword: "",
@@ -33,11 +38,6 @@ const ChangePassword = ({ onSave }) => {
       setUserInfo(response.data[0]);
     });
   }, [userInfo]);
-
-  const navigate = useNavigate();
-  const { onOpenSnackbar } = useContext(UserInterfaceContext);
-
-  const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
     oldPassword: Joi.string().required(),
