@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
@@ -16,15 +15,14 @@ import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext"
 
 // Service
 import * as gradeService from "../../services/professor/GradeService";
-import * as accountService from "../../services/shared/accounts";
 import * as lectureService from "../../services/professor/LectureService";
 
 // JOI
 import Joi from "joi";
 import { Typography } from "@mui/material";
 
-const AddGradeForm = ({ onSubmit }) => {
-  const [userInfo, setUserInfo] = useState(null);
+const AddGradeForm = () => {
+  const [lectureId, setLectureId] = useState(0);
   const [studentGrade, setStudentGrade] = useState(0);
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
 
@@ -32,16 +30,15 @@ const AddGradeForm = ({ onSubmit }) => {
   const params = useParams();
 
   useEffect(() => {
-    accountService.getCurrentUser().then((response) => {
-      setUserInfo(response.data[0]);
-      // console.log(response.data[0]);
+    lectureService.getProfLoad().then((response) => {
+      setLectureId(response.data[0][0]);
     });
 
-    lectureService.getStudentsPerLecture(params.id).then((response) => {
-      setStudentGrade(response.data[8]);
-      // console.log(response.data);
+    lectureService.getStudentsPerLecture(lectureId).then((response) => {
+      setStudentGrade(response.data[0][8]);
+      console.log(studentGrade);
     });
-  }, [userInfo, studentGrade]);
+  }, [lectureId, studentGrade]);
 
   const [form, setForm] = useState({
     gradeValue: 0.0,
@@ -80,15 +77,7 @@ const AddGradeForm = ({ onSubmit }) => {
         severity: "success",
         message: "Grade has been updated",
       });
-      if (userInfo[1] === "admin") {
-        navigate(`/admin/admin-list`);
-      } else if (userInfo[1] === "professor") {
-        navigate(`/professor/dashboard/${userInfo[0]}`);
-      } else if (userInfo[1] === "student") {
-        navigate(`/dashboard`);
-      } else {
-        navigate(`/`);
-      }
+      navigate(`/professor/dashboard/studentLists/${lectureId}`);
     } catch (error) {
       onOpenSnackbar({
         open: true,
@@ -112,7 +101,7 @@ const AddGradeForm = ({ onSubmit }) => {
     >
       <Grid item xs={10} sm={10} md={2} lg={2} xl={2} mt={5}>
         <Card>
-          <Typography>Encode grade</Typography>
+          <Typography>Encode Grade</Typography>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -144,15 +133,7 @@ const AddGradeForm = ({ onSubmit }) => {
               variant="outlined"
               fullWidth
               onClick={() => {
-                if (userInfo[1] === "admin") {
-                  navigate(`/admin/admin-list`);
-                } else if (userInfo[1] === "professor") {
-                  navigate(`/professor/dashboard/${userInfo[0]}`);
-                } else if (userInfo[1] === "student") {
-                  navigate(`/dashboard`);
-                } else {
-                  navigate(`/`);
-                }
+                navigate(`/professor/dashboard/studentLists/${lectureId}`);
               }}
             >
               Back
