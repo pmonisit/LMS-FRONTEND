@@ -37,6 +37,10 @@ export function editUserPersonalInfo(id, userInfo) {
   return http.put(`/account/edit/${id}`, userInfo);
 }
 
+export function changePassword(password) {
+  return http.put(`/account/changePW/`, password);
+}
+
 export function logout() {
   localStorage.removeItem("accessToken");
 }

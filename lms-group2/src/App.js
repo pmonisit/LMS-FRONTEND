@@ -49,6 +49,7 @@ import DegreeForm from "./components/admin/degree/DegreeForm";
 import CourseForm from "./components/admin/course/CourseForm";
 import DegreeListPage from "./pages/admin/DegreeListPage";
 import CourseListPage from "./pages/admin/CourseListPage";
+import ChangePassword from "./components/shared/ChangePassword";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -83,18 +84,18 @@ const App = () => {
       const response = await accountService.loginUser(username, password);
       localStorage.setItem("accessToken", response.data.access_token);
       setAccessToken(response.data.access_token);
-      // onOpenSnackbar({
-      //   open: true,
-      //   severity: "success",
-      //   message: "Login successful!",
-      // });
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Login successfully!",
+      });
       navigate("/");
     } catch (error) {
-      // onOpenSnackbar({
-      //   open: true,
-      //   severity: "error",
-      //   message: "Username or Password is incorrect. Please try again.",
-      // });
+      onOpenSnackbar({
+        open: true,
+        severity: "error",
+        message: "Username or Password is incorrect. Please try again.",
+      });
       console.log(error);
     }
   };
@@ -141,6 +142,13 @@ const App = () => {
             path="/profile/edit/:id"
             element={
               accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
+            }
+          />
+
+          <Route
+            path="/profile/changePassword/:id"
+            element={
+              accessToken ? <ChangePassword /> : <Navigate to="/login" />
             }
           />
 
