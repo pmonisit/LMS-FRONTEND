@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getTimeslotById(id) {
   return http.get(`/timeslot/${id}`);
@@ -8,8 +8,8 @@ export function getTimeslot() {
   return http.get("/timeslot/all");
 }
 
-export function editTimeslot(id) {
-  return http.put(`/timeslot/edit/${id}`);
+export function editTimeslot(id, timeslot) {
+  return http.put(`/timeslot/edit/${id}`, timeslot);
 }
 
 export function addTimeslot(timeslot) {

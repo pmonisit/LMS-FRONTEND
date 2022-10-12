@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getSemesterById(id) {
   return http.get(`/semester/${id}`);
@@ -12,8 +12,8 @@ export function getCurrentSemester() {
   return http.get("/semester/currentsem");
 }
 
-export function editSemester(id) {
-  return http.put(`/semester/edit/${id}`);
+export function editSemester(id, semester) {
+  return http.put(`/semester/edit/${id}`, semester);
 }
 
 export function addSemester(semester) {

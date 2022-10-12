@@ -45,13 +45,12 @@ const DegreeForm = ({ initialValue, degreeId }) => {
           adminService
             .editDegree(degreeId, degreeForm)
             .then((res) => console.log(res));
+          adminContext.onSetIsEdit(false);
         } else {
           adminService.addDegree(degreeForm).then((res) => {
             console.log(res);
           });
         }
-
-        adminContext.onSetIsEdit(false);
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

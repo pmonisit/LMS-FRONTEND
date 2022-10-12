@@ -6,32 +6,25 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import * as adminService from "../../../services/admin/CourseService";
+import * as adminService from "../../../services/admin/TimeslotService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 
-const CourseForm = ({ initialValue, courseId }) => {
-  useEffect(() => {
-    console.log(initialValue);
-    console.log(courseId);
-  }, []);
+const TimeslotForm = ({ initialValue, timeslotId }) => {
   const adminContext = useContext(AdminContext);
-  const [courseForm, setCourseForm] = useState(
+  const [timeslotForm, setTimeSlotForm] = useState(
     initialValue
       ? initialValue
       : {
-          courseCode: "",
-          courseName: "",
-          units: "",
-          degreeId: "",
-          timeslotId: "",
+          timeslotCode: "",
+          yearNo: "",
+          semNo: "",
         }
   );
-
-  const { courseCode, courseName, units, degreeId, timeslotId } = courseForm;
+  const { timeslotCode, yearNo, semNo } = timeslotForm;
 
   const handleChange = (event) => {
-    setCourseForm({
-      ...courseForm,
+    setTimeSlotForm({
+      ...timeslotForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -43,17 +36,18 @@ const CourseForm = ({ initialValue, courseId }) => {
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(courseForm);
-        if (adminContext.isEditCourse) {
+        console.log(timeslotForm);
+        if (adminContext.isTimeslotEdit) {
           adminService
-            .editCourse(courseId, courseForm)
+            .editTimeslot(timeslotId, timeslotForm)
             .then((res) => console.log(res));
-          adminContext.onSetIsEditCourse(false);
         } else {
-          adminService.addCourse(courseForm).then((res) => {
-            console.log(res);
-          });
+          adminService
+            .addTimeslot(timeslotForm)
+            .then((res) => console.log(res));
         }
+
+        adminContext.onSetIsEdit(false);
       }}
     >
       <Grid item xs={12} md={6} sm={6}>
@@ -64,50 +58,30 @@ const CourseForm = ({ initialValue, courseId }) => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  name="courseCode"
+                  name="timeslotCode"
                   onChange={handleChange}
-                  value={courseCode}
-                  label="Course Code"
+                  value={timeslotCode}
+                  label="Timeslot Code"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="courseName"
+                  name="yearNo"
                   onChange={handleChange}
-                  value={courseName}
-                  label="Course Name"
+                  value={yearNo}
+                  label="Year Number"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="units"
+                  name="semNo"
                   onChange={handleChange}
-                  value={units}
-                  label="Units"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="degreeId"
-                  onChange={handleChange}
-                  value={degreeId}
-                  label="Degree ID"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="timeslotId"
-                  onChange={handleChange}
-                  value={timeslotId}
-                  label="Timeslot ID"
+                  value={semNo}
+                  label="Semester Number"
                   variant="standard"
                   fullWidth
                 />
@@ -124,4 +98,4 @@ const CourseForm = ({ initialValue, courseId }) => {
   );
 };
 
-export default CourseForm;
+export default TimeslotForm;
