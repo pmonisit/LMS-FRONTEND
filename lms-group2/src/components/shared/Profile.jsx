@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 
 // Service
 import * as accountService from "../../services/shared/accounts";
+import { Button } from "@mui/material";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -21,6 +22,7 @@ const Profile = () => {
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
       setUser(response.data[0]);
+      // console.log(response.data[0]);
     });
   }, [user]);
 
@@ -31,7 +33,6 @@ const Profile = () => {
           <Card>
             <Grid container spacing={3}>
               <Grid item xs={6} sm={6}>
-                {/* <CardHeader title="Personal Information" /> */}
                 <Typography margin={2} variant="h6">
                   Basic Info
                 </Typography>
@@ -110,6 +111,21 @@ const Profile = () => {
                 </Grid>
               </Grid>
             </CardContent>
+            <Divider />
+            <Typography margin={2} variant="h6">
+              Account Settings
+            </Typography>
+
+            <Grid margin={3}>
+              <Button
+                variant="outlined"
+                LinkComponent={Link}
+                to={`/profile/changePassword/${user[0]}`}
+                fullWidth
+              >
+                Change Password
+              </Button>
+            </Grid>
           </Card>
         </Grid>
       </Grid>

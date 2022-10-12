@@ -16,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import StarIcon from "@mui/icons-material/Star";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
@@ -31,9 +30,7 @@ const StudentListPerLectureComponent = () => {
     accountService.getCurrentUser().then((response) => {
       setUser(response.data[0]);
     });
-  }, []);
 
-  useEffect(() => {
     lectureService.getStudentsPerLecture(params.id).then((response) => {
       setStudents(response.data);
     });
@@ -41,7 +38,7 @@ const StudentListPerLectureComponent = () => {
 
   return (
     <Grid container justifyContent="center" component="form" marginTop={10}>
-      <Grid item xs={10} sm={10} md={8} lg={6} xl={6}>
+      <Grid item xs={10} sm={10} md={10} lg={10} xl={6}>
         <Tooltip title="Back to dashboard">
           <Link to={`/professor/dashboard/${user[0]}`}>
             <IconButton>
@@ -59,6 +56,8 @@ const StudentListPerLectureComponent = () => {
                 <TableCell>First Name</TableCell>
                 <TableCell>Middle Name</TableCell>
                 <TableCell>Last Name</TableCell>
+                <TableCell>Final Grade</TableCell>
+                <TableCell>Remarks</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -68,16 +67,11 @@ const StudentListPerLectureComponent = () => {
                   <TableCell>{row[1]}</TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>{row[3]}</TableCell>
+                  <TableCell>{row[7]}</TableCell>
+                  <TableCell>{row[8]}</TableCell>
                   <TableCell>
                     {" "}
-                    <Tooltip title="Encode Grade">
-                      <Link to={`/professor/dashboard/${user[0]}`}>
-                        <IconButton>
-                          <StarIcon />
-                        </IconButton>
-                      </Link>
-                    </Tooltip>
-                    <Tooltip title="Evaluate Student">
+                    <Tooltip title="Encode grade and evaluation">
                       <Link to={`/professor/dashboard/${user[0]}`}>
                         <IconButton>
                           <AppRegistrationIcon />

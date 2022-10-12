@@ -30,8 +30,14 @@ const ProfessorScheduleComponent = () => {
   }, [rows]);
 
   return (
-    <Grid container justifyContent="center" component="form" marginTop={10}>
-      <Grid item xs={10} sm={10} md={11} lg={11} xl={11}>
+    <Grid
+      container
+      justifyContent="center"
+      component="form"
+      marginTop={10}
+      marginRight={3}
+    >
+      <Grid item xs={10} sm={10} md={12} lg={12} xl={11}>
         <Typography marginBottom={3} textAlign="center" variant="h6">
           My Schedule
         </Typography>
