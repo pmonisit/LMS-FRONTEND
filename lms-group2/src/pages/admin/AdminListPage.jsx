@@ -5,8 +5,8 @@ import { getAccounts, getAdmins } from "../../services/admin/AccountService";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import CourseForm from "../../components/admin/course/CourseForm";
-import CourseListPage from "./CourseListPage";
+import SemesterForm from "../../components/admin/semester/SemesterForm";
+import SemesterListPage from "./SemesterListPage";
 
 const AdminListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
@@ -31,8 +31,8 @@ const AdminListPage = () => {
         Add Administrator
       </Button>
       <ListTable details={adminList} />;
-      <CourseForm />
-      <CourseListPage />
+      <SemesterForm />
+      <SemesterListPage />
     </>
   );
 };

@@ -9,6 +9,14 @@ export const AdminContext = createContext({
   onSetCourseList: () => {},
   isEditCourse: false,
   onSetIsEditCourse: () => {},
+  timeslotList: [],
+  onSetTimeslotList: () => {},
+  isTimeslotEdit: false,
+  onSetIsTimeslotEdit: () => {},
+  isEditSemester: false,
+  onSetIsEditSemester: () => {},
+  semesterList: [],
+  onSetSemesterList: () => {},
 });
 
 export const AdminProvider = ({ children }) => {
@@ -16,6 +24,10 @@ export const AdminProvider = ({ children }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [courseList, setCourseList] = useState([]);
   const [isEditCourse, setIsEditCourse] = useState(false);
+  const [timeslotList, setTimeslotList] = useState([]);
+  const [isTimeslotEdit, setIsTimeslotEdit] = useState(false);
+  const [semesterList, setSemesterList] = useState([]);
+  const [isEditSemester, setIsEditSemester] = useState(false);
 
   return (
     <AdminContext.Provider
@@ -28,6 +40,14 @@ export const AdminProvider = ({ children }) => {
         onSetCourseList: setCourseList,
         isEditCourse,
         onSetIsEditCourse: setIsEditCourse,
+        timeslotList,
+        onSetTimeslotList: setTimeslotList,
+        isTimeslotEdit,
+        onSetIsTimeslotEdit: setIsTimeslotEdit,
+        isEditSemester,
+        onSetIsEditSemester: setIsEditSemester,
+        semesterList,
+        onSetSemesterList: setSemesterList,
       }}
     >
       {children}

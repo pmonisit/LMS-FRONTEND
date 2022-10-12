@@ -6,32 +6,28 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import * as adminService from "../../../services/admin/CourseService";
+import * as adminService from "../../../services/admin/Semester";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 
-const CourseForm = ({ initialValue, courseId }) => {
-  useEffect(() => {
-    console.log(initialValue);
-    console.log(courseId);
-  }, []);
+const SemesterForm = ({ initialValue, semesterId }) => {
   const adminContext = useContext(AdminContext);
-  const [courseForm, setCourseForm] = useState(
+  const [semesterForm, setSemesterForm] = useState(
     initialValue
       ? initialValue
       : {
-          courseCode: "",
-          courseName: "",
-          units: "",
-          degreeId: "",
-          timeslotId: "",
+          startDate: "",
+          isCurrent: "",
+          startingYear: "",
+          endingYear: "",
+          semOrder: "",
         }
   );
-
-  const { courseCode, courseName, units, degreeId, timeslotId } = courseForm;
+  const { startDate, isCurrent, startingYear, endingYear, semOrder } =
+    semesterForm;
 
   const handleChange = (event) => {
-    setCourseForm({
-      ...courseForm,
+    setSemesterForm({
+      ...semesterForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -43,16 +39,19 @@ const CourseForm = ({ initialValue, courseId }) => {
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(courseForm);
-        if (adminContext.isEditCourse) {
+        console.log(semesterForm);
+        if (adminContext.isEditSemester) {
+          console.log("Edit");
+          console.log(semesterForm);
           adminService
-            .editCourse(courseId, courseForm)
+            .editSemester(semesterId, semesterForm)
             .then((res) => console.log(res));
-          adminContext.onSetIsEditCourse(false);
+          adminContext.onSetIsEditSemester(false);
         } else {
-          adminService.addCourse(courseForm).then((res) => {
-            console.log(res);
-          });
+          console.log("Add");
+          adminService
+            .addSemester(semesterForm)
+            .then((res) => console.log(res));
         }
       }}
     >
@@ -64,50 +63,50 @@ const CourseForm = ({ initialValue, courseId }) => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  name="courseCode"
+                  name="startDate"
                   onChange={handleChange}
-                  value={courseCode}
-                  label="Course Code"
+                  value={startDate}
+                  label="Start Date"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="courseName"
+                  name="isCurrent"
                   onChange={handleChange}
-                  value={courseName}
-                  label="Course Name"
+                  value={isCurrent}
+                  label="Is Current(Temporary Name)"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="units"
+                  name="startingYear"
                   onChange={handleChange}
-                  value={units}
-                  label="Units"
+                  value={startingYear}
+                  label="Starting Year"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="degreeId"
+                  name="endingYear"
                   onChange={handleChange}
-                  value={degreeId}
-                  label="Degree ID"
+                  value={endingYear}
+                  label="Ending Year"
                   variant="standard"
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  name="timeslotId"
+                  name="semOrder"
                   onChange={handleChange}
-                  value={timeslotId}
-                  label="Timeslot ID"
+                  value={semOrder}
+                  label="Semester Order"
                   variant="standard"
                   fullWidth
                 />
@@ -124,4 +123,4 @@ const CourseForm = ({ initialValue, courseId }) => {
   );
 };
 
-export default CourseForm;
+export default SemesterForm;

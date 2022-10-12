@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getStudentLoadById(id) {
   return http.get(`/studentload/${id}`);
