@@ -42,6 +42,7 @@ const ChangePassword = ({ onSave }) => {
   const schema = Joi.object({
     oldPassword: Joi.string().required(),
     newPassword: Joi.string().required(),
+    confirmNewPassword: Joi.string().required(),
   });
 
   const handleChange = (event) => {
@@ -65,20 +66,28 @@ const ChangePassword = ({ onSave }) => {
   const handleChangePassword = async (event) => {
     event.preventDefault();
     try {
-      await accountService.changePassword(form);
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: "Your password has been changed successfully",
-      });
-      if (userInfo[1] === "admin") {
-        navigate(`/admin/admin-list`);
-      } else if (userInfo[1] === "professor") {
-        navigate(`/professor/dashboard/${userInfo[0]}`);
-      } else if (userInfo[1] === "student") {
-        navigate(`/dashboard`);
+      if (form.newPassword !== form.confirmNewPassword) {
+        onOpenSnackbar({
+          open: true,
+          severity: "error",
+          message: "New password and confirm new password should be the same",
+        });
       } else {
-        navigate(`/`);
+        await accountService.changePassword(form);
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: "Your password has been changed successfully",
+        });
+        if (userInfo[1] === "admin") {
+          navigate(`/admin/admin-list`);
+        } else if (userInfo[1] === "professor") {
+          navigate(`/professor/dashboard/${userInfo[0]}`);
+        } else if (userInfo[1] === "student") {
+          navigate(`/dashboard`);
+        } else {
+          navigate(`/`);
+        }
       }
     } catch (error) {
       onOpenSnackbar({
@@ -127,6 +136,18 @@ const ChangePassword = ({ onSave }) => {
                   error={!!errors.newPassword}
                   helperText={errors.newPassword}
                   label="New Password"
+                  type="password"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="confirmNewPassword"
+                  value={form.confirmNewPassword}
+                  onChange={handleChange}
+                  error={!!errors.confirmNewPassword}
+                  helperText={errors.confirmNewPassword}
+                  label="Confirm New Password"
                   type="password"
                   fullWidth
                 />
