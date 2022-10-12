@@ -1,7 +1,8 @@
 import React from "react";
+import AddGradeForm from "./AddGradeForm";
 
 const AddGradePerStudent = () => {
-  return <div>AddGradePerStudent</div>;
+  return <AddGradeForm></AddGradeForm>;
 };
 
 export default AddGradePerStudent;

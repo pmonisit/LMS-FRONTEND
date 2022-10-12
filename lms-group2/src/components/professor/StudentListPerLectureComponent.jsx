@@ -15,7 +15,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import Chip from "@mui/material/Chip";
+import Fab from "@mui/material/Fab";
+import EditIcon from "@mui/icons-material/Edit";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
@@ -29,10 +31,12 @@ const StudentListPerLectureComponent = () => {
   useEffect(() => {
     accountService.getCurrentUser().then((response) => {
       setUser(response.data[0]);
+      // console.log(response.data[0]);
     });
 
     lectureService.getStudentsPerLecture(params.id).then((response) => {
       setStudents(response.data);
+      // console.log(response.data);
     });
   }, [students]);
 
@@ -67,15 +71,23 @@ const StudentListPerLectureComponent = () => {
                   <TableCell>{row[1]}</TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>{row[3]}</TableCell>
-                  <TableCell>{row[7]}</TableCell>
                   <TableCell>{row[8]}</TableCell>
                   <TableCell>
+                    {row[9] === "PASSED" ? (
+                      <Chip label="Passed" color="success" />
+                    ) : row[9] === "CONDITIONAL" ? (
+                      <Chip label="Conditional" color="warning" />
+                    ) : (
+                      <Chip label="Failed" color="error" />
+                    )}
+                  </TableCell>
+                  <TableCell>
                     {" "}
-                    <Tooltip title="Encode grade and evaluation">
-                      <Link to={`/professor/dashboard/${user[0]}`}>
-                        <IconButton>
-                          <AppRegistrationIcon />
-                        </IconButton>
+                    <Tooltip title="Edit Grade">
+                      <Link to={`/professor/dashboard/addGrade/${row[7]}`}>
+                        <Fab size="small" color="primary" aria-label="edit">
+                          <EditIcon />
+                        </Fab>
                       </Link>
                     </Tooltip>
                   </TableCell>

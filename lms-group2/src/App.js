@@ -50,6 +50,7 @@ import CourseForm from "./components/admin/course/CourseForm";
 import DegreeListPage from "./pages/admin/DegreeListPage";
 import CourseListPage from "./pages/admin/CourseListPage";
 import ChangePassword from "./components/shared/ChangePassword";
+import AddGradePerStudent from "./components/professor/AddGradePerStudent";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -161,6 +162,13 @@ const App = () => {
               ) : (
                 <Navigate to="/login" />
               )
+            }
+          />
+
+          <Route
+            path="/professor/dashboard/addGrade/:id"
+            element={
+              accessToken ? <AddGradePerStudent /> : <Navigate to="/login" />
             }
           />
 

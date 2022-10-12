@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getGradeById(id) {
   return http.get(`/grade/${id}`);
@@ -12,8 +12,8 @@ export function deleteGrade(id) {
   return http.delete(`/grade/delete/${id}`);
 }
 
-export function editGrade(id) {
-  return http.put(`/grade/edit/${id}`);
+export function editGrade(id, grade) {
+  return http.put(`/grade/update/${id}`, grade);
 }
 
 export function addGrade(grade) {
