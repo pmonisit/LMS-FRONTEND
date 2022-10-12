@@ -166,7 +166,7 @@ const App = () => {
           />
 
           <Route
-            path="/professor/dashboard/addGrade/:id"
+            path="/professor/dashboard/addGrade/:studentId/:id"
             element={
               accessToken ? <AddGradePerStudent /> : <Navigate to="/login" />
             }

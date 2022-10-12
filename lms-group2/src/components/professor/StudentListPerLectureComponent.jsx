@@ -84,7 +84,9 @@ const StudentListPerLectureComponent = () => {
                   <TableCell>
                     {" "}
                     <Tooltip title="Edit Grade">
-                      <Link to={`/professor/dashboard/addGrade/${row[7]}`}>
+                      <Link
+                        to={`/professor/dashboard/addGrade/${row[0]}/${row[7]}`}
+                      >
                         <Fab size="small" color="primary" aria-label="edit">
                           <EditIcon />
                         </Fab>

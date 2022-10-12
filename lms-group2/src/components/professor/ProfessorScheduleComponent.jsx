@@ -11,7 +11,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Badge from "@mui/material/Badge";
 import GroupIcon from "@mui/icons-material/Group";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -27,6 +26,7 @@ const ProfessorScheduleComponent = () => {
   useEffect(() => {
     lectureService.getProfLoad().then((response) => {
       setRows(response.data);
+      // console.log(response.data);
     });
   }, [rows]);
 
