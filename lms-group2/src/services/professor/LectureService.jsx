@@ -31,7 +31,7 @@ export function addLecture(lecture) {
       delete lectureClone[key];
     }
   });
-  return http.post("/course/insert", lectureClone);
+  return http.post("/lecture/insert", lectureClone);
 }
 
 export function getAllLecturesBySemID(semesterId) {

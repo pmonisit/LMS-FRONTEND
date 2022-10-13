@@ -1,0 +1,30 @@
+Routes:
+-Semester
+-timeslot
+-lecture
+
+Joi
+Error handling
+
+
+
+
+
+  <Route
+            path="/admin/lecture/:id/edit"
+            element={
+              accessToken ? <EditLecturePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/lecture-details/:id"
+            element={
+              accessToken ? <LectureDetails /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/assign-lecture/:id"
+            element={
+              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+            }
+          />

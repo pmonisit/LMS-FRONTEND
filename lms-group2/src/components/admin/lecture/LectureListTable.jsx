@@ -7,14 +7,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
+import { AdminContext } from "../../../context/admin/account/adminContext";
 
-const ListTable = ({ details }) => {
-  const accountFormContext = useContext(AccountFormContext);
+const LectureListTable = ({ details }) => {
+  const adminContext = useContext(AdminContext);
   const handleEdit = (detail) => {
     console.log(detail);
   };
@@ -23,46 +23,44 @@ const ListTable = ({ details }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Surname</TableCell>
+            <TableCell>Section</TableCell>
+
+            <TableCell align="center">Course</TableCell>
+            <TableCell align="center">Surname</TableCell>
             <TableCell align="center">First Name</TableCell>
-            <TableCell align="center">Middle Name</TableCell>
-            <TableCell align="center">Account Id</TableCell>
+            <TableCell align="center">Semester</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {details.map((detail) => (
             <TableRow
-              key={detail.accountId}
+              key={detail[0]}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {detail.lastName}
+                {detail[10]}
               </TableCell>
-              <TableCell align="center">{detail.firstName}</TableCell>
-              <TableCell align="center">{detail.middleName}</TableCell>
-              <TableCell align="center">{detail.accountId}</TableCell>
+              <TableCell component="th" scope="row">
+                {detail[3]}
+              </TableCell>
+              <TableCell align="center">{detail[9]}</TableCell>
+              <TableCell align="center">{detail[7]}</TableCell>
+              <TableCell align="center">{detail[6]}</TableCell>
+
               <TableCell align="center">
-                {detail.role === "professor" && (
-                  <IconButton
-                    LinkComponent={Link}
-                    to={`/admin/assign-lecture/${detail.accountId}`}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                )}
                 <IconButton
                   LinkComponent={Link}
-                  to={`/admin/user-details/${detail.accountId}`}
+                  to={`/admin/lecture-details/${detail[0]}`}
                 >
                   <ArrowForwardIcon />
                 </IconButton>
                 <IconButton
                   onClick={() => {
-                    accountFormContext.onSetIsEdit(true);
+                    adminContext.onSetIsEditSemester(true);
                   }}
                   LinkComponent={Link}
-                  to={`/admin/user/${detail.accountId}/edit`}
+                  to={`/admin/lecture/${detail.lectureId}/edit`}
                 >
                   <EditIcon />
                 </IconButton>
@@ -75,4 +73,4 @@ const ListTable = ({ details }) => {
   );
 };
 
-export default ListTable;
+export default LectureListTable;
