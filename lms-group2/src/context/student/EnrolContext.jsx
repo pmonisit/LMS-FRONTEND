@@ -15,6 +15,7 @@ export const EnrolContext = createContext({
   myRecommendedCoursesAssigned: [],
   searchTerm: [],
   myDesiredSLoads: [],
+  currentSem: [],
   renderEnrolActions: () => {},
   handleSearchForClass: () => {},
   handleTypeSearch: () => {},
@@ -25,22 +26,22 @@ export const EnrolProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
+  const [mySemestersWithGrades, setMySemestersWithGrades] = useState([]);
   const [lecturesBySem, setLecturesBySem] = useState([]);
   const [enrolItems, setEnrolItems] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [myDesiredSLoads, setMyDesiredSLoads] = useState([]);
   const [myRecommendedCoursesAssigned, setMyRecommendedCoursesAssigned] =
     useState([]);
+  const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
 
   useEffect(() => {
     accountService.getCurrent().then((response) => {
       setUser(response.data[0]);
     });
-
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
-
       const semId = response.data.semesterId;
       let lecturesBySem = [];
       lectureService.getAllLecturesBySemID(semId).then((response) => {
@@ -50,26 +51,18 @@ export const EnrolProvider = ({ children }) => {
         });
       });
     });
-
     studentLoadService.getAllMyStudentLoads().then((response) => {
       setEnrolItems(response.data);
     });
-
     studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      console.log(response.data);
       setMyEnrolledSLoads(response.data);
     });
     studentLoadService.getMyDesiredStudentLoads().then((response) => {
-      console.log(response.data);
       setMyDesiredSLoads(response.data);
     });
-
-    // courseAssignedService.getCourseAssigned().then((response) => {
-    //   // setMyCoursesAssigned(response.data);
-    // });
-    // courseAssignedService.getMyCourses().then((response) => {
-    //   // setMyCoursesAssigned(response.data);
-    // });
+    courseAssignedService.getMyCourses().then((response) => {
+      setMyCoursesAssigned(response.data);
+    });
     courseAssignedService.getMyRecommendedCourses().then((response) => {
       setMyRecommendedCoursesAssigned(response.data);
     });
@@ -103,9 +96,10 @@ export const EnrolProvider = ({ children }) => {
     studentLoadService.deleteStudentLoad(sloadId);
   };
 
-  const renderEnrolActions = (lectureId) => {
+  const renderEnrolActions = (lectureId, courseCode) => {
     const enrolItem = [];
-
+    const taken = myCoursesAssigned.find((data) => data[0] === courseCode);
+    console.log(taken[3]);
     enrolItems.map((data) => {
       enrolItem.splice(
         0,
@@ -125,15 +119,23 @@ export const EnrolProvider = ({ children }) => {
         </Button>
       );
     } else {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleEnrol(lectureId)}
-        >
-          ENROL
-        </Button>
-      );
+      if (taken[3] === "TAKEN") {
+        return (
+          <Button variant="contained" color="primary" disabled>
+            COURSE TAKEN
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleEnrol(lectureId)}
+          >
+            ENROL
+          </Button>
+        );
+      }
     }
   };
 
@@ -158,6 +160,7 @@ export const EnrolProvider = ({ children }) => {
 
   const handleRemarks = (courseCode) => {
     const sl = [];
+
     sl.splice(
       0,
       1,
@@ -187,6 +190,7 @@ export const EnrolProvider = ({ children }) => {
         myRecommendedCoursesAssigned: myRecommendedCoursesAssigned,
         searchTerm: searchTerm,
         myDesiredSLoads: myDesiredSLoads,
+        currentSem: currentSem,
         renderEnrolActions: renderEnrolActions,
         handleSearchForClass: handleSearchForClass,
         handleTypeSearch: handleTypeSearch,

@@ -16,6 +16,7 @@ const Courses = () => {
     lecturesBySem,
     searchTerm,
     handleTypeSearch,
+    currentSem,
   } = useContext(EnrolContext);
 
   const [page, setPage] = useState(0);
@@ -32,6 +33,10 @@ const Courses = () => {
 
   return (
     <>
+      <h3 align="center">
+        Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
+        {currentSem.endingYear}
+      </h3>
       <>{handleTypeSearch()}</>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -89,7 +94,9 @@ const Courses = () => {
                       </TableCell>
                       <TableCell>capacity</TableCell>
                       <TableCell>desired</TableCell>
-                      <TableCell>{renderEnrolActions(lecture[0])}</TableCell>
+                      <TableCell>
+                        {renderEnrolActions(lecture[0], lecture[2])}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
