@@ -33,3 +33,7 @@ export function addLecture(lecture) {
   });
   return http.post("/course/insert", lectureClone);
 }
+
+export function getAllLecturesBySemID(semesterId) {
+  return http.get(`/lecture/all/semester/${semesterId}`);
+}

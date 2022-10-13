@@ -12,16 +12,34 @@ export function editStudentLoad(id) {
   return http.put(`/studentload/edit/${id}`);
 }
 
-export function addStudentLoad(studentload) {
-  const studentloadClone = { ...studentload };
-  Object.keys(studentload).forEach((key) => {
-    if (
-      studentload[key] === "" ||
-      studentload[key] === null ||
-      studentload[key] === "undefined"
-    ) {
-      delete studentloadClone[key];
-    }
-  });
-  return http.post("/studentload/insert", studentloadClone);
+// export function addStudentLoad(studentload) {
+//   const studentloadClone = { ...studentload };
+//   Object.keys(studentload).forEach((key) => {
+//     if (
+//       studentload[key] === "" ||
+//       studentload[key] === null ||
+//       studentload[key] === "undefined"
+//     ) {
+//       delete studentloadClone[key];
+//     }
+//   });
+//   return http.post("/studentload/insert", studentloadClone);
+// }
+
+export function addStudentLoad(lectureId) {
+  console.log(lectureId);
+  return http.post(`/studentload/enrol/${lectureId}`);
+}
+
+export function deleteStudentLoad(sloadId) {
+  console.log(sloadId);
+  return http.delete(`/studentload/unenrol/${sloadId}`);
+}
+
+export function getAllMyStudentLoads() {
+  return http.get("/studentload/mystudentload/all");
+}
+
+export function getMyDesiredStudentLoads() {
+  return http.get("/studentload/mystudentload/desired");
 }

@@ -18,7 +18,7 @@ import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
-import Courses from "./components/student/Courses";
+import CoursesPage from "./pages/student/CoursesPage";
 import StudentGrade from "./components/student/StudentGrade";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
@@ -280,7 +280,7 @@ const App = () => {
           />
           <Route
             path="/courses"
-            element={accessToken ? <Courses /> : <Navigate to="/login" />}
+            element={accessToken ? <CoursesPage /> : <Navigate to="/login" />}
           />
           <Route
             path="/grades"

@@ -1,13 +1,46 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import * as accountService from "../../services/admin/AccountService";
+import * as lectureService from "../../services/professor/LectureService";
+import * as studentLoadService from "../../services/admin/StudentLoadService";
+import * as semesterService from "../../services/admin/Semester";
 
 export const EnrolContext = createContext({
   columns: [],
+  user: [],
+  lecturesBySem: [],
   renderEnrolActions: () => {},
 });
 
 export const EnrolProvider = ({ children }) => {
   const [enrolItems, setEnrolItems] = useState([]);
+  const [user, setUser] = useState([]);
+  const [lecturesBySem, setLecturesBySem] = useState([]);
+  const [currentSem, setCurrentSem] = useState([]);
+
+  useEffect(() => {
+    accountService.getCurrent().then((response) => {
+      setUser(response.data[0]);
+    });
+
+    semesterService.getCurrentSemester().then((response) => {
+      setCurrentSem(response.data);
+
+      const semId = response.data.semesterId;
+      let lecturesBySem = [];
+      lectureService.getAllLecturesBySemID(semId).then((response) => {
+        lecturesBySem.push(response.data);
+        lecturesBySem.map((data) => {
+          setLecturesBySem(data);
+        });
+      });
+    });
+
+    studentLoadService.getAllMyStudentLoads().then((response) => {
+      console.log(response.data);
+      setEnrolItems(response.data);
+    });
+  }, []);
 
   const columns = [
     { id: "courseCode", label: "Course Code", minWidth: 100 },
@@ -21,42 +54,51 @@ export const EnrolProvider = ({ children }) => {
     { id: "demand", label: "Demand", minWidth: 100 },
     { id: "action", label: "Action", minWidth: 100 },
   ];
-  const handleEnrol = (course) => {
-    const enrolItem = enrolItems.find(
-      (enrolItem) => enrolItem.course.courseId === course.courseId
-    );
-    if (enrolItem) {
-      setEnrolItems(
-        enrolItems.map((enrolItem) => {
-          console.log(enrolItem);
-          return enrolItem;
-        })
+  const handleEnrol = (lectureId) => {
+    // const enrolItem = enrolItems.find(
+    //   (enrolItem) => enrolItem.course.courseId === course.courseId
+    // );
+    // if (enrolItem) {
+    //   setEnrolItems(
+    //     enrolItems.map((enrolItem) => {
+    //       console.log(enrolItem);
+    //       return enrolItem;
+    //     })
+    //   );
+    // } else {
+    //   setEnrolItems([...enrolItems, { course }]);
+    studentLoadService.addStudentLoad(lectureId);
+    // }
+  };
+
+  const handleUnEnrol = (sloadId) => {
+    console.log(sloadId);
+    // const enrolItem = enrolItems.find(
+    //   (enrolItem) => enrolItem[1] === course.courseId
+    // );
+    // setEnrolItems(
+    //   enrolItems.filter(
+    //     (enrolItem) => enrolItem.course.courseId !== course.courseId
+    //   )
+    // );
+    studentLoadService.deleteStudentLoad(sloadId);
+  };
+
+  const renderEnrolActions = (lectureId) => {
+    const enrolItem = [];
+
+    enrolItems.map((data) => {
+      enrolItem.splice(
+        0,
+        1,
+        enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
       );
-    } else {
-      setEnrolItems([...enrolItems, { course }]);
-    }
-  };
+    });
 
-  const handleUnEnrol = (course) => {
-    const enrolItem = enrolItems.find(
-      (enrolItem) => enrolItem.course.courseId === course.courseId
-    );
-
-    setEnrolItems(
-      enrolItems.filter(
-        (enrolItem) => enrolItem.course.courseId !== course.courseId
-      )
-    );
-  };
-
-  const renderEnrolActions = (course) => {
-    const enrolItem = enrolItems.find(
-      (enrolItem) => enrolItem.course.courseId === course.courseId
-    );
-    if (enrolItem) {
+    if (enrolItem[0]) {
       return (
         <Button
-          onClick={() => handleUnEnrol(course)}
+          onClick={() => handleUnEnrol(enrolItem[0][0])}
           variant="contained"
           color="primary"
         >
@@ -68,7 +110,7 @@ export const EnrolProvider = ({ children }) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleEnrol(course)}
+          onClick={() => handleEnrol(lectureId)}
         >
           ENROL
         </Button>
@@ -80,6 +122,8 @@ export const EnrolProvider = ({ children }) => {
     <EnrolContext.Provider
       value={{
         columns: columns,
+        user: user,
+        lecturesBySem: lecturesBySem,
         renderEnrolActions: renderEnrolActions,
       }}
     >
