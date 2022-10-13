@@ -8,20 +8,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import { GradeContext } from "../../context/student/GradeContext";
+import { Button } from "@mui/material";
 
 const StudentGrade = () => {
-  const { gradeColumns, mySemestersWithGrades } = useContext(GradeContext);
+  const { gradeColumns, mySemestersWithGrades, renderGrades } =
+    useContext(GradeContext);
 
   const handleLoop = () => {
-    // console.log(currentSem);
+    console.log(mySemestersWithGrades);
   };
 
   return (
     <Grid>
+      <Button onClick={handleLoop}>TEST</Button>
       {mySemestersWithGrades.map((semester) => (
         <Paper sx={{ width: "100%", overflow: "hidden" }} key={semester[0]}>
           <h3 align="center">
-            {semester[3]} AY {semester[1]} {semester[2]}
+            {semester[3]} AY {semester[1]} - {semester[2]}
           </h3>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -38,16 +41,7 @@ const StudentGrade = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Math 101</TableCell>
-                  <TableCell>A</TableCell>
-                  <TableCell>Prof. Prince</TableCell>
-                  <TableCell>3</TableCell>
-                  <TableCell>2.5</TableCell>
-                  <TableCell>Remarks</TableCell>
-                </TableRow>
-              </TableBody>
+              <TableBody>{renderGrades(semester[0])}</TableBody>
             </Table>
           </TableContainer>
         </Paper>
