@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import * as accountService from "../../services/admin/AccountService";
+import { useContext } from "react";
+
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -7,16 +7,10 @@ import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { EnrolContext } from "../../context/student/EnrolContext";
 
 const StudentDashboardPage = () => {
-  const [user, setUser] = useState([]);
-  useEffect(() => {
-    accountService.getCurrent().then((user) => {
-      console.log(user);
-      setUser(user.data);
-    });
-  }, []);
-
+  const { user } = useContext(EnrolContext);
   return (
     <>
       <strong>Student Homepage for {user.username}</strong>
@@ -26,16 +20,16 @@ const StudentDashboardPage = () => {
             <TableRow>
               <TableCell>Full Name</TableCell>
               <TableCell>
-                {user.lastName}, {user.firstName}, {user.middleName}
+                {user[4]}, {user[2]}, {user[3]}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Student Number</TableCell>
-              <TableCell>2010-48059</TableCell>
+              <TableCell>{user[9]}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Degree</TableCell>
-              <TableCell>BS Civil Engineering</TableCell>
+              <TableCell>{user[12]}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
