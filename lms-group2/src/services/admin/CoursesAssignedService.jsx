@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getCourseAssignedById(id) {
   return http.get(`/courseassigned/${id}`);
@@ -14,7 +14,7 @@ export function editCourseAssigned(id) {
 
 export function addCourseAssigned(courseAssigned) {
   const courseAssignedClone = { ...courseAssigned };
-  Object.keys(course).forEach((key) => {
+  Object.keys(courseAssigned).forEach((key) => {
     if (
       courseAssigned[key] === "" ||
       courseAssigned[key] === null ||
@@ -24,4 +24,12 @@ export function addCourseAssigned(courseAssigned) {
     }
   });
   return http.post("/courseassigned/insert", courseAssignedClone);
+}
+
+export function getMyCourses() {
+  return http.get("/courseassigned/mycourses");
+}
+
+export function getMyRecommendedCourses() {
+  return http.get("/courseassigned/mycourses/recommended");
 }
