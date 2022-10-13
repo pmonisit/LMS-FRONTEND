@@ -92,8 +92,8 @@ const Courses = () => {
                       <TableCell>
                         {lecture[9]}, {lecture[7]}, {lecture[8]}
                       </TableCell>
-                      <TableCell>capacity</TableCell>
-                      <TableCell>desired</TableCell>
+                      <TableCell>{lecture[15]}</TableCell>
+                      <TableCell>{lecture[16]}</TableCell>
                       <TableCell>
                         {renderEnrolActions(lecture[0], lecture[2])}
                       </TableCell>
