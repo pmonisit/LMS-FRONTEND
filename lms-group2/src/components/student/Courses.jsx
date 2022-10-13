@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,10 +10,14 @@ import TableRow from "@mui/material/TableRow";
 import { EnrolContext } from "../../context/student/EnrolContext";
 
 const Courses = () => {
-  const { columns, renderEnrolActions, lecturesBySem } =
-    useContext(EnrolContext);
+  const {
+    columns,
+    renderEnrolActions,
+    lecturesBySem,
+    searchTerm,
+    handleTypeSearch,
+  } = useContext(EnrolContext);
 
-  const [searchTerm, setSearchTerm] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -28,16 +32,7 @@ const Courses = () => {
 
   return (
     <>
-      <div align="center">
-        <input
-          type="text"
-          placeholder="Search Course..."
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
-          }}
-        />
-      </div>
-
+      <>{handleTypeSearch()}</>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">

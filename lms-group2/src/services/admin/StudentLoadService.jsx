@@ -43,3 +43,7 @@ export function getAllMyStudentLoads() {
 export function getMyDesiredStudentLoads() {
   return http.get("/studentload/mystudentload/desired");
 }
+
+export function getMyEnrolledStudentLoads() {
+  return http.get("/studentload/mystudentload/enrolled");
+}
