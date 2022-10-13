@@ -52,6 +52,18 @@ const Profile = () => {
               <Grid container spacing={3}>
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom color="#b71c1c">
+                    ID Number:
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    {" "}
+                    {user[9]}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6} sm={6}>
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     First Name:
                   </Typography>
                 </Grid>

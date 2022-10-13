@@ -23,6 +23,13 @@ import { Typography } from "@mui/material";
 
 const AddGradeForm = ({ onSubmit, initialValue }) => {
   const [lectureId, setLectureId] = useState(0);
+  const [studentDetails, setStudentDetails] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dateModified, setDateModified] = useState("");
+
+  const params = useParams();
+
   const [form, setForm] = useState(
     initialValue || {
       gradeValue: 0,
@@ -33,7 +40,16 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
     lectureService.getProfLoad().then((response) => {
       setLectureId(response.data[0][0]);
     });
-  }, [lectureId]);
+
+    gradeService
+      .getStudentGradePerLecture(params.studentId, lectureId)
+      .then((response) => {
+        setStudentDetails(response.data[0]);
+        setFirstName(studentDetails[5]);
+        setLastName(studentDetails[7]);
+        setDateModified(studentDetails[1]);
+      });
+  }, [lectureId, studentDetails]);
 
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -77,12 +93,33 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
       component="form"
       onSubmit={handleSubmit}
     >
-      <Grid item xs={10} sm={10} md={2} lg={2} xl={2} mt={5}>
+      <Grid item xs={10} sm={10} md={3} lg={3} xl={3} mt={5}>
         <Card>
-          <Typography>Encode Grade</Typography>
+          <Typography
+            marginTop={2}
+            variant="h6"
+            color="#b71c1c"
+            textAlign="center"
+          >
+            ENCODE GRADE
+          </Typography>
+
           <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={2} textAlign="center" margin={2}>
+              <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                <Typography variant="body1">
+                  <strong> Student Name: </strong>
+                  {firstName} {lastName}
+                </Typography>
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                <Typography marginBottom={1} variant="body1">
+                  <strong> Last Modified: </strong> {dateModified}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={4} sm={4} md={5} lg={5} xl={5} mt={2} mb={5}>
                 <TextField
                   name="gradeValue"
                   error={!!errors.gradeValue}
