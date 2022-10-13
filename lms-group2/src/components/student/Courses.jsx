@@ -83,7 +83,7 @@ const Courses = () => {
                       <TableCell>
                         <i>for</i> {lecture[5]}
                       </TableCell>
-                      <TableCell>units</TableCell>
+                      <TableCell>{lecture[17]}</TableCell>
                       <TableCell>
                         {lecture[11]}
                         {lecture[12]} {lecture[13]}-{lecture[14]}

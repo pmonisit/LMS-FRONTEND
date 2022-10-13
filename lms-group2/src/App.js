@@ -20,6 +20,9 @@ import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import CoursesPage from "./pages/student/CoursesPage";
 import StudentGradePage from "./pages/student/StudentGradePage";
+import StudentAttendancePage from "./pages/student/StudentAttendancePage";
+import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
+import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
 // Services
@@ -269,10 +272,6 @@ const App = () => {
             }
           />
           <Route
-            path="/profile"
-            element={accessToken ? <Profile /> : <Navigate to="/login" />}
-          />
-          <Route
             path="/enrolment"
             element={
               accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
@@ -286,6 +285,24 @@ const App = () => {
             path="/grades"
             element={
               accessToken ? <StudentGradePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/attendance"
+            element={
+              accessToken ? <StudentAttendancePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/curriculum"
+            element={
+              accessToken ? <StudentCurriculumPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/schedule"
+            element={
+              accessToken ? <StudentSchedulePage /> : <Navigate to="/login" />
             }
           />
         </Routes>
