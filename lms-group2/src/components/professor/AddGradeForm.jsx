@@ -21,33 +21,25 @@ import * as lectureService from "../../services/professor/LectureService";
 import Joi from "joi";
 import { Typography } from "@mui/material";
 
-const AddGradeForm = () => {
+const AddGradeForm = ({ onSubmit, initialValue }) => {
   const [lectureId, setLectureId] = useState(0);
-  const [studentGrade, setStudentGrade] = useState(0);
-  const { onOpenSnackbar } = useContext(UserInterfaceContext);
-
-  const navigate = useNavigate();
-  const params = useParams();
+  const [form, setForm] = useState(
+    initialValue || {
+      gradeValue: 0,
+    }
+  );
 
   useEffect(() => {
     lectureService.getProfLoad().then((response) => {
       setLectureId(response.data[0][0]);
     });
+  }, [lectureId]);
 
-    lectureService.getStudentsPerLecture(lectureId).then((response) => {
-      setStudentGrade(response.data[0][8]);
-      console.log(studentGrade);
-    });
-  }, [lectureId, studentGrade]);
-
-  const [form, setForm] = useState({
-    gradeValue: 0.0,
-  });
-
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
-    gradeValue: Joi.number().min(0.0).max(5.0).required(),
+    gradeValue: Joi.number().min(0).max(5).required(),
   });
 
   const handleChange = (event) => {
@@ -68,23 +60,9 @@ const AddGradeForm = () => {
     }
   };
 
-  const handleAddGrade = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      await gradeService.editGrade(params.id, form);
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: "Grade has been updated",
-      });
-      navigate(`/professor/dashboard/studentLists/${lectureId}`);
-    } catch (error) {
-      onOpenSnackbar({
-        open: true,
-        severity: "error",
-        message: "Error in updating grade",
-      });
-    }
+    onSubmit(form);
   };
 
   const isFormInvalid = () => {
@@ -97,7 +75,7 @@ const AddGradeForm = () => {
       container
       justifyContent="center"
       component="form"
-      onSubmit={handleAddGrade}
+      onSubmit={handleSubmit}
     >
       <Grid item xs={10} sm={10} md={2} lg={2} xl={2} mt={5}>
         <Card>
