@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 import * as accountService from "../../services/admin/AccountService";
 import * as lectureService from "../../services/professor/LectureService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
@@ -10,6 +12,7 @@ import * as courseAssignedService from "../../services/admin/CoursesAssignedServ
 export const EnrolContext = createContext({
   columns: [],
   coursesAssignedColumns: [],
+  scheduleColumns: [],
   user: [],
   lecturesBySem: [],
   myRecommendedCoursesAssigned: [],
@@ -20,13 +23,13 @@ export const EnrolContext = createContext({
   handleSearchForClass: () => {},
   handleTypeSearch: () => {},
   handleRemarks: () => {},
+  handleSchedule: () => {},
 });
 
 export const EnrolProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
-  const [mySemestersWithGrades, setMySemestersWithGrades] = useState([]);
   const [lecturesBySem, setLecturesBySem] = useState([]);
   const [enrolItems, setEnrolItems] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
@@ -55,6 +58,7 @@ export const EnrolProvider = ({ children }) => {
       setEnrolItems(response.data);
     });
     studentLoadService.getMyEnrolledStudentLoads().then((response) => {
+      console.log(response.data);
       setMyEnrolledSLoads(response.data);
     });
     studentLoadService.getMyDesiredStudentLoads().then((response) => {
@@ -88,6 +92,16 @@ export const EnrolProvider = ({ children }) => {
     { id: "action", label: "Remarks/Action", minWidth: 100 },
   ];
 
+  const scheduleColumns = [
+    { id: "M", label: "Monday", minWidth: 100 },
+    { id: "T", label: "Tuesday", minWidth: 100 },
+    { id: "W", label: "Wednesday", minWidth: 100 },
+    { id: "Th", label: "Thursday", minWidth: 100 },
+    { id: "F", label: "Friday", minWidth: 100 },
+    { id: "S", label: "Saturday", minWidth: 100 },
+    { id: "Su", label: "Sunday", minWidth: 100 },
+  ];
+
   const handleEnrol = (lectureId) => {
     studentLoadService.addStudentLoad(lectureId);
   };
@@ -99,7 +113,7 @@ export const EnrolProvider = ({ children }) => {
   const renderEnrolActions = (lectureId, courseCode) => {
     const enrolItem = [];
     const taken = myCoursesAssigned.find((data) => data[0] === courseCode);
-    console.log(taken[3]);
+
     enrolItems.map((data) => {
       enrolItem.splice(
         0,
@@ -107,7 +121,6 @@ export const EnrolProvider = ({ children }) => {
         enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
       );
     });
-
     if (enrolItem[0]) {
       return (
         <Button
@@ -180,11 +193,39 @@ export const EnrolProvider = ({ children }) => {
       );
     }
   };
+
+  const handleSchedule = () => {
+    const sortedSchedule = myEnrolledSLoads.sort((a, b) => {
+      return a[6].localeCompare(b[6]);
+    });
+    console.log(sortedSchedule);
+    return sortedSchedule.map((data) => {
+      return (
+        <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
+          <TableCell>
+            {data[6]} - {data[7]}
+          </TableCell>
+          {scheduleColumns.map((response) => {
+            return (
+              <TableCell key={response.id}>
+                {response.id === data[4]
+                  ? data[2] + "-" + data[8]
+                  : response.id === data[5]
+                  ? data[2] + "-" + data[8]
+                  : ""}
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      );
+    });
+  };
   return (
     <EnrolContext.Provider
       value={{
         columns: columns,
         coursesAssignedColumns: coursesAssignedColumns,
+        scheduleColumns: scheduleColumns,
         user: user,
         lecturesBySem: lecturesBySem,
         myRecommendedCoursesAssigned: myRecommendedCoursesAssigned,
@@ -195,6 +236,7 @@ export const EnrolProvider = ({ children }) => {
         handleSearchForClass: handleSearchForClass,
         handleTypeSearch: handleTypeSearch,
         handleRemarks: handleRemarks,
+        handleSchedule,
       }}
     >
       {children}

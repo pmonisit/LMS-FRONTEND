@@ -14,13 +14,8 @@ const StudentGrade = () => {
   const { gradeColumns, mySemestersWithGrades, renderGrades } =
     useContext(GradeContext);
 
-  const handleLoop = () => {
-    console.log(mySemestersWithGrades);
-  };
-
   return (
     <Grid>
-      <Button onClick={handleLoop}>TEST</Button>
       {mySemestersWithGrades.map((semester) => (
         <Paper sx={{ width: "100%", overflow: "hidden" }} key={semester[0]}>
           <h3 align="center">

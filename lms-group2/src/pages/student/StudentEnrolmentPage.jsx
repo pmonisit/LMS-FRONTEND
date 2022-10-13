@@ -89,16 +89,20 @@ const StudentEnrolmentPage = () => {
                     <TableCell>{lecture[2]}</TableCell>
                     <TableCell>{lecture[3]}</TableCell>
                     <TableCell>RESTRICTION</TableCell>
-                    <TableCell>units</TableCell>
+                    <TableCell>{lecture[16]}</TableCell>
                     <TableCell>
                       {lecture[4]}
                       {lecture[5]} {lecture[6]}-{lecture[7]}
                     </TableCell>
                     <TableCell>{lecture[8]}</TableCell>
-                    <TableCell>INSTRUCTOR</TableCell>
-                    <TableCell>capacity</TableCell>
-                    <TableCell>desired</TableCell>
-                    <TableCell>{renderEnrolActions(lecture[1])}</TableCell>
+                    <TableCell>
+                      {lecture[13]}, {lecture[12]}
+                    </TableCell>
+                    <TableCell>{lecture[14]}</TableCell>
+                    <TableCell>{lecture[15]}</TableCell>
+                    <TableCell>
+                      {renderEnrolActions(lecture[1], lecture[2])}
+                    </TableCell>
                   </TableRow>
                 );
               })}
