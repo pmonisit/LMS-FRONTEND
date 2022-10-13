@@ -26,7 +26,6 @@ const ProfessorScheduleComponent = () => {
   useEffect(() => {
     lectureService.getProfLoad().then((response) => {
       setRows(response.data);
-      // console.log(response.data);
     });
   }, [rows]);
 
