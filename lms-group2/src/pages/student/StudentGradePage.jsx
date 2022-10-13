@@ -1,4 +1,6 @@
+import StudentGrade from "../../components/student/StudentGrade";
+
 const StudentGradePage = () => {
-  return <>View Grade</>;
+  return <StudentGrade />;
 };
 export default StudentGradePage;

@@ -19,7 +19,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import StudentEnrolmentPage from "./pages/student/StudentEnrolmentPage";
 import StudentDashboardPage from "./pages/student/StudentDashboardPage";
 import CoursesPage from "./pages/student/CoursesPage";
-import StudentGrade from "./components/student/StudentGrade";
+import StudentGradePage from "./pages/student/StudentGradePage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
 // Services
@@ -284,7 +284,9 @@ const App = () => {
           />
           <Route
             path="/grades"
-            element={accessToken ? <StudentGrade /> : <Navigate to="/login" />}
+            element={
+              accessToken ? <StudentGradePage /> : <Navigate to="/login" />
+            }
           />
         </Routes>
 

@@ -19,10 +19,15 @@ const StudentEnrolmentPage = () => {
     myRecommendedCoursesAssigned,
     handleRemarks,
     myDesiredSLoads,
+    currentSem,
   } = useContext(EnrolContext);
 
   return (
     <>
+      <h3 align="center">
+        Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
+        {currentSem.endingYear}
+      </h3>
       <h4> My Advised Courses </h4>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>

@@ -33,3 +33,7 @@ export function addSemester(semester) {
 export function editMakeCurrentSemester(id) {
   return http.put(`/semester/makecurrent/${id}`);
 }
+
+export function getMySemestersWithGrades() {
+  return http.get("/semester/getmysems/grades");
+}
