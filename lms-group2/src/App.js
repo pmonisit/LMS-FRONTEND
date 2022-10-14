@@ -62,7 +62,7 @@ import EditPrerequisitePage from "./pages/admin/EditPrerequisitePage";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
-// import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
+import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -191,12 +191,13 @@ const App = () => {
             }
           />
 
-          {/* <Route
+
+          <Route
             path="/professor/dashboard/checkAttendance/:id"
             element={
               accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
             }
-          /> */}
+          />
 
           {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
 
