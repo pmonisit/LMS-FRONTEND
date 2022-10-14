@@ -5,12 +5,7 @@ import { getAccounts, getAdmins } from "../../services/admin/AccountService";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import LectureFormHolder from "../../components/admin/lecture/LectureFormHolder";
-import LectureListPage from "./LectureListPage";
-import SemesterForm from "../../components/admin/semester/SemesterForm";
-import SemesterListPage from "./SemesterListPage";
-import TimeslotForm from "../../components/admin/timeslot/TimeslotForm";
-import TimeslotListPage from "./TimeslotListPage";
+import PrerequisiteForm2 from "../../components/admin/prerequisite/PrerequisiteForm2";
 
 const AdminListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
@@ -35,8 +30,7 @@ const AdminListPage = () => {
         Add Administrator
       </Button>
       <ListTable details={adminList} />;
-      <LectureFormHolder />
-      <LectureListPage />
+      <PrerequisiteForm2 />
     </>
   );
 };

@@ -56,6 +56,9 @@ import EditLecturePage from "./pages/admin/EditLecturePage";
 import LectureDetails from "./components/admin/lecture/LectureDetails";
 import LectureFormHolder from "./components/admin/lecture/LectureFormHolder";
 import LectureListPage from "./pages/admin/LectureListPage";
+import PrerequisiteForm2 from "./components/admin/prerequisite/PrerequisiteForm2";
+import PrerequisiteListPage from "./pages/admin/PrerequisiteListPage";
+import EditPrerequisitePage from "./pages/admin/EditPrerequisitePage";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
@@ -297,6 +300,25 @@ const App = () => {
             path="/admin/assign-lecture/:id"
             element={
               accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+            }
+          />
+          {/*-----------Prerequisite------------ */}
+          <Route
+            path="/admin/add-prerequisite/:id"
+            element={
+              accessToken ? <PrerequisiteForm2 /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/prerequisite-list"
+            element={
+              accessToken ? <PrerequisiteListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/prerequisite/:id/edit"
+            element={
+              accessToken ? <EditPrerequisitePage /> : <Navigate to="/login" />
             }
           />
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}

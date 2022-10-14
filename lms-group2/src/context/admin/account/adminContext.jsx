@@ -21,6 +21,10 @@ export const AdminContext = createContext({
   onSetIsEditLecture: () => {},
   lectureList: [],
   onSetLectureList: () => {},
+  isEditPrerequisite: false,
+  onSetIsEditPrerequisite: () => {},
+  prerequisiteList: [],
+  onSetPrerequisiteList: () => {},
 });
 
 export const AdminProvider = ({ children }) => {
@@ -34,6 +38,8 @@ export const AdminProvider = ({ children }) => {
   const [isEditSemester, setIsEditSemester] = useState(false);
   const [isEditLecture, setIsEditLecture] = useState(false);
   const [lectureList, setLectureList] = useState([]);
+  const [isEditPrerequisite, setIsEditPrerequisite] = useState(false);
+  const [prerequisiteList, setPrerequisiteList] = useState([]);
 
   return (
     <AdminContext.Provider
@@ -58,6 +64,10 @@ export const AdminProvider = ({ children }) => {
         onSetIsEditLecture: setIsEditLecture,
         lectureList,
         onSetLectureList: setLectureList,
+        isEditPrerequisite,
+        onSetIsEditPrerequisite: setIsEditPrerequisite,
+        prerequisiteList,
+        onSetPrerequisiteList: setPrerequisiteList,
       }}
     >
       {children}
