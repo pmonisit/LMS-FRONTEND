@@ -25,6 +25,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
@@ -180,24 +181,16 @@ const StudentListPerLectureComponent = () => {
                             </Button>
                           </DialogActions>
                         </Dialog>
-                        <Button
+                        <BookmarkAddedIcon
+                          color="primary"
                           variant="outlined"
                           size="small"
-                          onClick={() => {
-                            handleClickOpen();
-                            //gradeService.markGradeAsFinal(row[7]);
-                          }}
-                        >
-                          Mark Grade As Final
-                        </Button>
-                        {/* <BookmarkAddedIcon
-                          color="secondary"
                           cursor="pointer"
                           onClick={() => {
                             handleClickOpen();
                             //gradeService.markGradeAsFinal(row[7]);
                           }}
-                        /> */}
+                        />
                       </Stack>
                     )}
                   </TableCell>
