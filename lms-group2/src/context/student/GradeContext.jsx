@@ -45,13 +45,16 @@ export const GradeProvider = ({ children }) => {
     const sgrades = myGradesWithSem.filter((data) => data[1] === semId);
 
     return sgrades.map((data) => {
+      console.log(data);
       return (
         <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
           <TableCell>{data[5]}</TableCell>
           <TableCell>{data[6]}</TableCell>
-          <TableCell>SECTION</TableCell>
-          <TableCell>INSTRUCTOR</TableCell>
-          <TableCell>UNITS</TableCell>
+          <TableCell>{data[9]}</TableCell>
+          <TableCell>
+            {data[11]}, {data[10]}
+          </TableCell>
+          <TableCell>{data[12]}</TableCell>
           <TableCell>{data[7]}</TableCell>
           <TableCell>{data[8]}</TableCell>
         </TableRow>

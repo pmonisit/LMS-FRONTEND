@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import { Grid, Input } from "@mui/material";
 import * as accountService from "../../services/admin/AccountService";
 import * as lectureService from "../../services/professor/LectureService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
+import * as prereqService from "../../services/admin/Prerequisite";
 
 export const EnrolContext = createContext({
   columns: [],
@@ -38,6 +40,9 @@ export const EnrolProvider = ({ children }) => {
     useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
+  const [prereqOfCourse, setPrereqOfCourse] = useState([]);
+  const [enrolText, setEnrolText] = useState("ENROL");
+  const [unenrolText, setUnEnrolText] = useState("UNENROL");
 
   useEffect(() => {
     accountService.getCurrent().then((response) => {
@@ -47,12 +52,19 @@ export const EnrolProvider = ({ children }) => {
       setCurrentSem(response.data);
       const semId = response.data.semesterId;
       let lecturesBySem = [];
+      let prereqCourse = [];
       lectureService.getAllLecturesBySemID(semId).then((response) => {
-        console.log(semId);
-        console.log(response);
         lecturesBySem.push(response.data);
         lecturesBySem.map((data) => {
           setLecturesBySem(data);
+          data.map((a) => {
+            let prereq = [];
+            prereqService.getPrereqOfCourse(a[1]).then((response) => {
+              prereq = [a[2], response.data];
+              prereqCourse.push(prereq);
+              setPrereqOfCourse(prereqCourse);
+            });
+          });
         });
       });
     });
@@ -70,6 +82,7 @@ export const EnrolProvider = ({ children }) => {
     });
     courseAssignedService.getMyRecommendedCourses().then((response) => {
       setMyRecommendedCoursesAssigned(response.data);
+      console.log(response.data);
     });
   }, []);
 
@@ -105,16 +118,22 @@ export const EnrolProvider = ({ children }) => {
 
   const handleEnrol = (lectureId) => {
     studentLoadService.addStudentLoad(lectureId);
+    setEnrolText("ENROL");
   };
 
   const handleUnEnrol = (sloadId) => {
     studentLoadService.deleteStudentLoad(sloadId);
+    setUnEnrolText("UNENROL");
   };
 
   const renderEnrolActions = (lectureId, courseCode) => {
     const enrolItem = [];
-    const taken = myCoursesAssigned.find((data) => data[0] === courseCode);
-
+    const courseAssignedOrTaken = myCoursesAssigned.find(
+      (data) => data[0] === courseCode
+    );
+    if (typeof courseAssignedOrTaken == "undefined") {
+      console.log(courseCode);
+    }
     enrolItems.map((data) => {
       enrolItem.splice(
         0,
@@ -125,31 +144,72 @@ export const EnrolProvider = ({ children }) => {
     if (enrolItem[0]) {
       return (
         <Button
-          onClick={() => handleUnEnrol(enrolItem[0][0])}
+          onClick={() => {
+            handleUnEnrol(enrolItem[0][0]);
+          }}
           variant="contained"
           color="primary"
         >
-          UNENROL
+          {/* UNENROL */}
+          {unenrolText}
+        </Button>
+      );
+    } else if (
+      typeof courseAssignedOrTaken !== "undefined" &&
+      courseAssignedOrTaken[3] === "TAKEN"
+    ) {
+      return (
+        <Button variant="contained" color="primary" disabled>
+          COURSE TAKEN
+        </Button>
+      );
+    } else if (typeof courseAssignedOrTaken == "undefined") {
+      return (
+        <>
+          <Button disabled variant="contained" color="primary">
+            {/* ENROL */}
+            {enrolText}
+          </Button>
+
+          <sub>
+            <font color="#d32f2f">
+              <i>*this course is restricted</i>
+            </font>
+          </sub>
+        </>
+      );
+    } else if (
+      prereqOfCourse.find(
+        (course) => course[0] === courseCode && course[1].length == 0
+      )
+    ) {
+      return (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            handleEnrol(lectureId);
+          }}
+        >
+          {/* ENROL */}
+          {enrolText}
         </Button>
       );
     } else {
-      if (taken[3] === "TAKEN") {
-        return (
-          <Button variant="contained" color="primary" disabled>
-            COURSE TAKEN
+      return (
+        <>
+          <Button disabled variant="contained" color="primary">
+            {/* ENROL */}
+            {enrolText}
           </Button>
-        );
-      } else {
-        return (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleEnrol(lectureId)}
-          >
-            ENROL
-          </Button>
-        );
-      }
+
+          <sub>
+            <font color="#d32f2f">
+              <i>*with prerequisite</i>
+            </font>
+          </sub>
+        </>
+      );
     }
   };
 
@@ -160,15 +220,26 @@ export const EnrolProvider = ({ children }) => {
 
   const handleTypeSearch = () => {
     return (
-      <div align="center">
-        <input
-          type="text"
-          placeholder="Search Course..."
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
-          }}
-        />
-      </div>
+      <Grid>
+        <div align="center">
+          <Input
+            type="text"
+            placeholder="Search Course..."
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+          />
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setSearchTerm("")}
+          >
+            Clear
+          </Button>
+        </div>
+      </Grid>
     );
   };
 
@@ -199,7 +270,6 @@ export const EnrolProvider = ({ children }) => {
     const sortedSchedule = myEnrolledSLoads.sort((a, b) => {
       return a[6].localeCompare(b[6]);
     });
-    console.log(sortedSchedule);
     return sortedSchedule.map((data) => {
       return (
         <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
