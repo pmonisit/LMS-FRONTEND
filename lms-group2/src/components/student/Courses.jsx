@@ -41,8 +41,10 @@ const Courses = () => {
       </h3>
       <>{handleTypeSearch()}</>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
+        {/* <TableContainer sx={{ maxHeight: 440 }}> */}
+        <TableContainer>
+          {/* <Table stickyHeader aria-label="sticky table"> */}
+          <Table>
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
@@ -58,7 +60,6 @@ const Courses = () => {
             </TableHead>
             <TableBody>
               {lecturesBySem
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter((value) => {
                   if (searchTerm == "") {
                     return value;
@@ -72,6 +73,7 @@ const Courses = () => {
                     return value;
                   }
                 })
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((lecture) => {
                   return (
                     <TableRow
@@ -80,7 +82,10 @@ const Courses = () => {
                       tabIndex={-1}
                       key={lecture[0]}
                     >
-                      <TableCell>{lecture[2]}</TableCell>
+                      <TableCell>
+                        {lecture[0]}
+                        {lecture[2]}
+                      </TableCell>
                       <TableCell>{lecture[3]}</TableCell>
                       <TableCell>
                         <i>for</i> {lecture[5]}

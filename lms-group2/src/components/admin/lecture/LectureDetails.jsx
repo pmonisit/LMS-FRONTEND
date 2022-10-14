@@ -63,12 +63,14 @@ const LectureDetails = () => {
             open={open}
             onClose={handleCloseMenu}
           >
-            <MenuItem onClick={() => navigate(`/employees/${user.id}/edit`)}>
+            <MenuItem
+            // onClick={() => navigate(`/employees/${user.id}/edit`)}
+            >
               Edit
             </MenuItem>
             <MenuItem
               onClick={async () => {
-                await handleDelete(user.AccountId);
+                // await handleDelete(user.AccountId);
                 navigate("/");
               }}
             >

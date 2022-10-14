@@ -7,7 +7,13 @@ import Container from "@mui/material/Container";
 function Copyright() {
   return (
     <>
-      <Typography variant="body2" color="text.secondary" textAlign="center">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        textAlign="center"
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         {new Date().getFullYear()}
         {" Copyright © "}
         Revalida - LMS Group 2{"."}

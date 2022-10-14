@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import { GradeContext } from "../../context/student/GradeContext";
+import { Toolbar } from "@mui/material";
 
 const StudentGrade = () => {
   const { gradeColumns, mySemestersWithGrades, renderGrades } =
@@ -15,6 +16,7 @@ const StudentGrade = () => {
 
   return (
     <Grid>
+      <Toolbar />
       {mySemestersWithGrades.map((semester) => (
         <Paper sx={{ width: "100%", overflow: "hidden" }} key={semester[0]}>
           <h3 align="center">

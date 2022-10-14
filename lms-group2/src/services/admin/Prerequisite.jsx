@@ -29,3 +29,7 @@ export function addPrerequisite(prerequisite) {
   });
   return http.post("/prerequisite/insert", prerequisiteClone);
 }
+
+export function getPrereqOfCourse(id) {
+  return http.get(`/prerequisite/getprereq/${id}`);
+}

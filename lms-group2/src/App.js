@@ -191,7 +191,6 @@ const App = () => {
             }
           />
 
-
           <Route
             path="/professor/dashboard/checkAttendance/:id"
             element={
