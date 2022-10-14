@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import DegreeListTable2 from "../../components/admin/degree/DegreeListTable2";
+
 import { AdminContext } from "../../context/admin/account/adminContext";
 import * as lectureService from "../../services/professor/LectureService";
 import LectureListTable from "../../components/admin/lecture/LectureListTable";
@@ -13,7 +13,7 @@ const LectureListPage = () => {
   }, []);
   return (
     <>
-      <LectureListTable details={adminContext.lectureList} />{" "}
+      <LectureListTable details={adminContext.lectureList} />
     </>
   );
 };

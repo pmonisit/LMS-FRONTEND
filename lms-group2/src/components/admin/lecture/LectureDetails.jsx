@@ -22,6 +22,7 @@ const LectureDetails = () => {
   useEffect(() => {
     setLoading(true);
     lectureService.getLectureById(params.id).then((response) => {
+      console.log(response.data);
       setLoading(false);
       setLecture(response.data);
     });
@@ -52,8 +53,8 @@ const LectureDetails = () => {
               <MoreVertIcon />
             </IconButton>
           }
-          title={lecture.lectureId}
-          subheader={`Lecture ID : ${lecture.lectureId}`}
+          title={lecture[0][3]}
+          subheader={`Section : ${lecture[0][10]}`}
         />
         <CardContent>
           <Menu
@@ -76,45 +77,35 @@ const LectureDetails = () => {
           </Menu>
           <Grid container spacing={5}>
             <Grid item xs={6}>
-              <Typography variant="overline">Section</Typography>
-              <Typography variant="body2">{lecture.section}</Typography>
+              <Typography variant="overline">Lecture Id</Typography>
+              <Typography variant="body2">{lecture[0][0]}</Typography>
             </Grid>
+
             <Grid item xs={6}>
-              <Typography variant="overline">Course</Typography>
-              <Typography variant="body2">{lecture.courseId}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="overline">Professor</Typography>
-              <Typography variant="body2">{lecture.accountId}</Typography>
+              <Typography variant="overline">Professor Name</Typography>
+              <Typography variant="body2">{` ${lecture[0][7]} ${lecture[0][9]}`}</Typography>
             </Grid>
 
             <Grid item xs={6}>
               <Typography variant="overline">Semester</Typography>
-              <Typography variant="body2">{lecture.semesterId}</Typography>
+              <Typography variant="body2">For Request</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="overline">Capacity</Typography>
-              <Typography variant="body2">{lecture.capacity}</Typography>
+              <Typography variant="body2">{lecture[0][15]}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="overline">Desired</Typography>
-              <Typography variant="body2">{lecture.desired}</Typography>
+              <Typography variant="body2">{lecture[0][16]}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="overline">Day One</Typography>
-              <Typography variant="body2">{lecture.dayOne}</Typography>
+              <Typography variant="overline">Schedule</Typography>
+              <Typography variant="body2">{`${lecture[0][11]} & ${lecture[0][12]}`}</Typography>
             </Grid>
+
             <Grid item xs={6}>
-              <Typography variant="overline">Day Two</Typography>
-              <Typography variant="body2">{lecture.dayTwo}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="overline">Start Time</Typography>
-              <Typography variant="body2">{lecture.startTime}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="overline">End Time</Typography>
-              <Typography variant="body2">{lecture.endTime}</Typography>
+              <Typography variant="overline">Time</Typography>
+              <Typography variant="body2">{`${lecture[0][13]} - ${lecture[0][14]}`}</Typography>
             </Grid>
           </Grid>
         </CardContent>
