@@ -7,6 +7,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import LectureFormHolder from "../../components/admin/lecture/LectureFormHolder";
 import LectureListPage from "./LectureListPage";
+import SemesterForm from "../../components/admin/semester/SemesterForm";
+import SemesterListPage from "./SemesterListPage";
+import TimeslotForm from "../../components/admin/timeslot/TimeslotForm";
+import TimeslotListPage from "./TimeslotListPage";
 
 const AdminListPage = () => {
   const accountFormContext = useContext(AccountFormContext);

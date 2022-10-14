@@ -6,11 +6,24 @@ Routes:
 Joi
 Error handling
 
-
-
-
+import EditLecturePage from "./pages/admin/EditLecturePage";
+import LectureDetails from "./components/admin/lecture/LectureDetails";
+import LectureFormHolder from "./components/admin/lecture/LectureFormHolder";
+import LectureListPage from "./pages/admin/LectureListPage";
 
   <Route
+            path="/admin/add-lecture"
+            element={
+              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/lecture-list"
+            element={
+              accessToken ? <LectureListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
             path="/admin/lecture/:id/edit"
             element={
               accessToken ? <EditLecturePage /> : <Navigate to="/login" />
@@ -28,3 +41,13 @@ Error handling
               accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
             }
           />
+
+
+To accomplish this weekend:
+1. lecture
+2. prerequesite
+3. Routing
+4. Dropdowns
+5. validation
+6. error handling
+7. Sort Table

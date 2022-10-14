@@ -23,11 +23,11 @@ const LectureListTable = ({ details }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Section</TableCell>
-
             <TableCell align="center">Course</TableCell>
-            <TableCell align="center">Surname</TableCell>
-            <TableCell align="center">First Name</TableCell>
+            <TableCell align="center">Section</TableCell>
+
+            <TableCell align="center">Professor Name</TableCell>
+
             <TableCell align="center">Semester</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
@@ -38,15 +38,15 @@ const LectureListTable = ({ details }) => {
               key={detail[0]}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {detail[10]}
-              </TableCell>
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" align="center">
                 {detail[3]}
               </TableCell>
-              <TableCell align="center">{detail[9]}</TableCell>
-              <TableCell align="center">{detail[7]}</TableCell>
-              <TableCell align="center">{detail[6]}</TableCell>
+              <TableCell component="th" scope="row" align="center">
+                {detail[10]}
+              </TableCell>
+
+              <TableCell align="center">{`${detail[7]} ${detail[9]}`}</TableCell>
+              <TableCell align="center">For Request</TableCell>
 
               <TableCell align="center">
                 <IconButton
