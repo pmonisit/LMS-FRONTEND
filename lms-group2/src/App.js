@@ -12,7 +12,6 @@ import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -63,7 +62,7 @@ import EditPrerequisitePage from "./pages/admin/EditPrerequisitePage";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
-import Sidebar from "./components/shared/Sidebar";
+// import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -191,6 +190,13 @@ const App = () => {
               accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
             }
           />
+
+          {/* <Route
+            path="/professor/dashboard/checkAttendance/:id"
+            element={
+              accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
+            }
+          /> */}
 
           {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
 
