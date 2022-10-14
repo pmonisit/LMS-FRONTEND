@@ -8,7 +8,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Grid from "@mui/material/Grid";
 import { GradeContext } from "../../context/student/GradeContext";
-import { Button } from "@mui/material";
 
 const StudentGrade = () => {
   const { gradeColumns, mySemestersWithGrades, renderGrades } =

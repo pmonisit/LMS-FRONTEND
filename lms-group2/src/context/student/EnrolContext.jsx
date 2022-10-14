@@ -48,6 +48,8 @@ export const EnrolProvider = ({ children }) => {
       const semId = response.data.semesterId;
       let lecturesBySem = [];
       lectureService.getAllLecturesBySemID(semId).then((response) => {
+        console.log(semId);
+        console.log(response);
         lecturesBySem.push(response.data);
         lecturesBySem.map((data) => {
           setLecturesBySem(data);
@@ -58,7 +60,6 @@ export const EnrolProvider = ({ children }) => {
       setEnrolItems(response.data);
     });
     studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      console.log(response.data);
       setMyEnrolledSLoads(response.data);
     });
     studentLoadService.getMyDesiredStudentLoads().then((response) => {

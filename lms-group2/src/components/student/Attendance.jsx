@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import * as attendanceService from "../../services/professor/AttendanceService";
-import { Button, Grid } from "@mui/material";
+import { Grid, Toolbar, Box } from "@mui/material";
 import * as semesterService from "../../services/admin/Semester";
 
 const Attendance = () => {
@@ -13,7 +13,6 @@ const Attendance = () => {
   const [currentSem, setCurrentSem] = useState([]);
 
   useEffect(() => {
-    // attendanceService.getMyAttendancesByLectureId(5).then((res) => {});
     let attendanceBySem = [];
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
@@ -43,23 +42,25 @@ const Attendance = () => {
   };
 
   return (
-    <Grid>
-      <h3 align="center">
-        Attendance for {currentSem.semOrder} AY {currentSem.startingYear} -
-        {currentSem.endingYear}
-      </h3>
-      <div className="demo-app">
-        <div className="demo-app-calendar">
-          <FullCalendar
-            defaultView="dayGridMonth"
-            plugins={[dayGridPlugin]}
-            ref={calendarComponentRef}
-            events={events}
-          />
-          <Button onClick={handleLoop}>Test</Button>
+    <Box>
+      <Toolbar />
+      <Grid>
+        <h2 align="center">
+          Attendance for {currentSem.semOrder} AY {currentSem.startingYear} -
+          {currentSem.endingYear}
+        </h2>
+        <div className="demo-app">
+          <div className="demo-app-calendar">
+            <FullCalendar
+              defaultView="dayGridMonth"
+              plugins={[dayGridPlugin]}
+              ref={calendarComponentRef}
+              events={events}
+            />
+          </div>
         </div>
-      </div>
-    </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -23,6 +23,7 @@ import StudentGradePage from "./pages/student/StudentGradePage";
 import StudentAttendancePage from "./pages/student/StudentAttendancePage";
 import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
+import StudentProfilePage from "./pages/student/StudentProfilePage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
 // Services
@@ -62,6 +63,7 @@ import EditPrerequisitePage from "./pages/admin/EditPrerequisitePage";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
+import Sidebar from "./components/shared/Sidebar";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -324,41 +326,47 @@ const App = () => {
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
           {/* {---------------------Students Routes- Author: Ja-----------------------------------------------} */}
           <Route
-            path="/dashboard"
+            path="/student/dashboard"
             element={
               accessToken ? <StudentDashboardPage /> : <Navigate to="/login" />
             }
           />
           <Route
-            path="/enrolment"
+            path="/student/profile"
+            element={
+              accessToken ? <StudentProfilePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/student/enrolment"
             element={
               accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
             }
           />
           <Route
-            path="/courses"
+            path="/student/courses"
             element={accessToken ? <CoursesPage /> : <Navigate to="/login" />}
           />
           <Route
-            path="/grades"
+            path="/student/grades"
             element={
               accessToken ? <StudentGradePage /> : <Navigate to="/login" />
             }
           />
           <Route
-            path="/attendance"
+            path="/student/attendance"
             element={
               accessToken ? <StudentAttendancePage /> : <Navigate to="/login" />
             }
           />
           <Route
-            path="/curriculum"
+            path="/student/curriculum"
             element={
               accessToken ? <StudentCurriculumPage /> : <Navigate to="/login" />
             }
           />
           <Route
-            path="/schedule"
+            path="/student/schedule"
             element={
               accessToken ? <StudentSchedulePage /> : <Navigate to="/login" />
             }

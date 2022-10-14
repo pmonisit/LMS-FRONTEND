@@ -59,7 +59,11 @@ const Navbar = ({ onLogout }) => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      // position="static"
+      position="fixed"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -254,7 +258,7 @@ const Navbar = ({ onLogout }) => {
                         color="inherit"
                         onClick={handleCloseUserMenu}
                         LinkComponent={Link}
-                        to="/dashboard"
+                        to="/student/dashboard"
                       >
                         Dashboard
                       </Button>
