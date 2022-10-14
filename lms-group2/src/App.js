@@ -37,7 +37,7 @@ import Footer from "./components/shared/Footer";
 import Profile from "./components/shared/Profile";
 import EditProfileInfo from "./components/shared/EditProfileInfo";
 
-//EJ - Testing
+//-----------Admin Imports--------------------------
 import GenericForm from "./components/admin/account/GenericForm";
 import AdminListPage from "./pages/admin/AdminListPage";
 import StudentListPage from "./pages/admin/StudentListPage";
@@ -52,6 +52,11 @@ import DegreeForm from "./components/admin/degree/DegreeForm";
 import CourseForm from "./components/admin/course/CourseForm";
 import DegreeListPage from "./pages/admin/DegreeListPage";
 import CourseListPage from "./pages/admin/CourseListPage";
+import EditLecturePage from "./pages/admin/EditLecturePage";
+import LectureDetails from "./components/admin/lecture/LectureDetails";
+import LectureFormHolder from "./components/admin/lecture/LectureFormHolder";
+import LectureListPage from "./pages/admin/LectureListPage";
+//------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
 
@@ -261,6 +266,37 @@ const App = () => {
             path="/admin/course/:id/edit"
             element={
               accessToken ? <EditCoursePage /> : <Navigate to="/login" />
+            }
+          />
+          {/*-----------Lecture------------ */}
+          <Route
+            path="/admin/add-lecture"
+            element={
+              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/lecture-list"
+            element={
+              accessToken ? <LectureListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/lecture/:id/edit"
+            element={
+              accessToken ? <EditLecturePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/lecture-details/:id"
+            element={
+              accessToken ? <LectureDetails /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/assign-lecture/:id"
+            element={
+              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
             }
           />
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
