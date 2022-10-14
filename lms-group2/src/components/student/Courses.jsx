@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { EnrolContext } from "../../context/student/EnrolContext";
+import { Box, Toolbar } from "@mui/material";
 
 const Courses = () => {
   const {
@@ -32,7 +33,8 @@ const Courses = () => {
   };
 
   return (
-    <>
+    <Box>
+      <Toolbar />
       <h3 align="center">
         Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
         {currentSem.endingYear}
@@ -113,7 +115,7 @@ const Courses = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </>
+    </Box>
   );
 };
 export default Courses;
