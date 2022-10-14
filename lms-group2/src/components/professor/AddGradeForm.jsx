@@ -126,7 +126,7 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
                   helpertext={errors.gradeValue}
                   value={form.gradeValue}
                   onChange={handleChange}
-                  label="Grade"
+                  label="Current Grade"
                   variant="standard"
                   type="number"
                   fullWidth

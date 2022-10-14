@@ -12,10 +12,6 @@ import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext"
 import * as gradeService from "../../services/professor/GradeService";
 import * as lectureService from "../../services/professor/LectureService";
 
-// JOI
-import Joi from "joi";
-import { Typography } from "@mui/material";
-
 const AddGradePerStudent = () => {
   const [studentGrade, setStudentGrade] = useState(0);
   const [lectureId, setLectureId] = useState(0);
@@ -33,9 +29,9 @@ const AddGradePerStudent = () => {
       .getStudentGradePerLecture(params.studentId, lectureId)
       .then((response) => {
         setStudentGrade(response.data[0]);
-        // console.log(studentGrade[2]);
+        // console.log(studentGrade);
       });
-  }, [studentGrade, lectureId]);
+  }, [params.studentId, studentGrade, lectureId]);
 
   const handleAddGrade = async (form) => {
     try {
@@ -59,7 +55,7 @@ const AddGradePerStudent = () => {
       onOpenSnackbar({
         open: true,
         severity: "error",
-        message: "Error in updating grade",
+        message: "Error in updating grade. It might been tagged as Final",
       });
     }
   };
