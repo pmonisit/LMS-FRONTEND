@@ -54,6 +54,7 @@ import DegreeListPage from "./pages/admin/DegreeListPage";
 import CourseListPage from "./pages/admin/CourseListPage";
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
+import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -179,6 +180,13 @@ const App = () => {
             path="/professor/dashboard/studentLists/:id"
             element={
               accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
+            }
+          />
+
+          <Route
+            path="/professor/dashboard/checkAttendance/:id"
+            element={
+              accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
             }
           />
 
