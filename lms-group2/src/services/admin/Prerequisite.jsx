@@ -1,4 +1,4 @@
-import http from "../http";
+import http from "../shared/http";
 
 export function getPrerequisiteById(id) {
   return http.get(`/prerequisite/${id}`);
@@ -12,8 +12,8 @@ export function deletePrerequisite(id) {
   return http.delete(`/prerequisite/delete/${id}`);
 }
 
-export function editPrerequisite(id) {
-  return http.put(`/prerequisite/edit/${id}`);
+export function editPrerequisite(id, prerequisite) {
+  return http.put(`/prerequisite/edit/${id}`, prerequisite);
 }
 
 export function addPrerequisite(prerequisite) {

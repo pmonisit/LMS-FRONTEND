@@ -5,49 +5,20 @@ Routes:
 
 Joi
 Error handling
+Prerequisite - need validation, cannot choose own course ID - use drop down then map/filter
 
-import EditLecturePage from "./pages/admin/EditLecturePage";
-import LectureDetails from "./components/admin/lecture/LectureDetails";
-import LectureFormHolder from "./components/admin/lecture/LectureFormHolder";
-import LectureListPage from "./pages/admin/LectureListPage";
 
-  <Route
-            path="/admin/add-lecture"
-            element={
-              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/admin/lecture-list"
-            element={
-              accessToken ? <LectureListPage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/admin/lecture/:id/edit"
-            element={
-              accessToken ? <EditLecturePage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/admin/lecture-details/:id"
-            element={
-              accessToken ? <LectureDetails /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/admin/assign-lecture/:id"
-            element={
-              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
-            }
-          />
 
 
 To accomplish this weekend:
-1. lecture
-2. prerequesite
-3. Routing
+1. lecture - done
+2. prerequesite -done
+3. Routing -done
 4. Dropdowns
 5. validation
 6. error handling
 7. Sort Table
+
+
+
+

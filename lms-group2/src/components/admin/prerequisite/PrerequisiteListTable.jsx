@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 
-const CourseListTable = ({ details }) => {
+const PrerequisiteListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
   const handleEdit = (detail) => {
     console.log(detail);
@@ -23,38 +23,36 @@ const CourseListTable = ({ details }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Course Code</TableCell>
-            <TableCell align="center">Course Name</TableCell>
-            <TableCell align="center">Units</TableCell>
-            <TableCell align="center">Degree Id</TableCell>
-            <TableCell align="center">Timeslot Id</TableCell>
+            <TableCell align="center">Prerequisite Id</TableCell>
+            <TableCell align="center">Course</TableCell>
+            <TableCell align="center">Prerequisite Course</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {details.map((detail) => (
             <TableRow
-              key={detail.courseId}
+              key={detail.prerequisiteId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell align="center">{detail.courseCode}</TableCell>
-              <TableCell align="center">{detail.courseName}</TableCell>
-              <TableCell align="center">{detail.units}</TableCell>
-              <TableCell align="center">{detail.degreeId}</TableCell>
-              <TableCell align="center">{detail.timeslotId}</TableCell>
+              <TableCell component="th" scope="row" align="center">
+                {detail.prerequisiteId}
+              </TableCell>
+              <TableCell component="th" scope="row" align="center">
+                {detail.courseId}
+              </TableCell>
+
+              <TableCell align="center">
+                {detail.prerequisiteCourseId}
+              </TableCell>
+
               <TableCell align="center">
                 <IconButton
-                  LinkComponent={Link}
-                  to={`/admin/add-prerequisite/${detail.courseId}`}
-                >
-                  <ArrowForwardIcon />
-                </IconButton>
-                <IconButton
                   onClick={() => {
-                    adminContext.onSetIsEditCourse(true);
+                    adminContext.onSetIsEditPrerequisite(true);
                   }}
                   LinkComponent={Link}
-                  to={`/admin/course/${detail.courseId}/edit`}
+                  to={`/admin/prerequisite/${detail.prerequisiteId}/edit`}
                 >
                   <EditIcon />
                 </IconButton>
@@ -67,4 +65,4 @@ const CourseListTable = ({ details }) => {
   );
 };
 
-export default CourseListTable;
+export default PrerequisiteListTable;
