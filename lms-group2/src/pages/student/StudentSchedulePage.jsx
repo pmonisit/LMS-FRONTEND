@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,7 +12,7 @@ import { EnrolContext } from "../../context/student/EnrolContext";
 import Sidebar from "../../components/shared/Sidebar";
 
 const StudentSchedulePage = () => {
-  const { currentSem, scheduleColumns, myEnrolledSLoads, handleSchedule } =
+  const { currentSem, scheduleColumns, handleSchedule } =
     useContext(EnrolContext);
   return (
     <Box sx={{ display: "flex" }}>

@@ -15,17 +15,20 @@ export const EnrolContext = createContext({
   columns: [],
   coursesAssignedColumns: [],
   scheduleColumns: [],
+  enrolColumns: [],
   user: [],
   lecturesBySem: [],
   myRecommendedCoursesAssigned: [],
   searchTerm: [],
   myDesiredSLoads: [],
+  myEnrolledSLoads: [],
   currentSem: [],
   renderEnrolActions: () => {},
   handleSearchForClass: () => {},
   handleTypeSearch: () => {},
   handleRemarks: () => {},
   handleSchedule: () => {},
+  handleEnrolLectures: () => {},
 });
 
 export const EnrolProvider = ({ children }) => {
@@ -41,6 +44,7 @@ export const EnrolProvider = ({ children }) => {
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
+  const [mySortedCurriculum, setMySortedCurriculum] = useState([]);
   const [enrolText, setEnrolText] = useState("ENROL");
   const [unenrolText, setUnEnrolText] = useState("UNENROL");
 
@@ -82,7 +86,6 @@ export const EnrolProvider = ({ children }) => {
     });
     courseAssignedService.getMyRecommendedCourses().then((response) => {
       setMyRecommendedCoursesAssigned(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -90,6 +93,18 @@ export const EnrolProvider = ({ children }) => {
     { id: "courseCode", label: "Course Code", minWidth: 100 },
     { id: "courseName", label: "Course Name", minWidth: 100 },
     { id: "restriction", label: "Restriction", minWidth: 100 },
+    { id: "units", label: "Units", minWidth: 100 },
+    { id: "schedule", label: "Schedule", minWidth: 100 },
+    { id: "section", label: "Section", minWidth: 100 },
+    { id: "instructor", label: "Instructor", minWidth: 100 },
+    { id: "slots", label: "Slots", minWidth: 100 },
+    { id: "demand", label: "Demand", minWidth: 100 },
+    { id: "action", label: "Action", minWidth: 100 },
+  ];
+
+  const enrolColumns = [
+    { id: "courseCode", label: "Course Code", minWidth: 100 },
+    { id: "courseName", label: "Course Name", minWidth: 100 },
     { id: "units", label: "Units", minWidth: 100 },
     { id: "schedule", label: "Schedule", minWidth: 100 },
     { id: "section", label: "Section", minWidth: 100 },
@@ -131,9 +146,9 @@ export const EnrolProvider = ({ children }) => {
     const courseAssignedOrTaken = myCoursesAssigned.find(
       (data) => data[0] === courseCode
     );
-    if (typeof courseAssignedOrTaken == "undefined") {
-      console.log(courseCode);
-    }
+    // if (typeof courseAssignedOrTaken == "undefined") {
+    //   console.log(courseCode);
+    // }
     enrolItems.map((data) => {
       enrolItem.splice(
         0,
@@ -160,7 +175,7 @@ export const EnrolProvider = ({ children }) => {
     ) {
       return (
         <Button variant="contained" color="primary" disabled>
-          COURSE TAKEN
+          PASSED
         </Button>
       );
     } else if (typeof courseAssignedOrTaken == "undefined") {
@@ -215,7 +230,7 @@ export const EnrolProvider = ({ children }) => {
 
   const handleSearchForClass = (term) => {
     setSearchTerm(term);
-    navigate("/courses");
+    navigate("/student/courses");
   };
 
   const handleTypeSearch = () => {
@@ -245,14 +260,31 @@ export const EnrolProvider = ({ children }) => {
 
   const handleRemarks = (courseCode) => {
     const sl = [];
+    const s2 = [];
 
     sl.splice(
       0,
       1,
       myEnrolledSLoads.find((demo) => demo[2] === courseCode)
     );
+
+    s2.splice(
+      0,
+      1,
+      myDesiredSLoads.find((demo) => demo[2] === courseCode)
+    );
     if (sl[0]) {
-      return "ENROLLED";
+      return (
+        <Button disabled variant="contained" color="primary">
+          ENROLLED
+        </Button>
+      );
+    } else if (s2[0]) {
+      return (
+        <Button disabled variant="contained" color="primary">
+          DESIRED
+        </Button>
+      );
     } else {
       return (
         <Button
@@ -291,23 +323,48 @@ export const EnrolProvider = ({ children }) => {
       );
     });
   };
+
+  const handleEnrolLectures = (lecture) => {
+    return (
+      <TableRow hover role="checkbox" tabIndex={-1} key={lecture[1]}>
+        <TableCell>{lecture[2]}</TableCell>
+        <TableCell>{lecture[3]}</TableCell>
+        <TableCell>{lecture[16]}</TableCell>
+        <TableCell>
+          {lecture[4]}
+          {lecture[5]} {lecture[6]}-{lecture[7]}
+        </TableCell>
+        <TableCell>{lecture[8]}</TableCell>
+        <TableCell>
+          {lecture[13]}, {lecture[12]}
+        </TableCell>
+        <TableCell>{lecture[14]}</TableCell>
+        <TableCell>{lecture[15]}</TableCell>
+        <TableCell>{renderEnrolActions(lecture[1], lecture[2])}</TableCell>
+      </TableRow>
+    );
+  };
+
   return (
     <EnrolContext.Provider
       value={{
         columns: columns,
         coursesAssignedColumns: coursesAssignedColumns,
         scheduleColumns: scheduleColumns,
+        enrolColumns: enrolColumns,
         user: user,
         lecturesBySem: lecturesBySem,
         myRecommendedCoursesAssigned: myRecommendedCoursesAssigned,
         searchTerm: searchTerm,
         myDesiredSLoads: myDesiredSLoads,
+        myEnrolledSLoads: myEnrolledSLoads,
         currentSem: currentSem,
         renderEnrolActions: renderEnrolActions,
         handleSearchForClass: handleSearchForClass,
         handleTypeSearch: handleTypeSearch,
         handleRemarks: handleRemarks,
-        handleSchedule,
+        handleSchedule: handleSchedule,
+        handleEnrolLectures: handleEnrolLectures,
       }}
     >
       {children}
