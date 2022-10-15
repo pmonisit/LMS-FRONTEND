@@ -59,6 +59,13 @@ import LectureListPage from "./pages/admin/LectureListPage";
 import PrerequisiteForm2 from "./components/admin/prerequisite/PrerequisiteForm2";
 import PrerequisiteListPage from "./pages/admin/PrerequisiteListPage";
 import EditPrerequisitePage from "./pages/admin/EditPrerequisitePage";
+import SemesterListPage from "./pages/admin/SemesterListPage";
+import SemesterForm from "./components/admin/semester/SemesterForm";
+import EditSemesterPage from "./pages/admin/EditSemesterPage";
+import TimeslotForm from "./components/admin/timeslot/TimeslotForm";
+import TimeslotListPage from "./pages/admin/TimeslotListPage";
+import EditTimeslotPage from "./pages/admin/EditTimeslotPage";
+
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
@@ -292,12 +299,12 @@ const App = () => {
               accessToken ? <LectureListPage /> : <Navigate to="/login" />
             }
           />
-          <Route
+          {/* <Route
             path="/admin/lecture/:id/edit"
             element={
               accessToken ? <EditLecturePage /> : <Navigate to="/login" />
             }
-          />
+          /> */}
           <Route
             path="/admin/lecture-details/:id"
             element={
@@ -327,6 +334,41 @@ const App = () => {
             path="/admin/prerequisite/:id/edit"
             element={
               accessToken ? <EditPrerequisitePage /> : <Navigate to="/login" />
+            }
+          />
+          {/*-----------Semester------------ */}
+          <Route
+            path="/admin/add-semester"
+            element={accessToken ? <SemesterForm /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/admin/semester-list"
+            element={
+              accessToken ? <SemesterListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/semester/:id/edit"
+            element={
+              accessToken ? <EditSemesterPage /> : <Navigate to="/login" />
+            }
+          />
+          {/*-----------Timeslot------------ */}
+          <Route
+            path="/admin/add-timeslot"
+            element={accessToken ? <TimeslotForm /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/admin/timeslot-list"
+            element={
+              accessToken ? <TimeslotListPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/admin/timeslot/:id/edit"
+            element={
+              accessToken ? <EditTimeslotPage /> : <Navigate to="/login" />
             }
           />
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
