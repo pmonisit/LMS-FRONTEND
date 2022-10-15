@@ -5,13 +5,13 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
+const Day2Selection = ({ list, form, onSetForm, id, label, day }) => {
   const accountFormContext = useContext(AccountFormContext);
 
   const handleChange = (event) => {
-    onSetAccountForm({
-      ...accountForm,
-      childId: event.target.value,
+    onSetForm({
+      ...form,
+      dayTwo: event.target.value,
     });
     console.log(event.target.value);
   };
@@ -22,27 +22,26 @@ const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
           {label}
         </InputLabel>
         <NativeSelect
-          value={id}
+          value={day}
           onChange={handleChange}
           inputProps={{
-            name: "childId",
+            name: `${id}`,
 
             id: "uncontrolled-native",
           }}
         >
           <option></option>
-          {list.map((item) => {
-            return (
-              <option
-                key={item.accountId}
-                value={item.accountId}
-              >{`${item.lastName}, ${item.middleName} ${item.firstName}`}</option>
-            );
-          })}
+          <option value="M">Monday</option>
+          <option value="T">Tuesday</option>
+          <option value="W">Wednesday</option>
+          <option value="Th">Thursday</option>
+          <option value="F">Friday</option>
+          <option value="S">Saturday</option>
+          <option value="Su">Sunday</option>
         </NativeSelect>
       </FormControl>
     </Box>
   );
 };
 
-export default Selection;
+export default Day2Selection;

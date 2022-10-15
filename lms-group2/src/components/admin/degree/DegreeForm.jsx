@@ -37,7 +37,7 @@ const DegreeForm = ({ initialValue, degreeId }) => {
     <Grid
       container
       justifyContent="center"
-      sx={{ marginTop: "5vh" }}
+      sx={{ marginTop: "100px" }}
       component="form"
       onSubmit={(event) => {
         event.preventDefault();

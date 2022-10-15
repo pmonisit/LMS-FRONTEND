@@ -86,12 +86,14 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
             <LectureForm
               lectureForm={lectureForm}
               onSetLectureForm={setLectureForm}
+              lectureId={lectureId}
             />
           )}
           {lectureStep === 1 && (
             <LectureForm2
               lectureForm={lectureForm}
               onSetLectureForm={setLectureForm}
+              lectureId={lectureId}
             />
           )}
         </Grid>
