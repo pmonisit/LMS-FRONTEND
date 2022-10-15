@@ -1,31 +1,20 @@
-import { createContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { Grid, Toolbar } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { Box } from "@mui/system";
-import { TableHead, Typography } from "@mui/material";
+import { TableHead } from "@mui/material";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
-import * as accountService from "../../services/admin/AccountService";
-import * as degreeService from "../../services/admin/DegreeService";
 import Sidebar from "../../components/shared/Sidebar";
+import { CurriculumContext } from "../../context/student/CurriculumContext";
 
 const StudentCurriculumPage = () => {
-  const [user, setUser] = useState([]);
-  const [degree, setDegree] = useState([]);
+  const { degree, handleCurriculum, handleConvert, handleSumOfUnits } =
+    useContext(CurriculumContext);
 
-  useEffect(() => {
-    accountService.getCurrent().then((response) => {
-      setUser(response.data[0][0]);
-      let degreeId = response.data[0][10];
-      degreeService.getDegreeById(degreeId).then((degree) => {
-        setDegree(degree.data);
-        console.log(degree.data);
-      });
-    });
-  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
@@ -37,302 +26,86 @@ const StudentCurriculumPage = () => {
             <br /> Proposed ({degree.unitsRequired} units)
           </div>
           <br />
-          <Box align="center">First Year</Box>
-          <br />
-          <Grid sx={{ flexGrow: 1 }} container spacing={5}>
-            <Grid item xs={12}>
-              <Grid container justifyContent="center" spacing={10}>
-                <Grid item>
-                  <Paper
-                    sx={{
-                      height: 350,
-                      width: 400,
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-                    }}
-                  >
-                    <TableContainer>
-                      <Table size="small" aria-label="a dense table">
-                        <TableHead align="center">
-                          <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell>1st Sem</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Course Code</TableCell>
-                            <TableCell>Unit</TableCell>
-                            <TableCell>Remark</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Math101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>ENROLLED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Eng101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PASSED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Phy101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PREREQ:Phy 1</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Fil101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>PE101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>SPEECH101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>LAB101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="right">TOTAL</TableCell>
-                            <TableCell>21</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
+          {handleCurriculum().map((curriculum) => {
+            return (
+              <Box key={curriculum[0][9]}>
+                <Box align="center">
+                  {handleConvert(curriculum[0][7])} YEAR LEVEL
+                </Box>
+                <Grid sx={{ flexGrow: 1 }} container spacing={5}>
+                  <Grid item xs={12}>
+                    <Grid container justifyContent="center" spacing={10}>
+                      <Grid item>
+                        <Paper
+                          sx={{
+                            height: 280,
+                            width: 500,
+                            backgroundColor: (theme) =>
+                              theme.palette.mode === "dark"
+                                ? "#1A2027"
+                                : "#fff",
+                          }}
+                        >
+                          <TableContainer>
+                            <Table size="small" aria-label="a dense table">
+                              <TableHead align="center">
+                                <TableRow>
+                                  <TableCell align="center" colSpan={4}>
+                                    {handleConvert(curriculum[0][8])} SEMESTER
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell
+                                    style={{
+                                      whiteSpace: "normal",
+                                      wordWrap: "break-word",
+                                    }}
+                                    width="25%"
+                                  >
+                                    Course Code
+                                  </TableCell>
+                                  <TableCell>Course Name</TableCell>
+                                  <TableCell>Units</TableCell>
+                                  <TableCell>Remarks</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {curriculum.map((data) => {
+                                  return (
+                                    <TableRow key={data[9]}>
+                                      <TableCell>{data[0]}</TableCell>
+                                      <TableCell>{data[1]}</TableCell>
+                                      <TableCell>{data[2]}</TableCell>
+                                      <TableCell>Remarks</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                                <TableRow>
+                                  <TableCell align="right" colSpan={2}>
+                                    TOTAL
+                                  </TableCell>
+                                  <TableCell>
+                                    {handleSumOfUnits(
+                                      curriculum[0][7],
+                                      curriculum[0][8]
+                                    )}
+                                  </TableCell>
+                                  <TableCell></TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Paper>
+                        <Toolbar />
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Paper
-                    sx={{
-                      height: 350,
-                      width: 400,
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-                    }}
-                  >
-                    <TableContainer>
-                      <Table size="small" aria-label="a dense table">
-                        <TableHead align="center">
-                          <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell>2nd Sem</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Course Code</TableCell>
-                            <TableCell>Unit</TableCell>
-                            <TableCell>Remark</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Math101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>ENROLLED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Eng101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PASSED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Phy101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PREREQ:Phy 1</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Fil101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>PE101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>SPEECH101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>LAB101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="right">TOTAL</TableCell>
-                            <TableCell>21</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <br />
-          <Box align="center" border={1}>
-            2nd Year
-          </Box>
-          <br />
-          <Grid sx={{ flexGrow: 1 }} container spacing={5}>
-            <Grid item xs={12}>
-              <Grid container justifyContent="center" spacing={10}>
-                <Grid item>
-                  <Paper
-                    sx={{
-                      height: 350,
-                      width: 400,
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-                    }}
-                  >
-                    <TableContainer>
-                      <Table size="small" aria-label="a dense table">
-                        <TableHead align="center">
-                          <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell>1st Sem</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Course Code</TableCell>
-                            <TableCell>Unit</TableCell>
-                            <TableCell>Remark</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Math101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>ENROLLED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Eng101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PASSED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Phy101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PREREQ:Phy 1</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Fil101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>PE101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>SPEECH101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>LAB101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="right">TOTAL</TableCell>
-                            <TableCell>21</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
-                </Grid>
-                <Grid item>
-                  <Paper
-                    sx={{
-                      height: 350,
-                      width: 400,
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-                    }}
-                  >
-                    <TableContainer>
-                      <Table size="small" aria-label="a dense table">
-                        <TableHead align="center">
-                          <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell>2nd Sem</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Course Code</TableCell>
-                            <TableCell>Unit</TableCell>
-                            <TableCell>Remark</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>Math101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>ENROLLED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Eng101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PASSED</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Phy101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell>PREREQ:Phy 1</TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>Fil101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>PE101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>SPEECH101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell>LAB101</TableCell>
-                            <TableCell>3</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="right">TOTAL</TableCell>
-                            <TableCell>21</TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+              </Box>
+            );
+          })}
         </Grid>
+        <Toolbar />
       </Box>
     </Box>
   );

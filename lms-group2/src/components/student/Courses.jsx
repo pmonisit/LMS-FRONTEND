@@ -59,54 +59,61 @@ const Courses = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {lecturesBySem
-                .filter((value) => {
-                  if (searchTerm == "") {
-                    return value;
-                  } else if (
-                    value[3].toLowerCase().includes(searchTerm.toLowerCase())
-                  ) {
-                    return value;
-                  } else if (
-                    value[2].toLowerCase().includes(searchTerm.toLowerCase())
-                  ) {
-                    return value;
-                  }
-                })
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((lecture) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={lecture[0]}
-                    >
-                      <TableCell>
-                        {lecture[0]}
-                        {lecture[2]}
-                      </TableCell>
-                      <TableCell>{lecture[3]}</TableCell>
-                      <TableCell>
-                        <i>for</i> {lecture[5]}
-                      </TableCell>
-                      <TableCell>{lecture[17]}</TableCell>
-                      <TableCell>
-                        {lecture[11]}
-                        {lecture[12]} {lecture[13]}-{lecture[14]}
-                      </TableCell>
-                      <TableCell>{lecture[10]}</TableCell>
-                      <TableCell>
-                        {lecture[9]}, {lecture[7]}, {lecture[8]}
-                      </TableCell>
-                      <TableCell>{lecture[15]}</TableCell>
-                      <TableCell>{lecture[16]}</TableCell>
-                      <TableCell>
-                        {renderEnrolActions(lecture[0], lecture[2])}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+              {lecturesBySem.length > 0 ? (
+                lecturesBySem
+                  .filter((value) => {
+                    if (searchTerm == "") {
+                      return value;
+                    } else if (
+                      value[3].toLowerCase().includes(searchTerm.toLowerCase())
+                    ) {
+                      return value;
+                    } else if (
+                      value[2].toLowerCase().includes(searchTerm.toLowerCase())
+                    ) {
+                      return value;
+                    }
+                  })
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((lecture) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={lecture[0]}
+                      >
+                        <TableCell>{lecture[2]}</TableCell>
+                        <TableCell>{lecture[3]}</TableCell>
+                        <TableCell>
+                          <i>for</i> {lecture[4]}
+                        </TableCell>
+                        <TableCell>{lecture[17]}</TableCell>
+                        <TableCell>
+                          {lecture[11]}
+                          {lecture[12]} {lecture[13]}-{lecture[14]}
+                        </TableCell>
+                        <TableCell>{lecture[10]}</TableCell>
+                        <TableCell>
+                          {lecture[9]}, {lecture[7]}, {lecture[8]}
+                        </TableCell>
+                        <TableCell>{lecture[15]}</TableCell>
+                        <TableCell>{lecture[16]}</TableCell>
+                        <TableCell>
+                          {renderEnrolActions(lecture[0], lecture[2])}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+              ) : (
+                <TableRow>
+                  <TableCell align="center" colSpan={9}>
+                    No Available Courses.
+                  </TableCell>
+                </TableRow>
+              )}
+
+              {}
             </TableBody>
           </Table>
         </TableContainer>

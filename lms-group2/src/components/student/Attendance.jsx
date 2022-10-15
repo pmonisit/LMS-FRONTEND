@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import * as attendanceService from "../../services/professor/AttendanceService";
@@ -18,8 +18,6 @@ const Attendance = () => {
       setCurrentSem(response.data);
       const semId = response.data.semesterId;
       attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
-        console.log(semId);
-        console.log(res.data);
         attendanceBySem.push(res.data);
         setAttendancePerSem(...attendanceBySem);
         setEvents(
@@ -36,10 +34,6 @@ const Attendance = () => {
       });
     });
   }, []);
-
-  const handleLoop = () => {
-    console.log(events);
-  };
 
   return (
     <Box>

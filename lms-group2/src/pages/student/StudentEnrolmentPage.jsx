@@ -13,13 +13,14 @@ import Sidebar from "../../components/shared/Sidebar";
 
 const StudentEnrolmentPage = () => {
   const {
-    columns,
-    renderEnrolActions,
     coursesAssignedColumns,
+    enrolColumns,
     myRecommendedCoursesAssigned,
     handleRemarks,
     myDesiredSLoads,
+    myEnrolledSLoads,
     currentSem,
+    handleEnrolLectures,
   } = useContext(EnrolContext);
 
   return (
@@ -50,32 +51,42 @@ const StudentEnrolmentPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {myRecommendedCoursesAssigned.map((course) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={course[0]}
-                      >
-                        <TableCell>{course[0]}</TableCell>
-                        <TableCell>{course[1]}</TableCell>
-                        <TableCell>{course[2]}</TableCell>
-                        <TableCell>{handleRemarks(course[0])}</TableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {myRecommendedCoursesAssigned.length > 0 ? (
+                    myRecommendedCoursesAssigned.map((course) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={course[0]}
+                        >
+                          <TableCell>{course[0]}</TableCell>
+                          <TableCell>{course[1]}</TableCell>
+                          <TableCell>{course[2]}</TableCell>
+                          <TableCell>{handleRemarks(course[0])}</TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell align="center" colSpan={9}>
+                        No Advised Courses.
+                      </TableCell>
+                    </TableRow>
+                  )}
+
+                  {}
                 </TableBody>
               </Table>
             </TableContainer>
           </Paper>
-          <h4> My Desired Courses</h4>
+          <h4> My Enrolled Courses</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    {columns.map((column) => (
+                    {enrolColumns.map((column) => (
                       <TableCell
                         key={column.id}
                         align={column.align}
@@ -87,34 +98,50 @@ const StudentEnrolmentPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {myDesiredSLoads.map((lecture) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={lecture[1]}
+                  {myEnrolledSLoads.length > 0 ? (
+                    myEnrolledSLoads.map((lecture) => {
+                      return handleEnrolLectures(lecture);
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell align="center" colSpan={9}>
+                        No Enrolled Courses.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          <h4> My Desired Courses</h4>
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {enrolColumns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
                       >
-                        <TableCell>{lecture[2]}</TableCell>
-                        <TableCell>{lecture[3]}</TableCell>
-                        <TableCell>RESTRICTION</TableCell>
-                        <TableCell>{lecture[16]}</TableCell>
-                        <TableCell>
-                          {lecture[4]}
-                          {lecture[5]} {lecture[6]}-{lecture[7]}
-                        </TableCell>
-                        <TableCell>{lecture[8]}</TableCell>
-                        <TableCell>
-                          {lecture[13]}, {lecture[12]}
-                        </TableCell>
-                        <TableCell>{lecture[14]}</TableCell>
-                        <TableCell>{lecture[15]}</TableCell>
-                        <TableCell>
-                          {renderEnrolActions(lecture[1], lecture[2])}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {myDesiredSLoads.length > 0 ? (
+                    myDesiredSLoads.map((lecture) => {
+                      return handleEnrolLectures(lecture);
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell align="center" colSpan={9}>
+                        No Desired Courses.
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>

@@ -5,6 +5,7 @@ import App from "./App";
 import { UserInterfaceProvider } from "./context/shared/UserInterfaceContext";
 import { AccountFormProvider } from "./context/admin/account/AccountFormContext";
 import { EnrolProvider } from "./context/student/EnrolContext";
+import { CurriculumProvider } from "./context/student/CurriculumContext";
 import { GradeProvider } from "./context/student/GradeContext";
 import { AdminProvider } from "./context/admin/account/adminContext";
 
@@ -14,13 +15,15 @@ root.render(
     <BrowserRouter>
       <UserInterfaceProvider>
         <AccountFormProvider>
-          <EnrolProvider>
-            <GradeProvider>
-              <AdminProvider>
-                <App />
-              </AdminProvider>
-            </GradeProvider>
-          </EnrolProvider>
+          <CurriculumProvider>
+            <EnrolProvider>
+              <GradeProvider>
+                <AdminProvider>
+                  <App />
+                </AdminProvider>
+              </GradeProvider>
+            </EnrolProvider>
+          </CurriculumProvider>
         </AccountFormProvider>
       </UserInterfaceProvider>
     </BrowserRouter>
