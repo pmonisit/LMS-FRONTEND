@@ -21,15 +21,25 @@ const StudentListPage = () => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        LinkComponent={Link}
-        to="/admin/add-user"
-      >
-        Add Student
-      </Button>
-      <ListTable details={studentList} />
+      <div style={{ marginTop: "80px" }}>
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          LinkComponent={Link}
+          to="/admin/add-user"
+          onClick={() => {
+            accountFormContext.onSetIsRole({
+              isStudent: true,
+              isAdmin: false,
+              isParent: false,
+              isProfessor: false,
+            });
+          }}
+        >
+          Add Student
+        </Button>
+        <ListTable details={studentList} />
+      </div>
     </>
   );
 };

@@ -8,6 +8,10 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import * as adminService from "../../../services/admin/Semester";
 import { AdminContext } from "../../../context/admin/account/adminContext";
+import StartDatePicker from "./StartDatePicker";
+import IsCurrentRadioButton from "./IsCurrentRadioButton";
+import StartYearSelection from "./StartYearSelection";
+import EndYearSelection from "./EndYearSelection";
 
 const SemesterForm = ({ initialValue, semesterId }) => {
   const adminContext = useContext(AdminContext);
@@ -62,43 +66,63 @@ const SemesterForm = ({ initialValue, semesterId }) => {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="startDate"
                   onChange={handleChange}
                   value={startDate}
                   label="Start Date"
                   variant="standard"
                   fullWidth
+                /> */}
+                <StartDatePicker
+                  semesterForm={semesterForm}
+                  onSetSemesterForm={setSemesterForm}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="isCurrent"
                   onChange={handleChange}
                   value={isCurrent}
                   label="Is Current(Temporary Name)"
                   variant="standard"
                   fullWidth
+                /> */}
+                <IsCurrentRadioButton
+                  semesterForm={semesterForm}
+                  onSetSemesterForm={setSemesterForm}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="startingYear"
                   onChange={handleChange}
                   value={startingYear}
                   label="Starting Year"
                   variant="standard"
                   fullWidth
+                /> */}
+                <StartYearSelection
+                  form={semesterForm}
+                  onSetForm={setSemesterForm}
+                  label="Starting Year"
+                  value={startingYear}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="endingYear"
                   onChange={handleChange}
                   value={endingYear}
                   label="Ending Year"
                   variant="standard"
                   fullWidth
+                /> */}
+                <EndYearSelection
+                  form={semesterForm}
+                  onSetForm={setSemesterForm}
+                  label="Ending Year"
+                  value={endingYear}
                 />
               </Grid>
               <Grid item xs={12}>

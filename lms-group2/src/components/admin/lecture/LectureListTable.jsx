@@ -56,11 +56,11 @@ const LectureListTable = ({ details }) => {
                   <ArrowForwardIcon />
                 </IconButton>
                 <IconButton
-                  onClick={() => {
-                    adminContext.onSetIsEditSemester(true);
-                  }}
-                  LinkComponent={Link}
-                  to={`/admin/lecture/${detail.lectureId}/edit`}
+                // onClick={() => {
+                //   adminContext.onSetIsEditSemester(true);
+                // }}
+                // LinkComponent={Link}
+                // to={`/admin/lecture/${detail.lectureId}/edit`}
                 >
                   <EditIcon />
                 </IconButton>

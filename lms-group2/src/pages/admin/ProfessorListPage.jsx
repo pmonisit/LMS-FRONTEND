@@ -23,15 +23,25 @@ const ProfessorListPage = () => {
   });
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        LinkComponent={Link}
-        to="/admin/add-user"
-      >
-        Add Professor
-      </Button>
-      <ListTable details={professorList} />;
+      <div style={{ marginTop: "80px" }}>
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          LinkComponent={Link}
+          to="/admin/add-user"
+          onClick={() => {
+            accountFormContext.onSetIsRole({
+              isStudent: false,
+              isAdmin: false,
+              isParent: false,
+              isProfessor: true,
+            });
+          }}
+        >
+          Add Professor
+        </Button>
+        <ListTable details={professorList} />;
+      </div>
     </>
   );
 };

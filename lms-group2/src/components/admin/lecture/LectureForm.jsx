@@ -8,9 +8,23 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import * as adminService from "../../../services/admin/Semester";
 import { AdminContext } from "../../../context/admin/account/adminContext";
+import * as courseService from "../../../services/admin/CourseService";
+import * as semesterService from "../../../services/admin/Semester";
+import CourseSelection from "./CourseSelection";
+import SemesterSelection from "./SemesterSelection";
 
-const LectureForm = ({ lectureForm, onSetLectureForm }) => {
+const LectureForm = ({ lectureForm, onSetLectureForm, lectureId }) => {
   const adminContext = useContext(AdminContext);
+  const [courses, setCourses] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  useEffect(() => {
+    courseService.getCourse().then((res) => {
+      setCourses(res.data);
+    });
+    semesterService.getSemester().then((res) => {
+      setSemesters(res.data);
+    });
+  }, []);
 
   const {
     section,
@@ -50,24 +64,38 @@ const LectureForm = ({ lectureForm, onSetLectureForm }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="courseId"
                   onChange={handleChange}
                   value={courseId}
                   label="Course Id"
                   variant="standard"
                   fullWidth
+                /> */}
+                <CourseSelection
+                  list={courses}
+                  form={lectureForm}
+                  onSetForm={onSetLectureForm}
+                  id={courseId}
+                  label="Course"
                 />
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="semesterId"
                   onChange={handleChange}
                   value={semesterId}
                   label="Semester Id"
                   variant="standard"
                   fullWidth
+                /> */}
+                <SemesterSelection
+                  list={semesters}
+                  form={lectureForm}
+                  onSetForm={onSetLectureForm}
+                  id={semesterId}
+                  label="Semester"
                 />
               </Grid>
             </Grid>

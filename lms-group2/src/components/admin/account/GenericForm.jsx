@@ -27,13 +27,25 @@ import {
 const GenericForm = ({ initialValue, accountId }) => {
   const accountFormContext = useContext(AccountFormContext);
   const { step, steps } = accountFormContext;
+  const { isAdmin, isProfessor, isStudent, isParent } =
+    accountFormContext.isRole;
   // const { role } = accountFormContext.accountForm;
-
+  const getRole = () => {
+    if (isAdmin && !isProfessor && !isStudent && !isParent) {
+      return "admin";
+    } else if (!isAdmin && isProfessor && !isStudent && !isParent) {
+      return "professor";
+    } else if (!isAdmin && !isProfessor && isStudent && !isParent) {
+      return "student";
+    } else if (!isAdmin && !isProfessor && !isStudent && isParent) {
+      return "parent";
+    }
+  };
   const [accountForm, setAccountForm] = useState(
     initialValue
       ? initialValue
       : {
-          role: "",
+          role: getRole(),
           firstName: "",
           middleName: "",
           lastName: "",
@@ -96,6 +108,12 @@ const GenericForm = ({ initialValue, accountId }) => {
                 });
                 break;
             }
+            accountFormContext.onSetIsRole({
+              isStudent: false,
+              isAdmin: false,
+              isParent: false,
+              isProfessor: false,
+            });
           }
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}

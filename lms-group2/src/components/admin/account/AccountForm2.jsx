@@ -12,13 +12,20 @@ import BasicDatePicker from "./BasicDatePicker";
 import { EventAvailableSharp } from "@mui/icons-material";
 import Selection from "./Selection";
 import { getStudents } from "../../../services/admin/AccountService";
+import * as degreeService from "../../../services/admin/DegreeService";
+import GenderRadioButton from "./GenderRadioButton";
+import ActiveRadioButton from "./ActiveRadioButton";
+import DegreeSelection from "./DegreeSelection";
+
 const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
   const accountFormContext = useContext(AccountFormContext);
   // const { gender, birthdate, status, active, childId, degreeId } =
   //   accountFormContext.accountForm;
   const [students, setStudents] = useState([]);
+  const [degrees, setDegrees] = useState([]);
   useEffect(() => {
     getStudents().then((res) => setStudents(res.data));
+    degreeService.getDegree().then((res) => setDegrees(res.data));
   }, []);
   const {
     role,
@@ -56,13 +63,32 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="gender"
                   onChange={handleChange}
                   value={gender}
                   label="Gender"
                   variant="standard"
                   fullWidth
+                /> */}
+                <GenderRadioButton
+                  accountForm={accountForm}
+                  onSetAccountForm={onSetAccountForm}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                {/* <TextField
+                  name="active"
+                  onChange={handleChange}
+                  value={active}
+                  label="Active"
+                  variant="standard"
+                  fullWidth
+                /> */}
+                <ActiveRadioButton
+                  accountForm={accountForm}
+                  onSetAccountForm={onSetAccountForm}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -79,17 +105,6 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
                   onSetAccountForm={onSetAccountForm}
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  name="active"
-                  onChange={handleChange}
-                  value={active}
-                  label="Active"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
               {role === "parent" && (
                 <Grid item xs={12}>
                   {/* <TextField
@@ -101,23 +116,31 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
                     fullWidth
                   /> */}
                   <Selection
-                    childId={childId}
+                    id={childId}
                     list={students}
                     accountForm={accountForm}
                     onSetAccountForm={onSetAccountForm}
+                    label="Child Name"
                   />
                 </Grid>
               )}
 
               {role === "student" && (
                 <Grid item xs={12}>
-                  <TextField
+                  {/* <TextField
                     name="degreeId"
                     onChange={handleChange}
                     value={degreeId}
                     label="DegreeId"
                     variant="standard"
                     fullWidth
+                  /> */}
+                  <DegreeSelection
+                    list={degrees}
+                    form={accountForm}
+                    onSetForm={onSetAccountForm}
+                    id={degreeId}
+                    label="Degree"
                   />
                 </Grid>
               )}

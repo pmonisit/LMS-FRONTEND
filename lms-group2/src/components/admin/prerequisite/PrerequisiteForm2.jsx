@@ -8,9 +8,15 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import * as prerequisiteService from "../../../services/admin/Prerequisite";
+import CourseSelection from "./CourseSelection";
+import * as courseService from "../../../services/admin/CourseService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 
 const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    courseService.getCourse().then((res) => setCourses(res.data));
+  });
   const params = useParams();
   const adminContext = useContext(AdminContext);
   const [prerequisiteForm, setPrerequisiteForm] = useState(
@@ -61,13 +67,21 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   name="prerequisiteCourseId"
                   onChange={handleChange}
                   value={prerequisiteCourseId}
                   label="Prerequisite Course"
                   variant="standard"
                   fullWidth
+                /> */}
+                <CourseSelection
+                  list={courses}
+                  form={prerequisiteForm}
+                  onSetForm={setPrerequisiteForm}
+                  id={prerequisiteCourseId}
+                  label="Prerequisite Course"
+                  selectedId={params.id}
                 />
               </Grid>
             </Grid>

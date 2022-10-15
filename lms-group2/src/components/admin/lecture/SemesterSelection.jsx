@@ -5,13 +5,13 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
+const SemesterSelection = ({ list, form, onSetForm, id, label }) => {
   const accountFormContext = useContext(AccountFormContext);
 
   const handleChange = (event) => {
-    onSetAccountForm({
-      ...accountForm,
-      childId: event.target.value,
+    onSetForm({
+      ...form,
+      semesterId: event.target.value,
     });
     console.log(event.target.value);
   };
@@ -25,7 +25,7 @@ const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
           value={id}
           onChange={handleChange}
           inputProps={{
-            name: "childId",
+            name: "semesterId",
 
             id: "uncontrolled-native",
           }}
@@ -33,10 +33,9 @@ const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
           <option></option>
           {list.map((item) => {
             return (
-              <option
-                key={item.accountId}
-                value={item.accountId}
-              >{`${item.lastName}, ${item.middleName} ${item.firstName}`}</option>
+              <option key={item.semesterId} value={item.semesterId}>
+                {`${item.semOrder}, ${item.startingYear} - ${item.endingYear}`}
+              </option>
             );
           })}
         </NativeSelect>
@@ -45,4 +44,4 @@ const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
   );
 };
 
-export default Selection;
+export default SemesterSelection;

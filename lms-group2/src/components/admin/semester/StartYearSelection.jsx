@@ -5,13 +5,13 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
-const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
+const StartYearSelection = ({ form, onSetForm, value, label }) => {
   const accountFormContext = useContext(AccountFormContext);
-
+  const currentYear = new Date().getFullYear();
   const handleChange = (event) => {
-    onSetAccountForm({
-      ...accountForm,
-      childId: event.target.value,
+    onSetForm({
+      ...form,
+      startingYear: event.target.value,
     });
     console.log(event.target.value);
   };
@@ -22,27 +22,24 @@ const Selection = ({ list, accountForm, onSetAccountForm, id, label }) => {
           {label}
         </InputLabel>
         <NativeSelect
-          value={id}
+          value={value}
           onChange={handleChange}
           inputProps={{
-            name: "childId",
+            name: `${value}`,
 
             id: "uncontrolled-native",
           }}
         >
           <option></option>
-          {list.map((item) => {
-            return (
-              <option
-                key={item.accountId}
-                value={item.accountId}
-              >{`${item.lastName}, ${item.middleName} ${item.firstName}`}</option>
-            );
-          })}
+          <option value={currentYear - 1}>{currentYear - 1}</option>
+          <option value={currentYear}>{currentYear}</option>
+          <option value={currentYear + 1}>{currentYear + 1}</option>
+          <option value={currentYear + 2}>{currentYear + 2}</option>
+          <option value={currentYear + 3}>{currentYear + 3}</option>
         </NativeSelect>
       </FormControl>
     </Box>
   );
 };
 
-export default Selection;
+export default StartYearSelection;

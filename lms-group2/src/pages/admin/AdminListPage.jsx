@@ -21,16 +21,26 @@ const AdminListPage = () => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        LinkComponent={Link}
-        to="/admin/add-user"
-      >
-        Add Administrator
-      </Button>
-      <ListTable details={adminList} />;
-      <PrerequisiteForm2 />
+      <div style={{ marginTop: "80px" }}>
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          LinkComponent={Link}
+          to="/admin/add-user"
+          onClick={() => {
+            accountFormContext.onSetIsRole({
+              isStudent: false,
+              isProfessor: false,
+              isParent: false,
+              isAdmin: true,
+            });
+          }}
+        >
+          Add Administrator
+        </Button>
+        <ListTable details={adminList} />;
+        <PrerequisiteForm2 />
+      </div>
     </>
   );
 };

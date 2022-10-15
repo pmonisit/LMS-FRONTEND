@@ -32,6 +32,8 @@ export const AccountFormContext = createContext({
   onSetParentList: () => {},
   isEdit: false,
   onSetIsEdit: () => {},
+  isRole: {},
+  onSetIsRole: () => {},
 });
 
 export const AccountFormProvider = ({ children }) => {
@@ -88,6 +90,12 @@ export const AccountFormProvider = ({ children }) => {
   const [professorList, setProfessorList] = useState([]);
   const [parentList, setParentList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [isRole, setIsRole] = useState({
+    isAdmin: false,
+    isProfessor: false,
+    isStudent: false,
+    isParent: false,
+  });
 
   //----------Methods-----------------------
 
@@ -114,7 +122,7 @@ export const AccountFormProvider = ({ children }) => {
     // console.log(accountForm);
   };
 
-  const steps = ["Personal Details", "Basic Details", "Finish"];
+  const steps = ["Personal Details", "Basic Details"];
   return (
     <AccountFormContext.Provider
       value={{
@@ -148,6 +156,8 @@ export const AccountFormProvider = ({ children }) => {
         onSetParentList: setParentList,
         isEdit,
         onSetIsEdit: setIsEdit,
+        isRole,
+        onSetIsRole: setIsRole,
       }}
     >
       {children}

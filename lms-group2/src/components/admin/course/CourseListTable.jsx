@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
@@ -47,7 +48,7 @@ const CourseListTable = ({ details }) => {
                   LinkComponent={Link}
                   to={`/admin/add-prerequisite/${detail.courseId}`}
                 >
-                  <ArrowForwardIcon />
+                  <AddIcon />
                 </IconButton>
                 <IconButton
                   onClick={() => {

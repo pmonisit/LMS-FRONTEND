@@ -19,15 +19,25 @@ const ParentListPage = () => {
   });
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        LinkComponent={Link}
-        to="/admin/add-user"
-      >
-        Add Parent
-      </Button>
-      <ListTable details={parentList} />;
+      <div style={{ marginTop: "80px" }}>
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          LinkComponent={Link}
+          to="/admin/add-user"
+          onClick={() => {
+            accountFormContext.onSetIsRole({
+              isStudent: false,
+              isAdmin: false,
+              isParent: true,
+              isProfessor: false,
+            });
+          }}
+        >
+          Add Parent
+        </Button>
+        <ListTable details={parentList} />;
+      </div>
     </>
   );
 };
