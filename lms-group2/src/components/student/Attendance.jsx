@@ -2,38 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import * as attendanceService from "../../services/professor/AttendanceService";
-import { Grid, Toolbar, Box } from "@mui/material";
+import { Grid, Toolbar, Box, Button } from "@mui/material";
 import * as semesterService from "../../services/admin/Semester";
+import { Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AttendanceContext } from "../../context/student/AttendanceContext";
 
 const Attendance = () => {
   const calendarComponentRef = useRef(null);
-  const [events, setEvents] = useState({ title: "", start: "" });
-  const [attendancePerSem, setAttendancePerSem] = useState([]);
-  const [attendanceCurrentSem, setAttendanceCurrentSem] = useState([]);
-  const [currentSem, setCurrentSem] = useState([]);
-
-  useEffect(() => {
-    let attendanceBySem = [];
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-      const semId = response.data.semesterId;
-      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
-        attendanceBySem.push(res.data);
-        setAttendancePerSem(...attendanceBySem);
-        setEvents(
-          res.data.map((a) => {
-            return {
-              ...events,
-              title: a[0] + " - " + a[7],
-              start: a[6],
-              color:
-                a[7] === "PRESENT" ? "blue" : a[7] === "LATE" ? "green" : "red",
-            };
-          })
-        );
-      });
-    });
-  }, []);
+  const { events, currentSem, attendancePerSem } =
+    useContext(AttendanceContext);
 
   return (
     <Box>
@@ -43,13 +22,25 @@ const Attendance = () => {
           Attendance for {currentSem.semOrder} AY {currentSem.startingYear} -
           {currentSem.endingYear}
         </h2>
+
+        <Typography align="center">
+          <Link to="viewlist">
+            <Button color="primary" type="submit" variant="contained">
+              VIEW ATTENDANCE BY LIST
+            </Button>
+          </Link>
+        </Typography>
         <div className="demo-app">
           <div className="demo-app-calendar">
             <FullCalendar
-              defaultView="dayGridMonth"
               plugins={[dayGridPlugin]}
               ref={calendarComponentRef}
               events={events}
+              headerToolbar={{
+                left: "prev today",
+                center: "title",
+                right: "next",
+              }}
             />
           </div>
         </div>

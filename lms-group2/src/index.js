@@ -5,6 +5,8 @@ import App from "./App";
 import { UserInterfaceProvider } from "./context/shared/UserInterfaceContext";
 import { AccountFormProvider } from "./context/admin/account/AccountFormContext";
 import { EnrolProvider } from "./context/student/EnrolContext";
+import { AttendanceProvider } from "./context/student/AttendanceContext";
+import { ScheduleProvider } from "./context/student/ScheduleContext";
 import { CurriculumProvider } from "./context/student/CurriculumContext";
 import { GradeProvider } from "./context/student/GradeContext";
 import { AdminProvider } from "./context/admin/account/adminContext";
@@ -17,11 +19,15 @@ root.render(
         <AccountFormProvider>
           <CurriculumProvider>
             <EnrolProvider>
-              <GradeProvider>
-                <AdminProvider>
-                  <App />
-                </AdminProvider>
-              </GradeProvider>
+              <ScheduleProvider>
+                <GradeProvider>
+                  <AttendanceProvider>
+                    <AdminProvider>
+                      <App />
+                    </AdminProvider>
+                  </AttendanceProvider>
+                </GradeProvider>
+              </ScheduleProvider>
             </EnrolProvider>
           </CurriculumProvider>
         </AccountFormProvider>

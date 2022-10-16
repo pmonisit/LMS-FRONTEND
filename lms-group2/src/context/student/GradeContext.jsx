@@ -32,8 +32,8 @@ export const GradeProvider = ({ children }) => {
   }, []);
 
   const gradeColumns = [
-    { id: "courseCode", label: "Course Code", minWidth: 100 },
-    { id: "courseName", label: "Course Name", minWidth: 100 },
+    { id: "courseCode", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "courseName", label: "Course\u00a0Name", minWidth: 100 },
     { id: "section", label: "Section", minWidth: 100 },
     { id: "instructor", label: "Instructor", minWidth: 100 },
     { id: "units", label: "Units", minWidth: 100 },
