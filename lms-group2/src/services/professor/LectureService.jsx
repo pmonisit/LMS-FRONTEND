@@ -37,3 +37,7 @@ export function addLecture(lecture) {
 export function getAllLecturesBySemID(semesterId) {
   return http.get(`/lecture/all/semester/${semesterId}`);
 }
+
+export function getAllMyAtttendancePerLecture(lectureId) {
+  return http.get(`/lecture/myattendance/all/lecture/${lectureId}`);
+}

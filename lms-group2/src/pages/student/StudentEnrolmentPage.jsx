@@ -36,7 +36,7 @@ const StudentEnrolmentPage = () => {
           <h4> My Advised Courses </h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+              <Table>
                 <TableHead>
                   <TableRow>
                     {coursesAssignedColumns.map((column) => (

@@ -36,21 +36,6 @@ const Sidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton LinkComponent={Link} to="/student/schedule">
-              <ListItemText primary={"Schedule"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton LinkComponent={Link} to="/student/attendance">
-              <ListItemText primary={"Attendance"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton LinkComponent={Link} to="/student/grades">
-              <ListItemText primary={"Grades"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
             <ListItemButton LinkComponent={Link} to="/student/curriculum">
               <ListItemText primary={"Curriculum"} />
             </ListItemButton>
@@ -63,6 +48,21 @@ const Sidebar = () => {
           <ListItem disablePadding>
             <ListItemButton LinkComponent={Link} to="/student/enrolment">
               <ListItemText primary={"Enrolment"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton LinkComponent={Link} to="/student/schedule">
+              <ListItemText primary={"Schedule"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton LinkComponent={Link} to="/student/attendance">
+              <ListItemText primary={"Attendance"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton LinkComponent={Link} to="/student/grades">
+              <ListItemText primary={"Grades"} />
             </ListItemButton>
           </ListItem>
         </List>

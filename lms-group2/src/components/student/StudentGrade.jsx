@@ -18,29 +18,32 @@ const StudentGrade = () => {
     <Grid>
       <Toolbar />
       {mySemestersWithGrades.map((semester) => (
-        <Paper sx={{ width: "100%", overflow: "hidden" }} key={semester[0]}>
-          <h3 align="center">
-            {semester[3]} AY {semester[1]} - {semester[2]}
-          </h3>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {gradeColumns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>{renderGrades(semester[0])}</TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+        <Grid key={semester[0]}>
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <h3 align="center">
+              {semester[3]} AY {semester[1]} - {semester[2]}
+            </h3>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {gradeColumns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>{renderGrades(semester[0])}</TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          <Toolbar />
+        </Grid>
       ))}
     </Grid>
   );

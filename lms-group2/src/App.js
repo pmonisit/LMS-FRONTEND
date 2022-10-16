@@ -23,6 +23,7 @@ import StudentAttendancePage from "./pages/student/StudentAttendancePage";
 import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentAttendanceListPage from "./pages/student/StudentAttendanceListPage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 
 // Services
@@ -405,6 +406,16 @@ const App = () => {
             path="/student/attendance"
             element={
               accessToken ? <StudentAttendancePage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/student/attendance/viewlist"
+            element={
+              accessToken ? (
+                <StudentAttendanceListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route

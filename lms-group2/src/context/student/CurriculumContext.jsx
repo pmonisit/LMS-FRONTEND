@@ -5,9 +5,11 @@ import * as degreeService from "../../services/admin/DegreeService";
 
 export const CurriculumContext = createContext({
   degree: [],
+  myCoursesAssigned: [],
   handleCurriculum: () => {},
   handleConvert: () => {},
   handleSumOfUnits: () => {},
+  handlePassedUnits: () => {},
 });
 
 export const CurriculumProvider = ({ children }) => {
@@ -70,6 +72,18 @@ export const CurriculumProvider = ({ children }) => {
     return sum;
   };
 
+  const handlePassedUnits = () => {
+    let sum = 0;
+    {
+      myCoursesAssigned.map((data) => {
+        if (data[3] === "TAKEN") {
+          sum += data[2];
+        }
+      });
+    }
+    return sum;
+  };
+
   const handleConvert = (number) => {
     let yearLevel = "";
     switch (number) {
@@ -94,13 +108,16 @@ export const CurriculumProvider = ({ children }) => {
 
     return yearLevel;
   };
+
   return (
     <CurriculumContext.Provider
       value={{
         degree: degree,
+        myCoursesAssigned: myCoursesAssigned,
         handleCurriculum: handleCurriculum,
         handleConvert: handleConvert,
         handleSumOfUnits: handleSumOfUnits,
+        handlePassedUnits: handlePassedUnits,
       }}
     >
       {children}

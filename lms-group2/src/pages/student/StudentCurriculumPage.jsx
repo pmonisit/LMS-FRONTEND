@@ -12,8 +12,14 @@ import Sidebar from "../../components/shared/Sidebar";
 import { CurriculumContext } from "../../context/student/CurriculumContext";
 
 const StudentCurriculumPage = () => {
-  const { degree, handleCurriculum, handleConvert, handleSumOfUnits } =
-    useContext(CurriculumContext);
+  const {
+    degree,
+    myCoursesAssigned,
+    handleCurriculum,
+    handleConvert,
+    handleSumOfUnits,
+    handlePassedUnits,
+  } = useContext(CurriculumContext);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -22,15 +28,50 @@ const StudentCurriculumPage = () => {
         <Grid>
           <Toolbar />
           <div align="center">
-            <strong>{degree.degreeName}</strong>
-            <br /> Proposed ({degree.unitsRequired} units)
+            <h2>{degree.degreeName}</h2>
           </div>
           <br />
+          <Paper
+            sx={{
+              width: 200,
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+            }}
+          >
+            <TableContainer>
+              <Table size="small" aria-label="a dense table">
+                <TableBody align="center">
+                  <TableRow>
+                    <TableCell align="center" colSpan={2}>
+                      <b>Summary</b>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Units Required</TableCell>
+                    <TableCell>{degree.unitsRequired}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Units Passed</TableCell>
+                    <TableCell>{handlePassedUnits()}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Remaining Units</TableCell>
+                    <TableCell>
+                      {degree.unitsRequired - handlePassedUnits() >= 0
+                        ? degree.unitsRequired - handlePassedUnits()
+                        : ""}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+
           {handleCurriculum().map((curriculum) => {
             return (
               <Box key={curriculum[0][9]}>
                 <Box align="center">
-                  {handleConvert(curriculum[0][7])} YEAR LEVEL
+                  <h4>{handleConvert(curriculum[0][7])} YEAR LEVEL</h4>
                 </Box>
                 <Grid sx={{ flexGrow: 1 }} container spacing={5}>
                   <Grid item xs={12}>
@@ -38,7 +79,7 @@ const StudentCurriculumPage = () => {
                       <Grid item>
                         <Paper
                           sx={{
-                            height: 280,
+                            // height: 280,
                             width: 500,
                             backgroundColor: (theme) =>
                               theme.palette.mode === "dark"
@@ -55,18 +96,14 @@ const StudentCurriculumPage = () => {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  <TableCell
-                                    style={{
-                                      whiteSpace: "normal",
-                                      wordWrap: "break-word",
-                                    }}
-                                    width="25%"
-                                  >
+                                  <TableCell align="center" width="25%">
                                     Course Code
                                   </TableCell>
-                                  <TableCell>Course Name</TableCell>
-                                  <TableCell>Units</TableCell>
-                                  <TableCell>Remarks</TableCell>
+                                  <TableCell align="center">
+                                    Course Name
+                                  </TableCell>
+                                  <TableCell align="center">Units</TableCell>
+                                  <TableCell align="center">Remarks</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -75,8 +112,12 @@ const StudentCurriculumPage = () => {
                                     <TableRow key={data[9]}>
                                       <TableCell>{data[0]}</TableCell>
                                       <TableCell>{data[1]}</TableCell>
-                                      <TableCell>{data[2]}</TableCell>
-                                      <TableCell>Remarks</TableCell>
+                                      <TableCell align="center">
+                                        {data[2]}
+                                      </TableCell>
+                                      <TableCell align="center">
+                                        {data[3] === "TAKEN" ? "PASSED" : ""}
+                                      </TableCell>
                                     </TableRow>
                                   );
                                 })}

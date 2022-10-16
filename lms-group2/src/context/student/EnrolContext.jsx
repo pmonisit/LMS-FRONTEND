@@ -18,6 +18,7 @@ export const EnrolContext = createContext({
   enrolColumns: [],
   user: [],
   lecturesBySem: [],
+  lectureObject: [],
   myRecommendedCoursesAssigned: [],
   searchTerm: [],
   myDesiredSLoads: [],
@@ -36,6 +37,7 @@ export const EnrolProvider = ({ children }) => {
   const [user, setUser] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
   const [lecturesBySem, setLecturesBySem] = useState([]);
+  const [lectureObject, setLectureObject] = useState([]);
   const [enrolItems, setEnrolItems] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [myDesiredSLoads, setMyDesiredSLoads] = useState([]);
@@ -44,7 +46,6 @@ export const EnrolProvider = ({ children }) => {
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
-  const [mySortedCurriculum, setMySortedCurriculum] = useState([]);
   const [enrolText, setEnrolText] = useState("ENROL");
   const [unenrolText, setUnEnrolText] = useState("UNENROL");
 
@@ -61,7 +62,11 @@ export const EnrolProvider = ({ children }) => {
         lecturesBySem.push(response.data);
         lecturesBySem.map((data) => {
           setLecturesBySem(data);
+          let arrobj = [];
           data.map((a) => {
+            let obj = { ...a };
+            arrobj.push(obj);
+            setLectureObject(arrobj);
             let prereq = [];
             prereqService.getPrereqOfCourse(a[1]).then((response) => {
               prereq = [a[2], response.data];
@@ -90,33 +95,33 @@ export const EnrolProvider = ({ children }) => {
   }, []);
 
   const columns = [
-    { id: "courseCode", label: "Course Code", minWidth: 100 },
-    { id: "courseName", label: "Course Name", minWidth: 100 },
-    { id: "restriction", label: "Restriction", minWidth: 100 },
-    { id: "units", label: "Units", minWidth: 100 },
-    { id: "schedule", label: "Schedule", minWidth: 100 },
-    { id: "section", label: "Section", minWidth: 100 },
-    { id: "instructor", label: "Instructor", minWidth: 100 },
-    { id: "slots", label: "Slots", minWidth: 100 },
-    { id: "demand", label: "Demand", minWidth: 100 },
-    { id: "action", label: "Action", minWidth: 100 },
+    { id: "2", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "3", label: "Course\u00a0Name", minWidth: 100 },
+    { id: "4", label: "Restriction", minWidth: 100 },
+    { id: "17", label: "Units", minWidth: 100 },
+    { id: "11", label: "Schedule", minWidth: 100 },
+    { id: "10", label: "Section", minWidth: 100 },
+    { id: "9", label: "Instructor", minWidth: 100 },
+    { id: "15", label: "Slots", minWidth: 100 },
+    { id: "16", label: "Demand", minWidth: 100 },
+    { id: "action", label: "Remarks/Action", minWidth: 100 },
   ];
 
   const enrolColumns = [
-    { id: "courseCode", label: "Course Code", minWidth: 100 },
-    { id: "courseName", label: "Course Name", minWidth: 100 },
+    { id: "courseCode", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "courseName", label: "Course\u00a0Name", minWidth: 100 },
     { id: "units", label: "Units", minWidth: 100 },
     { id: "schedule", label: "Schedule", minWidth: 100 },
     { id: "section", label: "Section", minWidth: 100 },
     { id: "instructor", label: "Instructor", minWidth: 100 },
     { id: "slots", label: "Slots", minWidth: 100 },
     { id: "demand", label: "Demand", minWidth: 100 },
-    { id: "action", label: "Action", minWidth: 100 },
+    { id: "action", label: "Remarks/Action", minWidth: 100 },
   ];
 
   const coursesAssignedColumns = [
-    { id: "courseCode", label: "Course Code", minWidth: 100 },
-    { id: "courseName", label: "Course Name", minWidth: 100 },
+    { id: "courseCode", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "courseName", label: "Course\u00a0Name", minWidth: 100 },
     { id: "units", label: "Units", minWidth: 100 },
     { id: "action", label: "Remarks/Action", minWidth: 100 },
   ];
@@ -146,9 +151,6 @@ export const EnrolProvider = ({ children }) => {
     const courseAssignedOrTaken = myCoursesAssigned.find(
       (data) => data[0] === courseCode
     );
-    // if (typeof courseAssignedOrTaken == "undefined") {
-    //   console.log(courseCode);
-    // }
     enrolItems.map((data) => {
       enrolItem.splice(
         0,
@@ -175,7 +177,7 @@ export const EnrolProvider = ({ children }) => {
     ) {
       return (
         <Button variant="contained" color="primary" disabled>
-          PASSED
+          TAKEN
         </Button>
       );
     } else if (typeof courseAssignedOrTaken == "undefined") {
@@ -185,12 +187,13 @@ export const EnrolProvider = ({ children }) => {
             {/* ENROL */}
             {enrolText}
           </Button>
-
-          <sub>
-            <font color="#d32f2f">
-              <i>*this course is restricted</i>
-            </font>
-          </sub>
+          <div>
+            <sub>
+              <font color="#d32f2f">
+                <i>*this course is restricted</i>
+              </font>
+            </sub>
+          </div>
         </>
       );
     } else if (
@@ -217,12 +220,13 @@ export const EnrolProvider = ({ children }) => {
             {/* ENROL */}
             {enrolText}
           </Button>
-
-          <sub>
-            <font color="#d32f2f">
-              <i>*with prerequisite</i>
-            </font>
-          </sub>
+          <div>
+            <sub>
+              <font color="#d32f2f">
+                <i>*with prerequisite</i>
+              </font>
+            </sub>
+          </div>
         </>
       );
     }
@@ -354,6 +358,7 @@ export const EnrolProvider = ({ children }) => {
         enrolColumns: enrolColumns,
         user: user,
         lecturesBySem: lecturesBySem,
+        lectureObject: lectureObject,
         myRecommendedCoursesAssigned: myRecommendedCoursesAssigned,
         searchTerm: searchTerm,
         myDesiredSLoads: myDesiredSLoads,
