@@ -1,7 +1,7 @@
 // React
 import * as React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Material Components
 import { CssBaseline } from "@mui/material";
@@ -12,6 +12,7 @@ import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -23,13 +24,19 @@ import StudentAttendancePage from "./pages/student/StudentAttendancePage";
 import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentAttendanceListPage from "./pages/student/StudentAttendanceListPage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
+import EditAttendancePage from "./pages/professor/EditAttendancePage";
+
+import ParentDashboardPage from "./pages/parent/ParentDashboardPage";
+import ParentProfilePage from "./pages/parent/ParentProfilePage";
+import ParentChildGradePage from "./pages/parent/ParentChildGradePage";
+import ParentChildAttendancePage from "./pages/parent/ParentChildAttendancePage";
+import ParentChildSchedulePage from "./pages/parent/ParentChildSchedulePage";
+import ParentChildCurriculumPage from "./pages/parent/ParentChildCurriculumPage";
 
 // Services
 import * as accountService from "./services/shared/accounts";
-
-// JWT Decode
-import jwtDecode from "jwt-decode";
 
 // Context
 import { UserInterfaceContext } from "./context/shared/UserInterfaceContext";
@@ -71,15 +78,34 @@ import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
 import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
+// JWT Decode
+import decode from "jwt-decode";
+
 const App = () => {
+  const [user, setUser] = useState(localStorage.getItem("accessToken"));
   const [accessToken, setAccessToken] = React.useState(
     accountService.getAccessToken()
   );
+  const [role, setRole] = React.useState(accountService.getRole());
 
   const navigate = useNavigate();
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const { isDarkMode, snackbarConfig, onCloseSnackbar } =
     useContext(UserInterfaceContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const date = new Date();
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < date.getTime()) {
+        handleLogout();
+      }
+    }
+    setUser(localStorage.getItem("accessToken"));
+  }, [user]);
 
   const theme = createTheme({
     palette: {
@@ -96,6 +122,7 @@ const App = () => {
   const handleLogout = () => {
     accountService.logout();
     setAccessToken(null);
+    setUser(null);
     navigate("/login");
   };
 
@@ -104,6 +131,8 @@ const App = () => {
       const response = await accountService.loginUser(username, password);
       localStorage.setItem("accessToken", response.data.access_token);
       setAccessToken(response.data.access_token);
+      console.log(response.data);
+
       onOpenSnackbar({
         open: true,
         severity: "success",
@@ -153,7 +182,7 @@ const App = () => {
               )
             }
           />
-          <Route path="*" element={<NotFoundPage />} />
+          {/* <Route path="*" element={<NotFoundPage />} /> */}
           <Route
             path="/profile"
             element={accessToken ? <Profile /> : <Navigate to="/login" />}
@@ -202,6 +231,13 @@ const App = () => {
             path="/professor/dashboard/checkAttendance/:id"
             element={
               accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
+            }
+          />
+
+          <Route
+            path="/professor/dashboard/editAttendance/:id"
+            element={
+              accessToken ? <EditAttendancePage /> : <Navigate to="/login" />
             }
           />
 
@@ -376,51 +412,146 @@ const App = () => {
           <Route
             path="/student/dashboard"
             element={
-              accessToken ? <StudentDashboardPage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/student/profile"
             element={
-              accessToken ? <StudentProfilePage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentProfilePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
+
           <Route
             path="/student/enrolment"
             element={
-              accessToken ? <StudentEnrolmentPage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentEnrolmentPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/student/courses"
-            element={accessToken ? <CoursesPage /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "student" ? (
+                <CoursesPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/student/grades"
             element={
-              accessToken ? <StudentGradePage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentGradePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/student/attendance"
             element={
-              accessToken ? <StudentAttendancePage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/attendance/viewlist"
+            element={
+              accessToken && role === "student" ? (
+                <StudentAttendanceListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/student/curriculum"
             element={
-              accessToken ? <StudentCurriculumPage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentCurriculumPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/student/schedule"
             element={
-              accessToken ? <StudentSchedulePage /> : <Navigate to="/login" />
+              accessToken && role === "student" ? (
+                <StudentSchedulePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* {---------------------Parents Routes- Author: Ja-----------------------------------------------} */}
+          <Route
+            path="/parent/dashboard"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/grades"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildGradePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/attendance"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/curriculum"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildCurriculumPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/schedule"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildSchedulePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
         </Routes>
-
         <Footer />
       </ThemeProvider>
     </LocalizationProvider>

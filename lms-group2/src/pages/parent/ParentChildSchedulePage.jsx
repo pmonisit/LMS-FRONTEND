@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react";
-import { Button, Grid, Toolbar, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Paper, Table, TableBody, TableCell } from "@mui/material";
 import { TableContainer, TableHead, TableRow, Box } from "@mui/material";
-import Sidebar from "../../components/shared/Sidebar";
+import { Grid, Toolbar, Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 
-const StudentSchedulePage = () => {
+const ParentChildSchedulePage = () => {
   const [currentSem, setCurrentSem] = useState([]);
-  const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
+  const [myChildEnrolledSLoads, setMyChildEnrolledSLoads] = useState([]);
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
     });
-    studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      setMyEnrolledSLoads(response.data);
+    studentLoadService.getMyChildSchedule().then((response) => {
+      setMyChildEnrolledSLoads(response.data);
     });
   }, []);
 
@@ -30,7 +31,7 @@ const StudentSchedulePage = () => {
   ];
 
   const handleSchedule = () => {
-    const sortedSchedule = myEnrolledSLoads.sort((a, b) => {
+    const sortedSchedule = myChildEnrolledSLoads.sort((a, b) => {
       let aminute = a[6].split(":").map(Number);
       let bminute = b[6].split(":").map(Number);
       return aminute[0] * 60 + aminute[1] - (bminute[0] * 60 + bminute[1]);
@@ -96,56 +97,16 @@ const StudentSchedulePage = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Grid>
           <Toolbar />
-          <h3 align="center">
-            Desired Schedule for {currentSem.semOrder} AY{" "}
-            {currentSem.startingYear} -{currentSem.endingYear}
-          </h3>
-          <Grid sx={{ flexGrow: 1 }} container spacing={5}>
-            <Grid item xs={12}>
-              <Grid container justifyContent="center" spacing={10}>
-                <Grid item>
-                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                    <TableContainer>
-                      <Table>
-                        <TableHead align="center">
-                          <TableRow>
-                            <TableCell>Time</TableCell>
-                            {scheduleColumns.map((column) => (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ minWidth: column.minWidth }}
-                              >
-                                {column.label}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>{handleSchedule()}</TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Paper>
-                  <sub>
-                    <i>
-                      <span style={{ color: "#ef9a9a" }}>* with conflict</span>
-                    </i>
-                  </sub>
-                  <Typography align="center">
-                    <Button color="primary" type="submit" variant="contained">
-                      Submit for Approval
-                    </Button>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid>
-          <Toolbar />
+          <Tooltip title="Back to dashboard">
+            <Link to={`/parent/dashboard`}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           <h3 align="center">
             Approved Schedule for {currentSem.semOrder} AY{" "}
             {currentSem.startingYear} -{currentSem.endingYear}
@@ -190,4 +151,4 @@ const StudentSchedulePage = () => {
   );
 };
 
-export default StudentSchedulePage;
+export default ParentChildSchedulePage;

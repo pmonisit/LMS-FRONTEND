@@ -38,10 +38,15 @@ export function getAllLecturesBySemID(semesterId) {
   return http.get(`/lecture/all/semester/${semesterId}`);
 }
 
+
 export function searchLecture(lecture) {
   return http.get(`/lecture/search/${lecture}`);
 }
 
 export function assignProfessor(lectureId, accountId) {
   return http.put(`lecture/edit/${lectureId}/changeprof/ ${accountId}`);
+  
+export function getAllMyAtttendancePerLecture(lectureId) {
+  return http.get(`/lecture/myattendance/all/lecture/${lectureId}`);
+
 }

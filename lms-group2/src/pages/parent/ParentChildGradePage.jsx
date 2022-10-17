@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react";
-import { Grid, Paper, TableContainer, TableHead, Table } from "@mui/material";
-import { TableBody, TableCell, TableRow, Toolbar } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer } from "@mui/material";
+import { Paper, TableHead, TableRow, Grid, Toolbar } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as semesterService from "../../services/admin/Semester";
 import * as gradeService from "../../services/professor/GradeService";
 
-const StudentGrade = () => {
-  const [mySemestersWithGrades, setMySemestersWithGrades] = useState([]);
-  const [myGradesWithSem, setMyGradesWithSem] = useState([]);
-
+const ParentChildGrade = () => {
+  const [myChildSemestersWithGrades, setMyChildSemestersWithGrades] = useState(
+    []
+  );
+  const [myChildGradesWithSem, setMyChildGradesWithSem] = useState([]);
   useEffect(() => {
-    let myGradesWithSem = [];
+    let myChildGradesWithSem = [];
     let id = 0;
-    semesterService.getMySemestersWithGrades().then((response) => {
-      setMySemestersWithGrades(response.data);
+    semesterService.getMyChildSemestersWithGrades().then((response) => {
+      setMyChildSemestersWithGrades(response.data);
       response.data.map((resp) => {
         let semId = resp[0];
         let merge = [];
-        gradeService.getMyGradesBySemId(semId).then((res) => {
+        gradeService.getChildGradesBySem(semId).then((res) => {
           res.data.map((a) => {
             merge = [id++, ...resp, ...a];
-            myGradesWithSem.push(merge);
-            setMyGradesWithSem(myGradesWithSem);
+            myChildGradesWithSem.push(merge);
+            setMyChildGradesWithSem(myChildGradesWithSem);
           });
         });
       });
@@ -38,7 +42,7 @@ const StudentGrade = () => {
   ];
 
   const renderGrades = (semId) => {
-    const sgrades = myGradesWithSem.filter((data) => data[1] === semId);
+    const sgrades = myChildGradesWithSem.filter((data) => data[1] === semId);
 
     return sgrades.map((data) => {
       return (
@@ -56,10 +60,18 @@ const StudentGrade = () => {
       );
     });
   };
+
   return (
     <Grid>
       <Toolbar />
-      {mySemestersWithGrades.map((semester) => (
+      <Tooltip title="Back to dashboard">
+        <Link to={`/parent/dashboard`}>
+          <IconButton>
+            <ArrowBackIcon />
+          </IconButton>
+        </Link>
+      </Tooltip>
+      {myChildSemestersWithGrades.map((semester) => (
         <Grid key={semester[0]}>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <h3 align="center">
@@ -90,4 +102,4 @@ const StudentGrade = () => {
     </Grid>
   );
 };
-export default StudentGrade;
+export default ParentChildGrade;

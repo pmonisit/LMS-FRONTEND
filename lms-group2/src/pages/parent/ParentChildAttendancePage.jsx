@@ -1,39 +1,56 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Grid, Toolbar, Box, Button, Typography } from "@mui/material";
+import { Grid, Toolbar, Typography, Button } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import * as attendanceService from "../../services/professor/AttendanceService";
 import * as semesterService from "../../services/admin/Semester";
+import * as attendanceService from "../../services/professor/AttendanceService";
 
-const Attendance = () => {
+const ParentChildAttendance = () => {
   const calendarComponentRef = useRef(null);
   const [events, setEvents] = useState({ title: "", start: "" });
   const [currentSem, setCurrentSem] = useState([]);
 
   useEffect(() => {
+    let attendanceBySem = [];
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
       const semId = response.data.semesterId;
-      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
-        setEvents(
-          res.data.map((a) => {
-            return {
-              ...events,
-              title: a[0] + " - " + a[7],
-              start: a[6],
-              color:
-                a[7] === "PRESENT" ? "blue" : a[7] === "LATE" ? "green" : "red",
-            };
-          })
-        );
-      });
+      attendanceService
+        .parentGetAllMyAttendancesBySemesterId(semId)
+        .then((res) => {
+          attendanceBySem.push(res.data);
+          setEvents(
+            res.data.map((a) => {
+              return {
+                ...events,
+                title: a[0] + " - " + a[7],
+                start: a[6],
+                color:
+                  a[7] === "PRESENT"
+                    ? "blue"
+                    : a[7] === "LATE"
+                    ? "green"
+                    : "red",
+              };
+            })
+          );
+        });
     });
   }, []);
 
   return (
-    <Box>
+    <Grid>
       <Toolbar />
+      <Tooltip title="Back to dashboard">
+        <Link to={`/parent/dashboard`}>
+          <IconButton>
+            <ArrowBackIcon />
+          </IconButton>
+        </Link>
+      </Tooltip>
       <Grid>
         <h2 align="center">
           Attendance for {currentSem.semOrder} AY {currentSem.startingYear} -
@@ -62,8 +79,8 @@ const Attendance = () => {
           </div>
         </div>
       </Grid>
-    </Box>
+    </Grid>
   );
 };
 
-export default Attendance;
+export default ParentChildAttendance;

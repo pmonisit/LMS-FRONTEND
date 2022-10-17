@@ -1,19 +1,11 @@
 import http from "../shared/http";
 
-export function getAttendanceById(id) {
-  return http.get(`/attendance/${id}`);
-}
-
 export function getAttendance() {
   return http.get("/attendance/all");
 }
 
 export function deleteAttendance(id) {
   return http.delete(`/attendance/delete/${id}`);
-}
-
-export function editAttendance(id) {
-  return http.put(`/attendance/edit/${id}`);
 }
 
 export function addAttendance(attendance) {
@@ -40,4 +32,28 @@ export function getAllMyAtttendancePerSem(semId) {
 
 export function getAllAttendanceByLecture(lectureId, accountId) {
   return http.get(`/attendance/all/${lectureId}/${accountId}`);
+}
+
+export function parentGetAllMyAttendancesBySemesterId(semId) {
+  return http.get(`/attendance/parent/child/all/${semId}`);
+}
+
+export function markAsPresent(lectureId, accountId) {
+  return http.post(`/attendance/present/${lectureId}/${accountId}`);
+}
+
+export function markAsLate(lectureId, accountId) {
+  return http.post(`/attendance/late/${lectureId}/${accountId}`);
+}
+
+export function markAsAbsent(lectureId, accountId) {
+  return http.post(`/attendance/absent/${lectureId}/${accountId}`);
+}
+
+export function editAttendance(attendanceId, form) {
+  return http.put(`/attendance/edit/${attendanceId}`, form);
+}
+
+export function getAttendanceById(attendanceId) {
+  return http.get(`/attendance/${attendanceId}`);
 }

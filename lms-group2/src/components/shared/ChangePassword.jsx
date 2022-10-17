@@ -111,7 +111,7 @@ const ChangePassword = () => {
       marginTop={4}
       onSubmit={handleChangePassword}
     >
-      <Grid item xs={10} sm={10} md={6} lg={4} xl={4}>
+      <Grid item xs={10} sm={10} md={6} lg={4} xl={4} mt={15}>
         <Card>
           <CardHeader title="Change your password" />
           <CardContent>

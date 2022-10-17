@@ -49,7 +49,7 @@ const StudentListPerLectureComponent = () => {
       setStudents(response.data);
     });
 
-    lectureService.getProfLoad().then((response) => {
+    lectureService.getLectureById(params.id).then((response) => {
       setCourseDetails(response.data[0]);
     });
   }, [params.id, user, students, courseDetails]);
@@ -79,31 +79,37 @@ const StudentListPerLectureComponent = () => {
         <Grid container spacing={2} textAlign="left" marginBottom={1}>
           <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
             <Typography marginBottom={1} variant="body1">
-              <strong> Course Name: </strong> {courseDetails[2]}
+              <strong> Course Name: </strong> {courseDetails[3]}
             </Typography>
           </Grid>
           <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
             <Typography marginBottom={1} variant="body1">
-              <strong>Day Schedule: </strong> {courseDetails[3]}{" "}
-              {courseDetails[4]}
+              <strong>Day Schedule: </strong> {courseDetails[12]}{" "}
+              {courseDetails[13]}
             </Typography>
           </Grid>
           <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
             <Typography marginBottom={1} variant="body1">
-              <strong> Section:</strong> {courseDetails[7]}
+              <strong> Section:</strong> {courseDetails[11]}
             </Typography>
           </Grid>
           <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
             <Typography marginBottom={1} variant="body1">
-              <strong>Time Schedule: </strong> {courseDetails[5]}
+              <strong>Time Schedule: </strong> {courseDetails[14]}
               {" - "}
-              {courseDetails[6]}
+              {courseDetails[15]}
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
+            <Typography marginBottom={1} variant="body1">
+              <strong>Semester: </strong> {courseDetails[23]}
             </Typography>
           </Grid>
           <Grid item xs={10} sm={6} md={6} lg={6} xl={6}>
             <Typography marginBottom={4} variant="body1">
-              <strong>Status: </strong>{" "}
-              {courseDetails[9] === true ? "On-Going" : "Completed"}
+              <strong>School Year: </strong> {courseDetails[21]}
+              {" - "}
+              {courseDetails[22]}
             </Typography>
           </Grid>
         </Grid>

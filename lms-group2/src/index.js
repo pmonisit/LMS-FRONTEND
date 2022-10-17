@@ -5,9 +5,12 @@ import App from "./App";
 import { UserInterfaceProvider } from "./context/shared/UserInterfaceContext";
 import { AccountFormProvider } from "./context/admin/account/AccountFormContext";
 import { EnrolProvider } from "./context/student/EnrolContext";
+import { AttendanceProvider } from "./context/student/AttendanceContext";
+import { ScheduleProvider } from "./context/student/ScheduleContext";
 import { CurriculumProvider } from "./context/student/CurriculumContext";
 import { GradeProvider } from "./context/student/GradeContext";
 import { AdminProvider } from "./context/admin/account/adminContext";
+import { ParentProvider } from "./context/parent/ParentContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,15 +18,9 @@ root.render(
     <BrowserRouter>
       <UserInterfaceProvider>
         <AccountFormProvider>
-          <CurriculumProvider>
-            <EnrolProvider>
-              <GradeProvider>
-                <AdminProvider>
-                  <App />
-                </AdminProvider>
-              </GradeProvider>
-            </EnrolProvider>
-          </CurriculumProvider>
+          <AdminProvider>
+            <App />
+          </AdminProvider>
         </AccountFormProvider>
       </UserInterfaceProvider>
     </BrowserRouter>

@@ -1,17 +1,16 @@
-import { useContext } from "react";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Table from "@mui/material/Table";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { EnrolContext } from "../../context/student/EnrolContext";
+import { useState, useEffect } from "react";
+import { Toolbar, TableContainer, TableRow, TableCell } from "@mui/material";
+import { TableBody, Table, Box, Typography } from "@mui/material";
 import Sidebar from "../../components/shared/Sidebar";
-import { Toolbar } from "@mui/material";
+import * as accountService from "../../services/admin/AccountService";
 
 const StudentDashboardPage = () => {
-  const { user } = useContext(EnrolContext);
+  const [user, setUser] = useState([]);
+  useEffect(() => {
+    accountService.getCurrent().then((response) => {
+      setUser(response.data[0]);
+    });
+  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
@@ -20,7 +19,6 @@ const StudentDashboardPage = () => {
         <Typography>
           <strong>Student Homepage for {user[8]}</strong>
         </Typography>
-
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table>
             <TableBody>

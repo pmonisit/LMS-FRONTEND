@@ -25,13 +25,14 @@ const Banner = () => {
         backgroundPosition: "center",
       }}
     >
-      <Typography color="inherit" align="center" variant="h2">
+      <Typography color="inherit" align="center" variant="h2" marginTop={15}>
         Welcome to TISS
       </Typography>
       <Typography
         color="inherit"
         align="center"
         variant="h5"
+        marginTop={15}
         sx={{ mb: 4, mt: { sx: 4, sm: 10, lg: 5 } }}
       >
         Technological Institute of Seven Seven
@@ -44,6 +45,7 @@ const Banner = () => {
             color="secondary"
             variant="contained"
             size="large"
+            marginTop={15}
             sx={{ minWidth: 200 }}
             LinkComponent={Link}
             to="/login"
@@ -53,7 +55,7 @@ const Banner = () => {
         )}
       </Box>
 
-      <Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
+      <Typography variant="body2" color="inherit" marginTop={15} sx={{ mt: 2 }}>
         Opportunities for lifelong learning
       </Typography>
     </BannerLayout>

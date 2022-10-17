@@ -1,18 +1,29 @@
-import { useState, useEffect } from "react";
-import { Grid, Paper, Toolbar, TableRow, Box } from "@mui/material";
-import { TableHead, TableContainer, TableCell } from "@mui/material";
-import { TableBody, Table } from "@mui/material";
-import Sidebar from "../../components/shared/Sidebar";
+import { createContext, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Grid, Toolbar } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import { Box } from "@mui/system";
+import { TableHead } from "@mui/material";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Table from "@mui/material/Table";
 import * as accountService from "../../services/admin/AccountService";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as degreeService from "../../services/admin/DegreeService";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const StudentCurriculumPage = () => {
+const ParentChildCurriculumPage = () => {
+  const [user, setUser] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [degree, setDegree] = useState([]);
 
   useEffect(() => {
-    accountService.getCurrent().then((response) => {
+    accountService.getCurrentChildInfo().then((response) => {
+      setUser(response.data[0]);
       let degreeId = response.data[0][10];
       degreeService.getDegreeById(degreeId).then((degree) => {
         setDegree(degree.data);
@@ -104,10 +115,17 @@ const StudentCurriculumPage = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Grid>
           <Toolbar />
+          <Tooltip title="Back to dashboard">
+            <Link to={`/parent/dashboard`}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           <div align="center">
             <h2>{degree.degreeName}</h2>
           </div>
@@ -154,6 +172,7 @@ const StudentCurriculumPage = () => {
                 <Box align="center">
                   <h4>{handleConvert(curriculum[0][7])} YEAR LEVEL</h4>
                 </Box>
+                S
                 <Grid sx={{ flexGrow: 1 }} container spacing={5}>
                   <Grid item xs={12}>
                     <Grid container justifyContent="center" spacing={10}>
@@ -232,4 +251,4 @@ const StudentCurriculumPage = () => {
     </Box>
   );
 };
-export default StudentCurriculumPage;
+export default ParentChildCurriculumPage;
