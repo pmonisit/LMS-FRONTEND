@@ -72,7 +72,7 @@ import EditSemesterPage from "./pages/admin/EditSemesterPage";
 import TimeslotForm from "./components/admin/timeslot/TimeslotForm";
 import TimeslotListPage from "./pages/admin/TimeslotListPage";
 import EditTimeslotPage from "./pages/admin/EditTimeslotPage";
-
+import AddProfessorForm from "./components/admin/account/AddProfessorForm";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
@@ -335,12 +335,12 @@ const App = () => {
               accessToken ? <LectureListPage /> : <Navigate to="/login" />
             }
           />
-          {/* <Route
+          <Route
             path="/admin/lecture/:id/edit"
             element={
               accessToken ? <EditLecturePage /> : <Navigate to="/login" />
             }
-          /> */}
+          />
           <Route
             path="/admin/lecture-details/:id"
             element={
@@ -353,6 +353,13 @@ const App = () => {
               accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
             }
           />
+          <Route
+            path="/admin/lecture/:id/add-professor"
+            element={
+              accessToken ? <AddProfessorForm /> : <Navigate to="/login" />
+            }
+          />
+
           {/*-----------Prerequisite------------ */}
           <Route
             path="/admin/add-prerequisite/:id"
