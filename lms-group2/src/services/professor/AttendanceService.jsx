@@ -34,22 +34,6 @@ export function getAllAttendanceByLecture(lectureId, accountId) {
   return http.get(`/attendance/all/${lectureId}/${accountId}`);
 }
 
-export function markAsPresent(lectureId, accountId) {
-  return http.post(`/attendance/present/${lectureId}/${accountId}`);
-}
-
-export function markAsLate(lectureId, accountId) {
-  return http.post(`/attendance/late/${lectureId}/${accountId}`);
-}
-
-export function markAsAbsent(lectureId, accountId) {
-  return http.post(`/attendance/absent/${lectureId}/${accountId}`);
-}
-
-export function editAttendance(attendanceId, form) {
-  return http.put(`/attendance/edit/${attendanceId}`, form);
-}
-
-export function getAttendanceById(attendanceId) {
-  return http.get(`/attendance/${attendanceId}`);
+export function parentGetAllMyAttendancesBySemesterId(semId) {
+  return http.get(`/attendance/parent/child/all/${semId}`);
 }

@@ -13,7 +13,7 @@ export const AttendanceContext = createContext({
   attendanceCurrentSem: [],
   attendanceCurrentSem: [],
   lecturesBySem: [],
-  handleViewAttendance: () => {},
+  // handleViewAttendance: () => {},
   handleGetLectureAttendance: () => {},
 });
 
@@ -43,30 +43,28 @@ export const AttendanceProvider = ({ children }) => {
           })
         );
       });
-      console.log(semId);
+
       let lecturesBySem = [];
       lectureService.getAllLecturesBySemID(semId).then((response) => {
-        console.log(response);
         lecturesBySem.push(response.data);
         lecturesBySem.map((data) => {
-          console.log(data);
           setLecturesBySem(data);
         });
       });
     });
   }, []);
 
-  const handleViewAttendance = () => {
-    attendanceCurrentSem.map((data) => {
-      //   console.log(data);
-    });
-    lecturesBySem.map((data) => {
-      //   console.log(data);
-    });
-  };
+  // const handleViewAttendance = () => {
+  //   attendanceCurrentSem.map((data) => {
+  //     //   console.log(data);
+  //   });
+  //   lecturesBySem.map((data) => {
+  //     //   console.log(data);
+  //   });
+  // };
 
   const handleGetLectureAttendance = (lectureCode) => {
-    console.log(lectureCode);
+    // console.log(lectureCode);
     return attendanceCurrentSem
       .filter((lecture) => lecture[0] === lectureCode)
       .map((data) => {
@@ -81,7 +79,7 @@ export const AttendanceProvider = ({ children }) => {
         currentSem: currentSem,
         attendanceCurrentSem: attendanceCurrentSem,
         attendanceCurrentSem: attendanceCurrentSem,
-        handleViewAttendance: handleViewAttendance,
+        // handleViewAttendance: handleViewAttendance,
         lecturesBySem: lecturesBySem,
         handleGetLectureAttendance: handleGetLectureAttendance,
       }}

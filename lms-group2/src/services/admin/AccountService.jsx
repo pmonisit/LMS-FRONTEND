@@ -103,3 +103,7 @@ export function addStudents(studentAccount) {
   });
   return http.post("/account/student/register", studentAccountClone);
 }
+
+export function getCurrentChildInfo() {
+  return http.get("/account/currentuser/childinfo");
+}

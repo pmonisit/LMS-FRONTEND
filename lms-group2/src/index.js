@@ -10,6 +10,7 @@ import { ScheduleProvider } from "./context/student/ScheduleContext";
 import { CurriculumProvider } from "./context/student/CurriculumContext";
 import { GradeProvider } from "./context/student/GradeContext";
 import { AdminProvider } from "./context/admin/account/adminContext";
+import { ParentProvider } from "./context/parent/ParentContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,7 +24,9 @@ root.render(
                 <GradeProvider>
                   <AttendanceProvider>
                     <AdminProvider>
-                      <App />
+                      <ParentProvider>
+                        <App />
+                      </ParentProvider>
                     </AdminProvider>
                   </AttendanceProvider>
                 </GradeProvider>
