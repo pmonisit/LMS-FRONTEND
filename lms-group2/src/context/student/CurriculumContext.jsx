@@ -21,9 +21,9 @@ export const CurriculumProvider = ({ children }) => {
     accountService.getCurrent().then((response) => {
       setUser(response.data[0]);
       let degreeId = response.data[0][10];
-      degreeService.getDegreeById(degreeId).then((degree) => {
-        setDegree(degree.data);
-      });
+      // degreeService.getDegreeById(degreeId).then((degree) => {
+      //   setDegree(degree.data);
+      // });
     });
     courseAssignedService.getMyCourses().then((response) => {
       setMyCoursesAssigned(response.data);

@@ -41,3 +41,7 @@ export function getAllMyAtttendancePerSem(semId) {
 export function getAllAttendanceByLecture(lectureId, accountId) {
   return http.get(`/attendance/all/${lectureId}/${accountId}`);
 }
+
+export function parentGetAllMyAttendancesBySemesterId(semId) {
+  return http.get(`/attendance/parent/child/all/${semId}`);
+}

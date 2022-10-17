@@ -15,3 +15,7 @@ export function markGradeAsFinal(gradeId) {
 export function getMyGradesBySemId(semesterId) {
   return http.get(`/grade/student/${semesterId}`);
 }
+
+export function getChildGradesBySem(semesterId) {
+  return http.get(`/grade/mychild/${semesterId}`);
+}

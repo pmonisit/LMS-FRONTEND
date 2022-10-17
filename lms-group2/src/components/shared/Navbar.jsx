@@ -262,6 +262,15 @@ const Navbar = ({ onLogout }) => {
                       >
                         Dashboard
                       </Button>
+                    ) : role === "parent" ? (
+                      <Button
+                        color="inherit"
+                        onClick={handleCloseUserMenu}
+                        LinkComponent={Link}
+                        to="/parent/dashboard"
+                      >
+                        Dashboard
+                      </Button>
                     ) : (
                       <Button
                         color="inherit"

@@ -47,3 +47,7 @@ export function getMyDesiredStudentLoads() {
 export function getMyEnrolledStudentLoads() {
   return http.get("/studentload/mystudentload/enrolled");
 }
+
+export function getMyChildSchedule() {
+  return http.get("/studentload/mychildschedule");
+}
