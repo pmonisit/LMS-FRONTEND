@@ -1,38 +1,57 @@
 import Box from "@mui/material/Box";
 import Sidebar from "../../components/shared/Sidebar";
-import { useContext, useState } from "react";
-import { AttendanceContext } from "../../context/student/AttendanceContext";
-import { Toolbar } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import { useState, useEffect } from "react";
+import { Toolbar, Paper, TableContainer, Table } from "@mui/material";
+import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import * as semesterService from "../../services/admin/Semester";
+import * as attendanceService from "../../services/professor/AttendanceService";
+import * as lectureService from "../../services/professor/LectureService";
 
 const StudentAttendanceListPage = () => {
-  const {
-    events,
-    currentSem,
-    attendanceCurrentSem,
-    lecturesBySem,
-    handleViewAttendance,
-    handleGetLectureAttendance,
-  } = useContext(AttendanceContext);
+  const [events, setEvents] = useState({ title: "", start: "" });
+  const [attendanceCurrentSem, setAttendanceCurrentSem] = useState([]);
+  const [currentSem, setCurrentSem] = useState([]);
+  const [lecturesBySem, setLecturesBySem] = useState([]);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  useEffect(() => {
+    let attendanceBySem = [];
+    semesterService.getCurrentSemester().then((response) => {
+      setCurrentSem(response.data);
+      const semId = response.data.semesterId;
+      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
+        attendanceBySem.push(res.data);
+        setAttendanceCurrentSem(...attendanceBySem);
+        setEvents(
+          res.data.map((a) => {
+            return {
+              ...events,
+              title: a[0] + " - " + a[7],
+              start: a[6],
+              color:
+                a[7] === "PRESENT" ? "blue" : a[7] === "LATE" ? "green" : "red",
+            };
+          })
+        );
+      });
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+      let lecturesBySem = [];
+      lectureService.getAllLecturesBySemID(semId).then((response) => {
+        lecturesBySem.push(response.data);
+        lecturesBySem.map((data) => {
+          setLecturesBySem(data);
+        });
+      });
+    });
+  }, []);
+
+  const handleGetLectureAttendance = (lectureCode) => {
+    return attendanceCurrentSem
+      .filter((lecture) => lecture[0] === lectureCode)
+      .map((data) => {
+        return data;
+      });
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />

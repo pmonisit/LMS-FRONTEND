@@ -1,19 +1,11 @@
-import { createContext, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer } from "@mui/material";
+import { Paper, TableHead, TableRow, Grid, Toolbar } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as semesterService from "../../services/admin/Semester";
 import * as gradeService from "../../services/professor/GradeService";
-import { Toolbar } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const ParentChildGrade = () => {
   const [myChildSemestersWithGrades, setMyChildSemestersWithGrades] = useState(

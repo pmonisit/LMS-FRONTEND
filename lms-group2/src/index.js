@@ -18,21 +18,9 @@ root.render(
     <BrowserRouter>
       <UserInterfaceProvider>
         <AccountFormProvider>
-          <CurriculumProvider>
-            <EnrolProvider>
-              <ScheduleProvider>
-                <GradeProvider>
-                  <AttendanceProvider>
-                    <AdminProvider>
-                      <ParentProvider>
-                        <App />
-                      </ParentProvider>
-                    </AdminProvider>
-                  </AttendanceProvider>
-                </GradeProvider>
-              </ScheduleProvider>
-            </EnrolProvider>
-          </CurriculumProvider>
+          <AdminProvider>
+            <App />
+          </AdminProvider>
         </AccountFormProvider>
       </UserInterfaceProvider>
     </BrowserRouter>

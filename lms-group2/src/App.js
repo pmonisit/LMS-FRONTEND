@@ -409,156 +409,149 @@ const App = () => {
           />
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
           {/* {---------------------Students Routes- Author: Ja-----------------------------------------------} */}
+          <Route
+            path="/student/dashboard"
+            element={
+              accessToken && role === "student" ? (
+                <StudentDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/profile"
+            element={
+              accessToken && role === "student" ? (
+                <StudentProfilePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/student/enrolment"
+            element={
+              accessToken && role === "student" ? (
+                <StudentEnrolmentPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/courses"
+            element={
+              accessToken && role === "student" ? (
+                <CoursesPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/grades"
+            element={
+              accessToken && role === "student" ? (
+                <StudentGradePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/attendance"
+            element={
+              accessToken && role === "student" ? (
+                <StudentAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/attendance/viewlist"
+            element={
+              accessToken && role === "student" ? (
+                <StudentAttendanceListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/curriculum"
+            element={
+              accessToken && role === "student" ? (
+                <StudentCurriculumPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/schedule"
+            element={
+              accessToken && role === "student" ? (
+                <StudentSchedulePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/* {---------------------Parents Routes- Author: Ja-----------------------------------------------} */}
+          <Route
+            path="/parent/dashboard"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/grades"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildGradePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/attendance"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/curriculum"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildCurriculumPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/schedule"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildSchedulePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
         </Routes>
-        {role === "student" ? (
-          <Routes>
-            <Route
-              path="/student/dashboard"
-              element={
-                accessToken ? (
-                  <StudentDashboardPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                accessToken ? <StudentProfilePage /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/profile/edit/:id"
-              element={
-                accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/student/enrolment"
-              element={
-                accessToken ? (
-                  <StudentEnrolmentPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/student/courses"
-              element={accessToken ? <CoursesPage /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/student/grades"
-              element={
-                accessToken ? <StudentGradePage /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/student/attendance"
-              element={
-                accessToken ? (
-                  <StudentAttendancePage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/student/attendance/viewlist"
-              element={
-                accessToken ? (
-                  <StudentAttendanceListPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/student/curriculum"
-              element={
-                accessToken ? (
-                  <StudentCurriculumPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/student/schedule"
-              element={
-                accessToken ? <StudentSchedulePage /> : <Navigate to="/login" />
-              }
-            />
-          </Routes>
-        ) : null}
-
-        {role === "parent" ? (
-          <Routes>
-            {/* {---------------------Parents Routes------------------------------------------------} */}
-            <Route
-              path="/parent/dashboard"
-              element={
-                accessToken ? <ParentDashboardPage /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                accessToken ? <ParentProfilePage /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/profile/edit/:id"
-              element={
-                accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/parent/child/grades"
-              element={
-                accessToken ? (
-                  <ParentChildGradePage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/parent/child/attendance"
-              element={
-                accessToken ? (
-                  <ParentChildAttendancePage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-
-            <Route
-              path="/parent/child/curriculum"
-              element={
-                accessToken ? (
-                  <ParentChildCurriculumPage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/parent/child/schedule"
-              element={
-                accessToken ? (
-                  <ParentChildSchedulePage />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        ) : null}
-
         <Footer />
       </ThemeProvider>
     </LocalizationProvider>

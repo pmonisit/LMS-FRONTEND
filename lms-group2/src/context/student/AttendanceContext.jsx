@@ -1,10 +1,6 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import * as accountService from "../../services/admin/AccountService";
-import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
-import * as degreeService from "../../services/admin/DegreeService";
+import { createContext, useState, useEffect } from "react";
 import * as semesterService from "../../services/admin/Semester";
 import * as attendanceService from "../../services/professor/AttendanceService";
-import { EnrolContext } from "../../context/student/EnrolContext";
 import * as lectureService from "../../services/professor/LectureService";
 
 export const AttendanceContext = createContext({

@@ -1,18 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Grid, Toolbar, Box, Button, Typography } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import * as attendanceService from "../../services/professor/AttendanceService";
-import { Grid, Toolbar, Box, Button } from "@mui/material";
 import * as semesterService from "../../services/admin/Semester";
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AttendanceContext } from "../../context/student/AttendanceContext";
 
 const Attendance = () => {
   const calendarComponentRef = useRef(null);
-  const { events, currentSem, attendancePerSem } =
-    useContext(AttendanceContext);
+  const [events, setEvents] = useState({ title: "", start: "" });
+  const [currentSem, setCurrentSem] = useState([]);
+
+  useEffect(() => {
+    semesterService.getCurrentSemester().then((response) => {
+      setCurrentSem(response.data);
+      const semId = response.data.semesterId;
+      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
+        setEvents(
+          res.data.map((a) => {
+            return {
+              ...events,
+              title: a[0] + " - " + a[7],
+              start: a[6],
+              color:
+                a[7] === "PRESENT" ? "blue" : a[7] === "LATE" ? "green" : "red",
+            };
+          })
+        );
+      });
+    });
+  }, []);
 
   return (
     <Box>

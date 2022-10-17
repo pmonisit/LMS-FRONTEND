@@ -1,32 +1,17 @@
-import { createContext, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Box from "@mui/material/Box";
-import { Button, Grid, Toolbar, Typography } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Paper, Table, TableBody, TableCell } from "@mui/material";
+import { TableContainer, TableHead, TableRow, Box } from "@mui/material";
+import { Grid, Toolbar, Tooltip, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import * as accountService from "../../services/admin/AccountService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 
-// import Sidebar from "../../components/shared/Sidebar";
-
 const ParentChildSchedulePage = () => {
-  const [user, setUser] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
   const [myChildEnrolledSLoads, setMyChildEnrolledSLoads] = useState([]);
 
   useEffect(() => {
-    accountService.getCurrent().then((response) => {
-      setUser(response.data[0]);
-    });
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
     });
@@ -60,7 +45,6 @@ const ParentChildSchedulePage = () => {
       let endMinute = end[0] * 60 + end[1];
 
       sortedSchedule.map((data) => {
-        // console.log(data);
         let datastart = data[6].split(":").map(Number);
         let dataend = data[7].split(":").map(Number);
         let newStartMinute = datastart[0] * 60 + datastart[1];
@@ -113,7 +97,6 @@ const ParentChildSchedulePage = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <Sidebar /> */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Grid>
           <Toolbar />
