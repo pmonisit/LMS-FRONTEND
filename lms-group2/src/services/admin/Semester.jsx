@@ -37,3 +37,7 @@ export function editMakeCurrentSemester(id) {
 export function getMySemestersWithGrades() {
   return http.get("/semester/getmysems/grades");
 }
+
+export function getMyChildSemestersWithGrades() {
+  return http.get("/semester/getchildsems/grades");
+}

@@ -1,20 +1,27 @@
 import { createContext, useState, useEffect } from "react";
-import TableRow from "@mui/material/TableRow";
+import { Link, useParams } from "react-router-dom";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Box from "@mui/material/Box";
+import { Button, Grid, Toolbar, Typography } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as accountService from "../../services/admin/AccountService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 
-export const ScheduleContext = createContext({
-  scheduleColumns: [],
-  currentSem: [],
-  handleSchedule: () => {},
-});
+// import Sidebar from "../../components/shared/Sidebar";
 
-export const ScheduleProvider = ({ children }) => {
+const ParentChildSchedulePage = () => {
   const [user, setUser] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
-  const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
+  const [myChildEnrolledSLoads, setMyChildEnrolledSLoads] = useState([]);
 
   useEffect(() => {
     accountService.getCurrent().then((response) => {
@@ -23,8 +30,8 @@ export const ScheduleProvider = ({ children }) => {
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
     });
-    studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      setMyEnrolledSLoads(response.data);
+    studentLoadService.getMyChildSchedule().then((response) => {
+      setMyChildEnrolledSLoads(response.data);
     });
   }, []);
 
@@ -39,7 +46,7 @@ export const ScheduleProvider = ({ children }) => {
   ];
 
   const handleSchedule = () => {
-    const sortedSchedule = myEnrolledSLoads.sort((a, b) => {
+    const sortedSchedule = myChildEnrolledSLoads.sort((a, b) => {
       let aminute = a[6].split(":").map(Number);
       let bminute = b[6].split(":").map(Number);
       return aminute[0] * 60 + aminute[1] - (bminute[0] * 60 + bminute[1]);
@@ -105,14 +112,60 @@ export const ScheduleProvider = ({ children }) => {
   };
 
   return (
-    <ScheduleContext.Provider
-      value={{
-        scheduleColumns: scheduleColumns,
-        currentSem: currentSem,
-        handleSchedule: handleSchedule,
-      }}
-    >
-      {children}
-    </ScheduleContext.Provider>
+    <Box sx={{ display: "flex" }}>
+      {/* <Sidebar /> */}
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Grid>
+          <Toolbar />
+          <Tooltip title="Back to dashboard">
+            <Link to={`/parent/dashboard`}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
+          <h3 align="center">
+            Approved Schedule for {currentSem.semOrder} AY{" "}
+            {currentSem.startingYear} -{currentSem.endingYear}
+          </h3>
+          <Grid sx={{ flexGrow: 1 }} container spacing={5}>
+            <Grid item xs={12}>
+              <Grid container justifyContent="center" spacing={10}>
+                <Grid item>
+                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                    <TableContainer>
+                      <Table>
+                        <TableHead align="center">
+                          <TableRow>
+                            <TableCell>Time</TableCell>
+                            {scheduleColumns.map((column) => (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ minWidth: column.minWidth }}
+                              >
+                                {column.label}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>{handleSchedule()}</TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Paper>
+                  <sub>
+                    <i>
+                      <span style={{ color: "#ef9a9a" }}>* with conflict</span>
+                    </i>
+                  </sub>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
 };
+
+export default ParentChildSchedulePage;

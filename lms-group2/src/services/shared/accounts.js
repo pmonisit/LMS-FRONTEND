@@ -1,4 +1,14 @@
 import http from "./http";
+import jwtDecode from "jwt-decode";
+
+export function getRole() {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    return null;
+  }
+  const decoded = jwtDecode(accessToken);
+  return decoded.roles[0];
+}
 
 export function getCurrentUser() {
   return http.get("/account/currentuser");
