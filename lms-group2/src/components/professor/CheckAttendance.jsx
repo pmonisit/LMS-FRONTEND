@@ -1,6 +1,7 @@
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import Moment from "moment";
 
 // Material Components
 import Table from "@mui/material/Table";
@@ -15,18 +16,25 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Chip from "@mui/material/Chip";
+import EditIcon from "@mui/icons-material/Edit";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
 import * as attendanceService from "../../services/professor/AttendanceService";
 
+// Context
+import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
+
 const CheckAttendance = () => {
   const [lectureId, setLectureId] = useState(0);
+
   const [attendanceDetails, setAttendanceDetails] = useState([]);
   const [studentInfo, setStudentInfo] = useState([]);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
+
+  const date = Moment().format("MMMM DD, YYYY");
 
   const params = useParams();
 
@@ -34,17 +42,71 @@ const CheckAttendance = () => {
     lectureService.getProfLoad().then((response) => {
       setLectureId(response.data[0][0]);
     });
-
     attendanceService
       .getAllAttendanceByLecture(lectureId, params.id)
       .then((response) => {
-        // console.log(response.data);
-        setAttendanceDetails(response.data);
-        setStudentInfo(response.data[0]);
-        setFirstName(studentInfo[4]);
-        setLastName(studentInfo[6]);
+        // console.log(response.data?.[0]);
+        setStudentInfo(response.data?.[0]);
+        setAttendanceDetails(response?.data);
       });
   }, [lectureId, attendanceDetails, params.id, studentInfo]);
+
+  const handlePresent = () => {
+    attendanceService
+      .markAsPresent(lectureId, params.id)
+      .then((response) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: `Attendance for today has been tagged successfully`,
+        });
+      })
+      .catch((error) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "info",
+          message: `Attendance has already been logged for today. If you want to change, kindly click the edit icon.`,
+        });
+      });
+  };
+
+  const handleLate = () => {
+    attendanceService
+      .markAsLate(lectureId, params.id)
+      .then((response) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: `Attendance for today has been tagged successfully`,
+        });
+      })
+      .catch((error) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "info",
+          message: `Attendance has already been logged for today. If you want to change, kindly click the edit icon.`,
+        });
+      });
+  };
+
+  const handleAbsent = () => {
+    attendanceService
+      .markAsAbsent(lectureId, params.id)
+      .then((response) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: `Attendance for today has been logged successfully`,
+        });
+      })
+      .catch((error) => {
+        onOpenSnackbar({
+          open: true,
+          severity: "info",
+          message: `Attendance has already been logged for today. If you want to change, kindly click the edit icon.`,
+        });
+      });
+  };
 
   return (
     <Grid container justifyContent="center" component="form" marginTop={10}>
@@ -66,15 +128,34 @@ const CheckAttendance = () => {
           ATTENDANCE
         </Typography>
         <Typography
-          marginBottom={5}
+          marginBottom={3}
+          marginTop={4}
+          variant="h4"
+          textAlign="center"
+        >
+          <strong>
+            {" "}
+            {studentInfo?.[4]} {studentInfo?.[6]}
+          </strong>
+        </Typography>
+        <Typography
+          marginBottom={3}
           marginTop={4}
           variant="body1"
           textAlign="center"
         >
-          <strong>
-            {firstName} {lastName}
-          </strong>
+          Date Today: {date}
         </Typography>
+        <Stack
+          direction="row"
+          spacing={2}
+          marginBottom={5}
+          justifyContent="center"
+        >
+          <Chip label="Present" color="success" onClick={handlePresent} />
+          <Chip label="Late" color="warning" onClick={handleLate} />
+          <Chip label="Absent" color="error" onClick={handleAbsent} />
+        </Stack>
 
         <TableContainer component={Paper}>
           <Table>
@@ -91,7 +172,18 @@ const CheckAttendance = () => {
                   <TableCell>{row[1]}</TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>
-                    <Button>Edit</Button>{" "}
+                    <Tooltip title="Edit Grade">
+                      <Link
+                        to={`/professor/dashboard/editAttendance/${row[0]}`}
+                      >
+                        <EditIcon
+                          color="primary"
+                          variant="outlined"
+                          size="small"
+                          cursor="pointer"
+                        />
+                      </Link>
+                    </Tooltip>{" "}
                   </TableCell>
                 </TableRow>
               ))}

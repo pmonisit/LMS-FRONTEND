@@ -81,7 +81,7 @@ const BasicInfoForm = ({ onSubmit, initialValue }) => {
       component="form"
       onSubmit={handleSubmit}
     >
-      <Grid item xs={10} sm={10} md={6} lg={4} xl={4} mt={5}>
+      <Grid item xs={10} sm={10} md={6} lg={4} xl={4} mt={15}>
         <Card>
           <CardHeader title="Edit Basic Information" />
           <CardContent>

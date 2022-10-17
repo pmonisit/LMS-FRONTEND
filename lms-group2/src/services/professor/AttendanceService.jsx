@@ -1,19 +1,11 @@
 import http from "../shared/http";
 
-export function getAttendanceById(id) {
-  return http.get(`/attendance/${id}`);
-}
-
 export function getAttendance() {
   return http.get("/attendance/all");
 }
 
 export function deleteAttendance(id) {
   return http.delete(`/attendance/delete/${id}`);
-}
-
-export function editAttendance(id) {
-  return http.put(`/attendance/edit/${id}`);
 }
 
 export function addAttendance(attendance) {
