@@ -12,6 +12,7 @@ import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -25,6 +26,7 @@ import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentAttendanceListPage from "./pages/student/StudentAttendanceListPage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
+import EditAttendancePage from "./pages/professor/EditAttendancePage";
 
 import ParentDashboardPage from "./pages/parent/ParentDashboardPage";
 import ParentProfilePage from "./pages/parent/ParentProfilePage";
@@ -32,7 +34,6 @@ import ParentChildGradePage from "./pages/parent/ParentChildGradePage";
 import ParentChildAttendancePage from "./pages/parent/ParentChildAttendancePage";
 import ParentChildSchedulePage from "./pages/parent/ParentChildSchedulePage";
 import ParentChildCurriculumPage from "./pages/parent/ParentChildCurriculumPage";
-
 
 // Services
 import * as accountService from "./services/shared/accounts";
