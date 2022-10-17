@@ -1,7 +1,7 @@
 // React
 import * as React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Material Components
 import { CssBaseline } from "@mui/material";
@@ -12,6 +12,7 @@ import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 // Pages
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -25,6 +26,8 @@ import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentAttendanceListPage from "./pages/student/StudentAttendanceListPage";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
+import EditAttendancePage from "./pages/professor/EditAttendancePage";
+
 import ParentDashboardPage from "./pages/parent/ParentDashboardPage";
 import ParentProfilePage from "./pages/parent/ParentProfilePage";
 import ParentChildGradePage from "./pages/parent/ParentChildGradePage";
@@ -34,9 +37,6 @@ import ParentChildCurriculumPage from "./pages/parent/ParentChildCurriculumPage"
 
 // Services
 import * as accountService from "./services/shared/accounts";
-
-// JWT Decode
-import jwtDecode from "jwt-decode";
 
 // Context
 import { UserInterfaceContext } from "./context/shared/UserInterfaceContext";
@@ -78,7 +78,11 @@ import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
 import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
+// JWT Decode
+import decode from "jwt-decode";
+
 const App = () => {
+  const [user, setUser] = useState(localStorage.getItem("accessToken"));
   const [accessToken, setAccessToken] = React.useState(
     accountService.getAccessToken()
   );
@@ -88,6 +92,20 @@ const App = () => {
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const { isDarkMode, snackbarConfig, onCloseSnackbar } =
     useContext(UserInterfaceContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const date = new Date();
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < date.getTime()) {
+        handleLogout();
+      }
+    }
+    setUser(localStorage.getItem("accessToken"));
+  }, [user]);
 
   const theme = createTheme({
     palette: {
@@ -104,6 +122,7 @@ const App = () => {
   const handleLogout = () => {
     accountService.logout();
     setAccessToken(null);
+    setUser(null);
     navigate("/login");
   };
 
@@ -112,6 +131,8 @@ const App = () => {
       const response = await accountService.loginUser(username, password);
       localStorage.setItem("accessToken", response.data.access_token);
       setAccessToken(response.data.access_token);
+      console.log(response.data);
+
       onOpenSnackbar({
         open: true,
         severity: "success",
@@ -172,12 +193,14 @@ const App = () => {
               accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
             }
           />
+
           <Route
             path="/profile/changePassword/:id"
             element={
               accessToken ? <ChangePassword /> : <Navigate to="/login" />
             }
           />
+
           {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
           <Route
             path="/professor/dashboard/:id"
@@ -189,26 +212,39 @@ const App = () => {
               )
             }
           />
+
           <Route
             path="/professor/dashboard/addGrade/:studentId/:id"
             element={
               accessToken ? <AddGradePerStudent /> : <Navigate to="/login" />
             }
           />
+
           <Route
             path="/professor/dashboard/studentLists/:id"
             element={
               accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
             }
           />
+
           <Route
             path="/professor/dashboard/checkAttendance/:id"
             element={
               accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
             }
           />
+
+          <Route
+            path="/professor/dashboard/editAttendance/:id"
+            element={
+              accessToken ? <EditAttendancePage /> : <Navigate to="/login" />
+            }
+          />
+
           {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
+
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
+
           {/*-----------Users------------ */}
           <Route
             path="/admin/admin-list"
@@ -244,10 +280,12 @@ const App = () => {
             path="/admin/user-details/:id"
             element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
           />
+
           <Route
             path="/admin/user-details/:id"
             element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
           />
+
           {/*-----------Degree------------ */}
           <Route
             path="/admin/add-degree"
@@ -265,11 +303,13 @@ const App = () => {
               accessToken ? <EditDegreePage /> : <Navigate to="/login" />
             }
           />
+
           {/*-----------Course------------ */}
           <Route
             path="/admin/add-course"
             element={accessToken ? <CourseForm /> : <Navigate to="/login" />}
           />
+
           <Route
             path="/admin/course-list"
             element={
@@ -354,6 +394,7 @@ const App = () => {
             path="/admin/add-timeslot"
             element={accessToken ? <TimeslotForm /> : <Navigate to="/login" />}
           />
+
           <Route
             path="/admin/timeslot-list"
             element={
@@ -511,7 +552,6 @@ const App = () => {
             }
           />
         </Routes>
-
         <Footer />
       </ThemeProvider>
     </LocalizationProvider>
