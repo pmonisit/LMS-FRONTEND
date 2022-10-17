@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Grid from "@mui/material/Grid";
 import { getAccountById } from "../../../services/admin/AccountService";
+import * as degreeService from "../../../services/admin/DegreeService";
 
 const UserDetails = () => {
   const params = useParams();
@@ -17,6 +18,7 @@ const UserDetails = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [degree, setDegree] = useState(null);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -44,6 +46,9 @@ const UserDetails = () => {
   }
 
   if (user) {
+    degreeService
+      .getDegreeById(user.degreeId)
+      .then((res) => setDegree(res.data.degreeName));
     return (
       <Card>
         <CardHeader
@@ -104,6 +109,12 @@ const UserDetails = () => {
                 {user.active ? "Yes" : "No"}
               </Typography>
             </Grid>
+            {user.role === "student" && (
+              <Grid item xs={6}>
+                <Typography variant="overline">Degree</Typography>
+                <Typography variant="body2">{degree}</Typography>
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </Card>

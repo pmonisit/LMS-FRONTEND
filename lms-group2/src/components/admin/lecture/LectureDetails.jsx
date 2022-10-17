@@ -79,29 +79,33 @@ const LectureDetails = () => {
 
               <Grid item xs={6}>
                 <Typography variant="overline">Professor Name</Typography>
-                <Typography variant="body2">{` ${lecture[0][7]} ${lecture[0][9]}`}</Typography>
+                <Typography variant="body2">{` ${lecture[0][8]} ${lecture[0][10]}`}</Typography>
               </Grid>
 
               <Grid item xs={6}>
                 <Typography variant="overline">Semester</Typography>
-                <Typography variant="body2">For Request</Typography>
+                <Typography variant="body2">{lecture[0][23]}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="overline">Degree</Typography>
+                <Typography variant="body2">{lecture[0][5]}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="overline">Capacity</Typography>
-                <Typography variant="body2">{lecture[0][15]}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Desired</Typography>
                 <Typography variant="body2">{lecture[0][16]}</Typography>
               </Grid>
               <Grid item xs={6}>
+                <Typography variant="overline">Desired</Typography>
+                <Typography variant="body2">{lecture[0][17]}</Typography>
+              </Grid>
+              <Grid item xs={6}>
                 <Typography variant="overline">Schedule</Typography>
-                <Typography variant="body2">{`${lecture[0][11]} & ${lecture[0][12]}`}</Typography>
+                <Typography variant="body2">{`${lecture[0][12]} & ${lecture[0][13]}`}</Typography>
               </Grid>
 
               <Grid item xs={6}>
                 <Typography variant="overline">Time</Typography>
-                <Typography variant="body2">{`${lecture[0][13]} - ${lecture[0][14]}`}</Typography>
+                <Typography variant="body2">{`${lecture[0][14]} - ${lecture[0][15]}`}</Typography>
               </Grid>
             </Grid>
           </CardContent>

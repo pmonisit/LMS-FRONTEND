@@ -18,59 +18,23 @@ To accomplish this weekend:
 5. validation
 6. error handling
 7. Sort Table
-8. Pagination
-9. Fix Error
+8. Pagination - done
+9. Fix Error - accountId, semesterId 
 
 Sidebar
 Dashboard
-Search Function
+Search Function 
 
 
-import SemesterListPage from "./pages/admin/SemesterListPage";
-import SemesterForm from "./components/admin/semester/SemesterForm";
-import EditSemesterPage from "./pages/admin/EditSemesterPage";
-import TimeslotForm from "./components/admin/timeslot/TimeslotForm";
-import TimeslotListPage from "./pages/admin/TimeslotListPage";
-import EditTimeslotPage from "./pages/admin/EditTimeslotPage";
+semester-list remove isCurrent, lagay sa action
 
 
 
-  {/*-----------Semester------------ */}
-          <Route
-            path="/admin/add-semester"
-            element={accessToken ? <SemesterForm /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/admin/semester-list"
+import AddProfessorForm from "./components/admin/account/AddProfessorForm";
+
+ <Route
+            path="/admin/lecture/:id/add-professor"
             element={
-              accessToken ? <SemesterListPage /> : <Navigate to="/login" />
+              accessToken ? <AddProfessorForm /> : <Navigate to="/login" />
             }
           />
-          <Route
-            path="/admin/semester/:id/edit"
-            element={
-              accessToken ? <EditSemesterPage /> : <Navigate to="/login" />
-            }
-          />
-          {/*-----------Timeslot------------ */}
-          <Route
-            path="/admin/add-timeslot"
-            element={accessToken ? <TimeslotForm /> : <Navigate to="/login" />}
-          />
-
-          <Route
-            path="/admin/timeslot-list"
-            element={
-              accessToken ? <TimeslotListPage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/admin/timeslot/:id/edit"
-            element={
-              accessToken ? <EditTimeslotPage /> : <Navigate to="/login" />
-            }
-          />
-
-
-
-
