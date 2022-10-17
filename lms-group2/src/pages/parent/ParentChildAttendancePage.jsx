@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Grid, Toolbar, Typography, Button } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { Grid, Toolbar, Box, Button } from "@mui/material";
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import * as semesterService from "../../services/admin/Semester";
 import * as attendanceService from "../../services/professor/AttendanceService";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const ParentChildAttendance = () => {
   const calendarComponentRef = useRef(null);
   const [events, setEvents] = useState({ title: "", start: "" });
-  const [attendanceCurrentSem, setAttendanceCurrentSem] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
-  const [lecturesBySem, setLecturesBySem] = useState([]);
 
   useEffect(() => {
     let attendanceBySem = [];
@@ -25,9 +21,7 @@ const ParentChildAttendance = () => {
       attendanceService
         .parentGetAllMyAttendancesBySemesterId(semId)
         .then((res) => {
-          console.log(res.data);
           attendanceBySem.push(res.data);
-          setAttendanceCurrentSem(...attendanceBySem);
           setEvents(
             res.data.map((a) => {
               return {

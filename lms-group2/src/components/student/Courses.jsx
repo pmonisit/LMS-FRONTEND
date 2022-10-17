@@ -1,40 +1,196 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+import React, { useState, useEffect } from "react";
+import { Grid, Input, Box, Paper, TableContainer, Table } from "@mui/material";
+import { TableHead, TableBody, TableCell } from "@mui/material";
+import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
+import { Toolbar, FormControlLabel, Switch, Button } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import { useContext } from "react";
-import { EnrolContext } from "../../context/student/EnrolContext";
+import PropTypes from "prop-types";
+import * as lectureService from "../../services/professor/LectureService";
+import * as studentLoadService from "../../services/admin/StudentLoadService";
+import * as semesterService from "../../services/admin/Semester";
+import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
+import * as prereqService from "../../services/admin/Prerequisite";
 
 const Courses = () => {
-  const {
-    columns,
-    renderEnrolActions,
-    lecturesBySem,
-    lectureObject,
-    searchTerm,
-    handleTypeSearch,
-    currentSem,
-  } = useContext(EnrolContext);
-
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("2");
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("2");
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [lecturesBySem, setLecturesBySem] = useState([]);
+  const [lectureObject, setLectureObject] = useState([]);
+  const [searchTerm, setSearchTerm] = useState([]);
+  const [currentSem, setCurrentSem] = useState([]);
+  const [prereqOfCourse, setPrereqOfCourse] = useState([]);
+  const [enrolItems, setEnrolItems] = useState([]);
+  const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
+  const [enrolText, setEnrolText] = useState("ENROL");
+  const [unenrolText, setUnEnrolText] = useState("UNENROL");
 
-  function descendingComparator(a, b, orderBy) {
+  useEffect(() => {
+    semesterService.getCurrentSemester().then((response) => {
+      setCurrentSem(response.data);
+      const semId = response.data.semesterId;
+      let lecturesBySem = [];
+      let prereqCourse = [];
+      lectureService.getAllLecturesBySemID(semId).then((response) => {
+        lecturesBySem.push(response.data);
+        lecturesBySem.map((data) => {
+          setLecturesBySem(data);
+          let arrobj = [];
+          data.map((a) => {
+            let obj = { ...a };
+            arrobj.push(obj);
+            setLectureObject(arrobj);
+            let prereq = [];
+            prereqService.getPrereqOfCourse(a[1]).then((response) => {
+              prereq = [a[2], response.data];
+              prereqCourse.push(prereq);
+              setPrereqOfCourse(prereqCourse);
+            });
+          });
+        });
+      });
+    });
+    studentLoadService.getAllMyStudentLoads().then((response) => {
+      setEnrolItems(response.data);
+    });
+    courseAssignedService.getMyCourses().then((response) => {
+      setMyCoursesAssigned(response.data);
+    });
+  }, []);
+
+  const columns = [
+    { id: "2", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "3", label: "Course\u00a0Name", minWidth: 100 },
+    { id: "4", label: "Restriction", minWidth: 100 },
+    { id: "17", label: "Units", minWidth: 100 },
+    { id: "11", label: "Schedule", minWidth: 100 },
+    { id: "10", label: "Section", minWidth: 100 },
+    { id: "9", label: "Instructor", minWidth: 100 },
+    { id: "15", label: "Slots", minWidth: 100 },
+    { id: "16", label: "Demand", minWidth: 100 },
+    { id: "action", label: "Remarks/Action", minWidth: 100 },
+  ];
+
+  const handleEnrol = (lectureId) => {
+    studentLoadService.addStudentLoad(lectureId);
+    setEnrolText("ENROL");
+  };
+
+  const handleUnEnrol = (sloadId) => {
+    studentLoadService.deleteStudentLoad(sloadId);
+    setUnEnrolText("UNENROL");
+  };
+
+  const renderEnrolActions = (lectureId, courseCode) => {
+    const enrolItem = [];
+    const courseAssignedOrTaken = myCoursesAssigned.find(
+      (data) => data[0] === courseCode
+    );
+    enrolItems.map((data) => {
+      enrolItem.splice(
+        0,
+        1,
+        enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
+      );
+    });
+    if (enrolItem[0]) {
+      return (
+        <Button
+          onClick={() => {
+            handleUnEnrol(enrolItem[0][0]);
+          }}
+          variant="contained"
+          color="primary"
+        >
+          {unenrolText}
+        </Button>
+      );
+    } else if (
+      typeof courseAssignedOrTaken !== "undefined" &&
+      courseAssignedOrTaken[3] === "TAKEN"
+    ) {
+      return (
+        <Button variant="contained" color="primary" disabled>
+          TAKEN
+        </Button>
+      );
+    } else if (typeof courseAssignedOrTaken == "undefined") {
+      return (
+        <>
+          <Button disabled variant="contained" color="primary">
+            {enrolText}
+          </Button>
+          <div>
+            <sub>
+              <font color="#d32f2f">
+                <i>*this course is restricted</i>
+              </font>
+            </sub>
+          </div>
+        </>
+      );
+    } else if (
+      prereqOfCourse.find(
+        (course) => course[0] === courseCode && course[1].length == 0
+      )
+    ) {
+      return (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            handleEnrol(lectureId);
+          }}
+        >
+          {enrolText}
+        </Button>
+      );
+    } else {
+      return (
+        <>
+          <Button disabled variant="contained" color="primary">
+            {enrolText}
+          </Button>
+          <div>
+            <sub>
+              <font color="#d32f2f">
+                <i>*with prerequisite</i>
+              </font>
+            </sub>
+          </div>
+        </>
+      );
+    }
+  };
+
+  const handleTypeSearch = () => {
+    return (
+      <Grid>
+        <div align="center">
+          <Input
+            type="text"
+            placeholder="Search Course..."
+            value={searchTerm}
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+          />
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setSearchTerm("")}
+          >
+            Clear
+          </Button>
+        </div>
+      </Grid>
+    );
+  };
+
+  const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
       return -1;
     }
@@ -42,15 +198,15 @@ const Courses = () => {
       return 1;
     }
     return 0;
-  }
+  };
 
-  function getComparator(order, orderBy) {
+  const getComparator = (order, orderBy) => {
     return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
-  }
+  };
 
-  function stableSort(array, comparator) {
+  const stableSort = (array, comparator) => {
     console.log(lectureObject);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -61,9 +217,9 @@ const Courses = () => {
       return a[1] - b[1];
     });
     return stabilizedThis.map((el) => el[0]);
-  }
+  };
 
-  function EnhancedTableHead(props) {
+  const EnhancedTableHead = (props) => {
     const { order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
@@ -98,7 +254,7 @@ const Courses = () => {
         </TableRow>
       </TableHead>
     );
-  }
+  };
 
   EnhancedTableHead.propTypes = {
     onRequestSort: PropTypes.func.isRequired,

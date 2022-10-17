@@ -1,22 +1,32 @@
-import { useContext } from "react";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Table from "@mui/material/Table";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { ParentContext } from "../../context/parent/ParentContext";
-// import Sidebar from "../../components/shared/Sidebar";
-import { Toolbar, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Toolbar, Grid, TableContainer, TableRow } from "@mui/material";
+import { TableBody, Table, Box, Typography, TableCell } from "@mui/material";
 import Profile from "../../components/shared/Profile";
+import * as accountService from "../../services/admin/AccountService";
 
 const ParentDashboardPage = () => {
-  const { user, handleChildInfo } = useContext(ParentContext);
+  const [user, setUser] = useState([]);
+  const [childInfo, setChildInfo] = useState([]);
+
+  useEffect(() => {
+    accountService.getCurrent().then((response) => {
+      setUser(response.data[0]);
+    });
+    accountService.getCurrentChildInfo().then((response) => {
+      setChildInfo(response.data);
+    });
+  }, []);
+
+  const handleChildInfo = () => {
+    childInfo.map((data) => {});
+    return childInfo.map((data) => {
+      return data;
+    });
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <Sidebar /> */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography align="center">
