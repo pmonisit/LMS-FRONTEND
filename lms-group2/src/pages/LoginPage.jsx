@@ -45,7 +45,7 @@ const LoginPage = ({ onLogin }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     console.log(form);
     onLogin(form.username, form.password);
@@ -64,7 +64,7 @@ const LoginPage = ({ onLogin }) => {
       marginTop={4}
       onSubmit={handleSubmit}
     >
-      <Grid item xs={10} sm={10} md={6} lg={4} xl={4}>
+      <Grid item xs={10} sm={10} md={6} lg={4} xl={4} mt={15}>
         <Card>
           <CardHeader title="LOGIN" />
           <CardContent>

@@ -11,42 +11,37 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 
 // Service
-import * as gradeService from "../../services/professor/GradeService";
-import * as lectureService from "../../services/professor/LectureService";
+import * as attendanceService from "../../services/professor/AttendanceService";
 
 // JOI
 import Joi from "joi";
 import { Typography } from "@mui/material";
 
-const AddGradeForm = ({ onSubmit, initialValue }) => {
-  const [lectureId, setLectureId] = useState(0);
-  const [studentDetails, setStudentDetails] = useState([]);
+const EditAttendanceForm = ({ onSubmit, initialValue }) => {
+  const [attendanceDetails, setAttendanceDetails] = useState([]);
 
   const params = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    attendanceService.getAttendanceById(params.id).then((response) => {
+      //   console.log(response.data[0]);
+      setAttendanceDetails(response.data[0]);
+    });
+  }, [attendanceDetails]);
 
   const [form, setForm] = useState(
     initialValue || {
-      gradeValue: 0,
+      attendanceDate: "",
+      status: "",
     }
   );
 
-  useEffect(() => {
-    lectureService.getProfLoad().then((response) => {
-      setLectureId(response?.data[0][0]);
-    });
-
-    gradeService
-      .getStudentGradePerLecture(params.studentId, lectureId)
-      .then((response) => {
-        setStudentDetails(response?.data[0]);
-      });
-  }, [lectureId, studentDetails]);
-
-  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
-    gradeValue: Joi.number().min(0).max(5).required(),
+    attendanceDate: Joi.string().min(4).max(10).required(),
+    status: Joi.string().min(4).max(10).required(),
   });
 
   const handleChange = (event) => {
@@ -92,7 +87,7 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
             color="#b71c1c"
             textAlign="center"
           >
-            ENCODE GRADE
+            UPDATE ATTENDANCE
           </Typography>
 
           <CardContent>
@@ -100,26 +95,38 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
               <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                 <Typography variant="body1">
                   <strong> Student Name: </strong>
-                  {studentDetails?.[5]} {studentDetails?.[7]}
+                  {attendanceDetails[4]} {attendanceDetails[6]}
                 </Typography>
               </Grid>
               <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-                <Typography marginBottom={1} variant="body1">
-                  <strong> Last Modified: </strong> {studentDetails?.[1]}
+                <Typography variant="body1">
+                  <strong> Attendance Date: </strong>
+                  {attendanceDetails[1]}
                 </Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={4} sm={4} md={5} lg={5} xl={5} mt={2} mb={5}>
+              <Grid item xs={12}>
                 <TextField
-                  name="gradeValue"
-                  error={!!errors.gradeValue}
-                  helpertext={errors.gradeValue}
-                  value={form.gradeValue}
+                  name="attendanceDate"
+                  error={!!errors.attendanceDate}
+                  helpertext={errors.attendanceDate}
+                  value={form.attendanceDate}
                   onChange={handleChange}
-                  label="Current Grade"
+                  label="Attendance Date"
                   variant="standard"
-                  type="number"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="status"
+                  error={!!errors.status}
+                  helpertext={errors.status}
+                  value={form.status}
+                  onChange={handleChange}
+                  label="Status"
+                  variant="standard"
                   fullWidth
                 />
               </Grid>
@@ -139,7 +146,9 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
               variant="outlined"
               fullWidth
               onClick={() => {
-                navigate(`/professor/dashboard/studentLists/${lectureId}`);
+                navigate(
+                  `/professor/dashboard/checkAttendance/${attendanceDetails[3]}`
+                );
               }}
             >
               Back
@@ -151,4 +160,4 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
   );
 };
 
-export default AddGradeForm;
+export default EditAttendanceForm;
