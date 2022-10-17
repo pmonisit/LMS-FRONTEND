@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,12 +12,27 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
+import TablePagination from "@mui/material/TablePagination";
 
 const SemesterListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
   const handleEdit = (detail) => {
     console.log(detail);
   };
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, details.length - page * rowsPerPage);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -33,36 +48,56 @@ const SemesterListTable = ({ details }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {details.map((detail) => (
-            <TableRow
-              key={detail.semesterId}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {detail.startDate}
-              </TableCell>
-              <TableCell align="center">
-                {detail.isCurrent ? "True" : "False"}
-              </TableCell>
-              <TableCell align="center">{detail.startingYear}</TableCell>
-              <TableCell align="center">{detail.endingYear}</TableCell>
-              <TableCell align="center">{detail.semOrder}</TableCell>
+          {details
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((detail) => (
+              <TableRow
+                key={detail.semesterId}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {detail.startDate}
+                </TableCell>
+                <TableCell align="center">
+                  {detail.isCurrent ? "True" : "False"}
+                </TableCell>
+                <TableCell align="center">{detail.startingYear}</TableCell>
+                <TableCell align="center">{detail.endingYear}</TableCell>
+                <TableCell align="center">{detail.semOrder}</TableCell>
 
-              <TableCell align="center">
-                <IconButton
-                  onClick={() => {
-                    adminContext.onSetIsEditSemester(true);
-                  }}
-                  LinkComponent={Link}
-                  to={`/admin/semester/${detail.semesterId}/edit`}
-                >
-                  <EditIcon />
-                </IconButton>
-              </TableCell>
+                <TableCell align="center">
+                  <IconButton
+                    onClick={() => {
+                      adminContext.onSetIsEditSemester(true);
+                    }}
+                    LinkComponent={Link}
+                    to={`/admin/semester/${detail.semesterId}/edit`}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          {emptyRows > 0 && (
+            <TableRow
+              style={{
+                height: 73 * emptyRows,
+              }}
+            >
+              <TableCell colSpan={6} />
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 15]}
+        component="div"
+        count={details.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableContainer>
   );
 };
