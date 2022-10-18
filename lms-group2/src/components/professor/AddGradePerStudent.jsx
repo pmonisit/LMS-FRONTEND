@@ -10,7 +10,6 @@ import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext"
 
 // Service
 import * as gradeService from "../../services/professor/GradeService";
-import * as lectureService from "../../services/professor/LectureService";
 
 const AddGradePerStudent = () => {
   const [studentGrade, setStudentGrade] = useState(0);

@@ -1,7 +1,6 @@
 import React from "react";
 
 // Material Components
-import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -20,7 +19,7 @@ const GradingSystem = () => {
     margin: 10,
   }));
   return (
-    <Grid container justifyContent="center" component="form">
+    <Grid container justifyContent="center">
       <Grid item xs={8} sm={8} md={8} lg={7.5} xl={5} mt={15}>
         <Card>
           <Typography
