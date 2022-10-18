@@ -54,7 +54,7 @@ const EditAttendanceForm = ({ onSubmit }) => {
       component="form"
       onSubmit={handleSubmit}
     >
-      <Grid item xs={10} sm={10} md={5} lg={3} xl={3} mt={15}>
+      <Grid item xs={10} sm={10} md={5} lg={5} xl={4} mt={15}>
         <Card>
           <Typography
             marginTop={2}

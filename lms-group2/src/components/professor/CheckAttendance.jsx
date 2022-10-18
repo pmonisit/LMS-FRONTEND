@@ -173,7 +173,7 @@ const CheckAttendance = () => {
                   </TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>
-                    <Tooltip title="Edit Grade">
+                    <Tooltip title="Edit Attendance">
                       <Link
                         to={`/professor/dashboard/editAttendance/${row[0]}`}
                       >
