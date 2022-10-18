@@ -1,5 +1,5 @@
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // Material Components
@@ -18,14 +18,14 @@ import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import EditIcon from "@mui/icons-material/Edit";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+
+// Sweet Alert
+import Swal from "sweetalert2";
+
+// Context
+import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 
 // Service
 import * as lectureService from "../../services/professor/LectureService";
@@ -37,6 +37,7 @@ const StudentListPerLectureComponent = () => {
   const [user, setUser] = useState([]);
   const [courseDetails, setCourseDetails] = useState([]);
   const [open, setOpen] = useState(false);
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
 
   const params = useParams();
 
@@ -47,6 +48,7 @@ const StudentListPerLectureComponent = () => {
 
     lectureService.getStudentsPerLecture(params.id).then((response) => {
       setStudents(response.data);
+      // console.log(students);
     });
 
     lectureService.getLectureById(params.id).then((response) => {
@@ -148,7 +150,7 @@ const StudentListPerLectureComponent = () => {
                   <TableCell align="center">
                     <Tooltip title="Check attendance">
                       <Link
-                        to={`/professor/dashboard/checkAttendance/${row[0]}`}
+                        to={`/professor/dashboard/checkAttendance/${row[0]}/${row[6]}`}
                       >
                         <EventAvailableIcon color="primary" />
                       </Link>
@@ -162,41 +164,40 @@ const StudentListPerLectureComponent = () => {
                         {" "}
                         <Tooltip title="Edit Grade">
                           <Link
-                            to={`/professor/dashboard/addGrade/${row[0]}/${row[7]}`}
+                            to={`/professor/dashboard/addGrade/${row[0]}/${row[6]}`}
                           >
                             <EditIcon color="primary" />
                           </Link>
                         </Tooltip>{" "}
-                        <Dialog open={open} onClose={handleClose}>
-                          <DialogTitle>{" Are you sure?"}</DialogTitle>
-                          <DialogContent>
-                            <DialogContentText>
-                              You won't be able to update the grade of this
-                              student again.
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button
-                              onClick={() => {
-                                handleClose();
-                                gradeService.markGradeAsFinal(row[7]);
-                              }}
-                            >
-                              Confirm
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                        <BookmarkAddedIcon
-                          color="primary"
-                          variant="outlined"
-                          size="small"
-                          cursor="pointer"
-                          onClick={() => {
-                            handleClickOpen();
-                            //gradeService.markGradeAsFinal(row[7]);
-                          }}
-                        />
+                        <Tooltip title="Mark Grade As Final">
+                          <BookmarkAddedIcon
+                            color="primary"
+                            variant="outlined"
+                            size="small"
+                            cursor="pointer"
+                            onClick={() => {
+                              handleClickOpen();
+                              Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to update the grade of this student again if it's final.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Confirm",
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  onOpenSnackbar({
+                                    open: true,
+                                    severity: "success",
+                                    message: `${row[1]}'s grade is now final`,
+                                  });
+                                  gradeService.markGradeAsFinal(row[7]);
+                                }
+                              });
+                            }}
+                          />
+                        </Tooltip>
                       </Stack>
                     )}
                   </TableCell>

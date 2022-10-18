@@ -1,6 +1,7 @@
 // React
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Moment from "moment";
 
 // Material Components
 import TextField from "@mui/material/TextField";
@@ -9,6 +10,10 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 // Service
 import * as attendanceService from "../../services/professor/AttendanceService";
@@ -17,59 +22,29 @@ import * as attendanceService from "../../services/professor/AttendanceService";
 import Joi from "joi";
 import { Typography } from "@mui/material";
 
-const EditAttendanceForm = ({ onSubmit, initialValue }) => {
+const EditAttendanceForm = ({ onSubmit }) => {
   const [attendanceDetails, setAttendanceDetails] = useState([]);
-
+  const [form, setForm] = useState("");
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     attendanceService.getAttendanceById(params.id).then((response) => {
-      //   console.log(response.data[0]);
       setAttendanceDetails(response.data[0]);
+      // console.log(attendanceDetails);
     });
   }, [attendanceDetails]);
 
-  const [form, setForm] = useState(
-    initialValue || {
-      attendanceDate: "",
-      status: "",
-    }
-  );
-
-  const [errors, setErrors] = useState({});
-
-  const schema = Joi.object({
-    attendanceDate: Joi.string().min(4).max(10).required(),
-    status: Joi.string().min(4).max(10).required(),
-  });
-
   const handleChange = (event) => {
-    setForm({ ...form, [event.currentTarget.name]: event.currentTarget.value });
-
-    const { error } = schema
-      .extract(event.currentTarget.name)
-      .label(event.currentTarget.name)
-      .validate(event.currentTarget.value);
-    if (error) {
-      setErrors({
-        ...errors,
-        [event.currentTarget.name]: error.details[0].message,
-      });
-    } else {
-      delete errors[event.currentTarget.name];
-      setErrors(errors);
-    }
+    console.log(event.target.name);
+    // setForm({ ...form, [event.target.name]: event.target.value });
+    setForm(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(form);
     onSubmit(form);
-  };
-
-  const isFormInvalid = () => {
-    const result = schema.validate(form);
-    return !!result.error;
   };
 
   return (
@@ -101,44 +76,51 @@ const EditAttendanceForm = ({ onSubmit, initialValue }) => {
               <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                 <Typography variant="body1">
                   <strong> Attendance Date: </strong>
-                  {attendanceDetails[1]}
+                  {Moment(attendanceDetails[1]).format("MMMM DD, YYYY")}
+                </Typography>
+              </Grid>
+              <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                <Typography variant="body1">
+                  <strong> Current Status: </strong>
+                  {attendanceDetails[2]}
                 </Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={12}>
-                <TextField
-                  name="attendanceDate"
-                  error={!!errors.attendanceDate}
-                  helpertext={errors.attendanceDate}
-                  value={form.attendanceDate}
-                  onChange={handleChange}
-                  label="Attendance Date"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
+              <Grid item xs={12}></Grid>
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6} marginBottom={5}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    name="form"
+                    id="form"
+                    value={form}
+                    label="Status"
+                    onChange={handleChange}
+                  >
+                    <MenuItem></MenuItem>
+                    <MenuItem value={"PRESENT"}>PRESENT</MenuItem>
+                    <MenuItem value={"LATE"}>LATE</MenuItem>
+                    <MenuItem value={"ABSENT"}>ABSENT</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {/* <TextField
                   name="status"
                   error={!!errors.status}
                   helpertext={errors.status}
-                  value={form.status}
+                  value={form}
                   onChange={handleChange}
                   label="Status"
                   variant="standard"
                   fullWidth
-                />
+                /> */}
               </Grid>
             </Grid>
           </CardContent>
           <CardActions>
-            <Button
-              variant="contained"
-              type="submit"
-              fullWidth
-              disabled={isFormInvalid()}
-            >
+            <Button variant="contained" type="submit" fullWidth>
               Save
             </Button>
 
@@ -147,7 +129,7 @@ const EditAttendanceForm = ({ onSubmit, initialValue }) => {
               fullWidth
               onClick={() => {
                 navigate(
-                  `/professor/dashboard/checkAttendance/${attendanceDetails[3]}`
+                  `/professor/dashboard/checkAttendance/${attendanceDetails[3]}/${attendanceDetails[7]}`
                 );
               }}
             >
