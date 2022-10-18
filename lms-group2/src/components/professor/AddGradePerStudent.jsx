@@ -14,24 +14,19 @@ import * as lectureService from "../../services/professor/LectureService";
 
 const AddGradePerStudent = () => {
   const [studentGrade, setStudentGrade] = useState(0);
-  const [lectureId, setLectureId] = useState(0);
+
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const navigate = useNavigate();
 
   const params = useParams();
 
   useEffect(() => {
-    lectureService.getProfLoad().then((response) => {
-      setLectureId(response.data[0][0]);
-    });
-
     gradeService
-      .getStudentGradePerLecture(params.studentId, lectureId)
+      .getStudentGradePerLecture(params.studentId, params.id)
       .then((response) => {
-        setStudentGrade(response.data[0]);
-        // console.log(studentGrade);
+        setStudentGrade(response?.data[0]);
       });
-  }, [params.studentId, studentGrade, lectureId]);
+  }, [params.studentId, studentGrade, params.id]);
 
   const handleAddGrade = async (form) => {
     try {
@@ -41,15 +36,15 @@ const AddGradePerStudent = () => {
           severity: "info",
           message: `No changes has been made`,
         });
-        navigate(`/professor/dashboard/studentLists/${lectureId}`);
+        navigate(`/professor/dashboard/studentLists/${params.id}`);
       } else {
-        await gradeService.editGrade(params.id, form);
+        await gradeService.editGrade(studentGrade[0], form);
         onOpenSnackbar({
           open: true,
           severity: "success",
           message: `${studentGrade[5]}'s grade has been updated`,
         });
-        navigate(`/professor/dashboard/studentLists/${lectureId}`);
+        navigate(`/professor/dashboard/studentLists/${params.id}`);
       }
     } catch (error) {
       onOpenSnackbar({

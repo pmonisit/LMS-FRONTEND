@@ -20,7 +20,6 @@ const EditAttendanceComponent = () => {
 
   useEffect(() => {
     attendanceService.getAttendanceById(params.id).then((response) => {
-      // console.log(response.data[0]);
       setAttendanceDetails(response.data[0]);
     });
   }, [attendanceDetails, params.id]);
@@ -28,13 +27,17 @@ const EditAttendanceComponent = () => {
   const handleEditAttendance = async (form) => {
     try {
       await attendanceService.editAttendance(attendanceDetails[0], form);
+      console.log(form);
       onOpenSnackbar({
         open: true,
         severity: "success",
         message: `Attendance has been updated`,
       });
-      navigate(`/professor/dashboard/checkAttendance/${attendanceDetails[3]}`);
+      navigate(
+        `/professor/dashboard/checkAttendance/${attendanceDetails[3]}/${attendanceDetails[7]}`
+      );
     } catch (error) {
+      console.log(form);
       onOpenSnackbar({
         open: true,
         severity: "error",
@@ -44,15 +47,7 @@ const EditAttendanceComponent = () => {
   };
 
   if (attendanceDetails) {
-    return (
-      <EditAttendanceForm
-        initialValue={{
-          attendanceDate: attendanceDetails[1],
-          status: attendanceDetails[2],
-        }}
-        onSubmit={handleEditAttendance}
-      />
-    );
+    return <EditAttendanceForm onSubmit={handleEditAttendance} />;
   }
   return null;
 };

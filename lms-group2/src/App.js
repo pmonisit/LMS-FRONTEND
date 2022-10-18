@@ -82,7 +82,6 @@ import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 import decode from "jwt-decode";
 
 const App = () => {
-  const [user, setUser] = useState(localStorage.getItem("accessToken"));
   const [accessToken, setAccessToken] = React.useState(
     accountService.getAccessToken()
   );
@@ -99,13 +98,12 @@ const App = () => {
 
     if (token) {
       const decodedToken = decode(token);
-
-      if (decodedToken.exp * 1000 < date.getTime()) {
+      if (new Date(decodedToken.exp * 1000).getTime() <= date.getTime()) {
         handleLogout();
       }
     }
-    setUser(localStorage.getItem("accessToken"));
-  }, [user]);
+    setAccessToken(localStorage.getItem("accessToken"));
+  }, []);
 
   const theme = createTheme({
     palette: {
@@ -121,8 +119,6 @@ const App = () => {
 
   const handleLogout = () => {
     accountService.logout();
-    setAccessToken(null);
-    setUser(null);
     navigate("/login");
   };
 
@@ -228,7 +224,7 @@ const App = () => {
           />
 
           <Route
-            path="/professor/dashboard/checkAttendance/:id"
+            path="/professor/dashboard/checkAttendance/:studentId/:lectureId"
             element={
               accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
             }

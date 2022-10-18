@@ -28,8 +28,6 @@ import * as attendanceService from "../../services/professor/AttendanceService";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 
 const CheckAttendance = () => {
-  const [lectureId, setLectureId] = useState(0);
-
   const [attendanceDetails, setAttendanceDetails] = useState([]);
   const [studentInfo, setStudentInfo] = useState([]);
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
@@ -39,21 +37,21 @@ const CheckAttendance = () => {
   const params = useParams();
 
   useEffect(() => {
-    lectureService.getProfLoad().then((response) => {
-      setLectureId(response.data[0][0]);
-    });
+    // lectureService.getLectureById(params.id).then((response) => {
+    //   console.log(response.data);
+    //   setLectureId(response.data[0]);
+    // });
     attendanceService
-      .getAllAttendanceByLecture(lectureId, params.id)
+      .getAllAttendanceByLecture(params.lectureId, params.studentId)
       .then((response) => {
-        // console.log(response.data?.[0]);
         setStudentInfo(response.data?.[0]);
-        setAttendanceDetails(response?.data);
+        setAttendanceDetails(response.data);
       });
-  }, [lectureId, attendanceDetails, params.id, studentInfo]);
+  }, [attendanceDetails, params.lectureId, params.studentId, studentInfo]);
 
   const handlePresent = () => {
     attendanceService
-      .markAsPresent(lectureId, params.id)
+      .markAsPresent(params.lectureId, params.studentId)
       .then((response) => {
         onOpenSnackbar({
           open: true,
@@ -72,7 +70,7 @@ const CheckAttendance = () => {
 
   const handleLate = () => {
     attendanceService
-      .markAsLate(lectureId, params.id)
+      .markAsLate(params.lectureId, params.studentId)
       .then((response) => {
         onOpenSnackbar({
           open: true,
@@ -91,7 +89,7 @@ const CheckAttendance = () => {
 
   const handleAbsent = () => {
     attendanceService
-      .markAsAbsent(lectureId, params.id)
+      .markAsAbsent(params.lectureId, params.studentId)
       .then((response) => {
         onOpenSnackbar({
           open: true,
@@ -112,7 +110,7 @@ const CheckAttendance = () => {
     <Grid container justifyContent="center" component="form" marginTop={10}>
       <Grid item xs={10} sm={10} md={10} lg={10} xl={6}>
         <Tooltip title="Back to dashboard">
-          <Link to={`/professor/dashboard/studentLists/${lectureId}`}>
+          <Link to={`/professor/dashboard/studentLists/${params.lectureId}`}>
             <IconButton>
               <ArrowBackIcon />
             </IconButton>
@@ -169,7 +167,10 @@ const CheckAttendance = () => {
             <TableBody>
               {attendanceDetails.map((row) => (
                 <TableRow key={row[0]}>
-                  <TableCell>{row[1]}</TableCell>
+                  <TableCell>
+                    {" "}
+                    {Moment(row[1]).format("MMMM DD, YYYY")}
+                  </TableCell>
                   <TableCell>{row[2]}</TableCell>
                   <TableCell>
                     <Tooltip title="Edit Grade">
