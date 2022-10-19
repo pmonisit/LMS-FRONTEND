@@ -48,3 +48,7 @@ export function assignProfessor(lectureId, accountId) {
 export function getAllMyAtttendancePerLecture(lectureId) {
   return http.get(`/lecture/myattendance/all/lecture/${lectureId}`);
 }
+
+export function getLecturesByDegree(degreeId) {
+  return http.get(`/lecture/all/currentsem/degree/${degreeId}`);
+}

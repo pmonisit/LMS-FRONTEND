@@ -74,6 +74,7 @@ import TimeslotForm from "./components/admin/timeslot/TimeslotForm";
 import TimeslotListPage from "./pages/admin/TimeslotListPage";
 import EditTimeslotPage from "./pages/admin/EditTimeslotPage";
 import AddProfessorForm from "./components/admin/account/AddProfessorForm";
+import SchedulePage from "./pages/admin/SchedulePage";
 //------------End of Admin Imports
 import ChangePassword from "./components/shared/ChangePassword";
 import AddGradePerStudent from "./components/professor/AddGradePerStudent";
@@ -192,14 +193,12 @@ const App = () => {
               accessToken ? <EditProfileInfo /> : <Navigate to="/login" />
             }
           />
-
           <Route
             path="/profile/changePassword/:id"
             element={
               accessToken ? <ChangePassword /> : <Navigate to="/login" />
             }
           />
-
           {/* {---------------------Start Faculty Routes- Author: Prince-----------------------------------------------} */}
           <Route
             path="/professor/dashboard/:id"
@@ -211,28 +210,24 @@ const App = () => {
               )
             }
           />
-
           <Route
             path="/professor/dashboard/addGrade/:studentId/:id"
             element={
               accessToken ? <AddGradePerStudent /> : <Navigate to="/login" />
             }
           />
-
           <Route
             path="/professor/dashboard/studentLists/:id"
             element={
               accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
             }
           />
-
           <Route
             path="/professor/dashboard/checkAttendance/:studentId/:lectureId"
             element={
               accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
             }
           />
-
           <Route
             path="/professor/dashboard/editAttendance/:id"
             element={
@@ -248,7 +243,6 @@ const App = () => {
           />
 
           {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
-
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
           <Route
@@ -292,12 +286,10 @@ const App = () => {
             path="/admin/user-details/:id"
             element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
           />
-
           <Route
             path="/admin/user-details/:id"
             element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
           />
-
           {/*-----------Degree------------ */}
           <Route
             path="/admin/add-degree"
@@ -315,13 +307,15 @@ const App = () => {
               accessToken ? <EditDegreePage /> : <Navigate to="/login" />
             }
           />
-
+          <Route
+            path="/admin/degree/:degreeId/schedule"
+            element={accessToken ? <SchedulePage /> : <Navigate to="/login" />}
+          />
           {/*-----------Course------------ */}
           <Route
             path="/admin/add-course"
             element={accessToken ? <CourseForm /> : <Navigate to="/login" />}
           />
-
           <Route
             path="/admin/course-list"
             element={
@@ -371,7 +365,6 @@ const App = () => {
               accessToken ? <AddProfessorForm /> : <Navigate to="/login" />
             }
           />
-
           {/*-----------Prerequisite------------ */}
           <Route
             path="/admin/add-prerequisite/:id"
@@ -413,7 +406,6 @@ const App = () => {
             path="/admin/add-timeslot"
             element={accessToken ? <TimeslotForm /> : <Navigate to="/login" />}
           />
-
           <Route
             path="/admin/timeslot-list"
             element={
@@ -448,7 +440,6 @@ const App = () => {
               )
             }
           />
-
           <Route
             path="/student/enrolment"
             element={

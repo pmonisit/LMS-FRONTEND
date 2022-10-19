@@ -22,6 +22,12 @@ const LectureListPage = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await lectureService.
+  //   };
+  // }, []);
+
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
 

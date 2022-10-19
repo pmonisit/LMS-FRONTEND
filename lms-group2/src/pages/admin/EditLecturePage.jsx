@@ -10,6 +10,7 @@ const EditLecturePage = () => {
   const [lecture, setLecture] = useState([]);
   let tempLecture;
   useEffect(() => {
+    const findLecture = async () => {};
     tempLecture = adminContext.lectureList.find(
       (data) => data[0] === +params.id
     );

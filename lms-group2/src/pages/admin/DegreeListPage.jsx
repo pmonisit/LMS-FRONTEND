@@ -12,6 +12,7 @@ const DegreeListPage = () => {
   const [searchText, setSearchText] = useState("");
   const [tempList, setTempList] = useState([]);
   const [isSearchSuccessful, setIsSearchSuccessful] = useState(true);
+
   useEffect(() => {
     adminService.getDegree().then((res) => {
       console.log(res.data);

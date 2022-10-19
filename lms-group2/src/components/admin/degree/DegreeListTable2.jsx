@@ -9,12 +9,16 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import TablePagination from "@mui/material/TablePagination";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const DegreeListTable2 = ({ details }) => {
+  const navigate = useNavigate();
   const adminContext = useContext(AdminContext);
   const handleEdit = (detail) => {
     console.log(detail);
@@ -33,6 +37,18 @@ const DegreeListTable2 = ({ details }) => {
   };
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, details.length - page * rowsPerPage);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -60,6 +76,56 @@ const DegreeListTable2 = ({ details }) => {
                 <TableCell align="center">{detail.unitsRequired}</TableCell>
 
                 <TableCell align="center">
+                  <IconButton
+                    // onClick={!open ? handleOpenMenu : handleCloseMenu}
+                    LinkComponent={Link}
+                    to={`/admin/degree/${detail.degreeId}/schedule`}
+                  >
+                    <ScheduleIcon />
+                    {/* <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleCloseMenu}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          navigate(
+                            `/admin/degree/${detail.degreeId}/schedule/1`
+                          );
+                        }}
+                      >
+                        First Year
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          navigate(
+                            `/admin/degree/${detail.degreeId}/schedule/2`
+                          );
+                        }}
+                      >
+                        Second Year
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          navigate(
+                            `/admin/degree/${detail.degreeId}/schedule/3`
+                          );
+                        }}
+                      >
+                        Third Year
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          navigate(
+                            `/admin/degree/${detail.degreeId}/schedule/4`
+                          );
+                        }}
+                      >
+                        Fourth Year
+                      </MenuItem>
+                    </Menu> */}
+                  </IconButton>
                   <IconButton
                     onClick={() => {
                       adminContext.onSetIsEdit(true);

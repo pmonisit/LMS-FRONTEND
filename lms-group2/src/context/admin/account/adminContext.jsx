@@ -27,6 +27,8 @@ export const AdminContext = createContext({
   onSetPrerequisiteList: () => {},
   // isSuccess: false,
   // onSetIsSuccess: () => {},
+  scheduleList: [],
+  onSetScheduleList: () => {},
 });
 
 export const AdminProvider = ({ children }) => {
@@ -43,6 +45,7 @@ export const AdminProvider = ({ children }) => {
   const [isEditPrerequisite, setIsEditPrerequisite] = useState(false);
   const [prerequisiteList, setPrerequisiteList] = useState([]);
   // const [isSuccess, setIsSuccess] = useState(false);
+  const [scheduleList, setScheduleList] = useState([]);
 
   return (
     <AdminContext.Provider
@@ -73,6 +76,8 @@ export const AdminProvider = ({ children }) => {
         onSetPrerequisiteList: setPrerequisiteList,
         // isSuccess,
         // onSetIsSuccess: setIsSuccess,
+        scheduleList,
+        onSetScheduleList: setScheduleList,
       }}
     >
       {children}
