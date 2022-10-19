@@ -17,7 +17,7 @@ const LectureListPage = () => {
 
   useEffect(() => {
     lectureService.getLecture().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       adminContext.onSetLectureList(res.data);
     });
   }, []);

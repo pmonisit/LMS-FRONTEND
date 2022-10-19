@@ -8,8 +8,11 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import * as adminService from "../../../services/admin/TimeslotService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
-
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
+import { useNavigate } from "react-router-dom";
 const TimeslotForm = ({ initialValue, timeslotId }) => {
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const adminContext = useContext(AdminContext);
   const [timeslotForm, setTimeSlotForm] = useState(
     initialValue
@@ -38,16 +41,27 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
         event.preventDefault();
         console.log(timeslotForm);
         if (adminContext.isTimeslotEdit) {
-          adminService
-            .editTimeslot(timeslotId, timeslotForm)
-            .then((res) => console.log(res));
+          adminService.editTimeslot(timeslotId, timeslotForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully edited a Timeslot",
+            });
+          });
         } else {
-          adminService
-            .addTimeslot(timeslotForm)
-            .then((res) => console.log(res));
+          adminService.addTimeslot(timeslotForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Timeslot",
+            });
+          });
         }
 
         adminContext.onSetIsEdit(false);
+        navigate("/admin/timeslot-list");
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

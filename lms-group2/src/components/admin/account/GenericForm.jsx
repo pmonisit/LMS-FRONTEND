@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -14,6 +15,8 @@ import { AccountFormContext } from "../../../context/admin/account/AccountFormCo
 import ProfessorForm from "./ProfessorForm";
 import AdminForm from "./AdminForm";
 import ParentForm from "./ParentForm";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 
 import {
   addStudents,
@@ -23,10 +26,16 @@ import {
   editAccountBio,
   setChild,
 } from "../../../services/admin/AccountService";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
+import { AdminContext } from "../../../context/admin/account/adminContext";
 
 const GenericForm = ({ initialValue, accountId }) => {
+  const navigate = useNavigate();
   const accountFormContext = useContext(AccountFormContext);
+  const adminContext = useContext(AdminContext);
   const { step, steps } = accountFormContext;
+  const { onOpenSnackbar, onCloseSnackbar, snackbarConfig } =
+    useContext(UserInterfaceContext);
   const { isAdmin, isProfessor, isStudent, isParent } =
     accountFormContext.isRole;
   // const { role } = accountFormContext.accountForm;
@@ -68,11 +77,33 @@ const GenericForm = ({ initialValue, accountId }) => {
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
+
           //console.log(accountFormContext.accountForm);
           if (accountFormContext.isEdit) {
-            editAccountBio(accountId, accountForm).then((res) =>
-              console.log(res)
-            );
+            editAccountBio(accountId, accountForm).then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a User",
+              });
+              {
+                accountForm.role === "student" &&
+                  navigate("/admin/student-list");
+              }
+              {
+                accountForm.role === "admin" && navigate("/admin/admin-list");
+              }
+              {
+                accountForm.role === "professor" &&
+                  navigate("/admin/professor-list");
+              }
+              {
+                accountForm.role === "parent" && navigate("/admin/parent-list");
+              }
+
+              accountFormContext.onSetStep(0);
+            });
             if (accountForm.role === "parent") {
               setChild(accountId, accountForm).then((res) => console.log(res));
               console.log("set child id");
@@ -85,26 +116,54 @@ const GenericForm = ({ initialValue, accountId }) => {
                 return addStudents(accountForm).then((res) => {
                   console.log("From student");
                   console.log(res);
+                  onOpenSnackbar({
+                    open: true,
+                    severity: "success",
+                    message: "Successfully added a Student",
+                  });
+                  navigate("/admin/student-list");
+                  accountFormContext.onSetStep(0);
                 });
-
                 break;
               case "admin":
                 console.log(accountFormContext.adminForm);
+
                 return addAdminAccount(accountForm).then((res) => {
                   console.log("From admin");
                   console.log(res);
+                  onOpenSnackbar({
+                    open: true,
+                    severity: "success",
+                    message: "Successfully added an Administrator",
+                  });
+                  navigate("/admin/admin-list");
+                  accountFormContext.onSetStep(0);
                 });
                 break;
               case "professor":
                 return addProfessorAccount(accountForm).then((res) => {
                   console.log("From professor");
                   console.log(res);
+                  onOpenSnackbar({
+                    open: true,
+                    severity: "success",
+                    message: "Successfully added a Professor",
+                  });
+                  navigate("/admin/professor-list");
+                  accountFormContext.onSetStep(0);
                 });
                 break;
               case "parent":
                 return addParentAccount(accountForm).then((res) => {
                   console.log("From parent");
                   console.log(res);
+                  onOpenSnackbar({
+                    open: true,
+                    severity: "success",
+                    message: "Successfully added a Parent",
+                  });
+                  navigate("/admin/parent-list");
+                  accountFormContext.onSetStep(0);
                 });
                 break;
             }
