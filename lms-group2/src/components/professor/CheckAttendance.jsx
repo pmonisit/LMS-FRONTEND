@@ -1,6 +1,6 @@
 // React
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Moment from "moment";
 
 // Material Components
@@ -21,7 +21,6 @@ import Chip from "@mui/material/Chip";
 import EditIcon from "@mui/icons-material/Edit";
 
 // Service
-import * as lectureService from "../../services/professor/LectureService";
 import * as attendanceService from "../../services/professor/AttendanceService";
 
 // Context
@@ -35,12 +34,9 @@ const CheckAttendance = () => {
   const date = Moment().format("MMMM DD, YYYY");
 
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // lectureService.getLectureById(params.id).then((response) => {
-    //   console.log(response.data);
-    //   setLectureId(response.data[0]);
-    // });
     attendanceService
       .getAllAttendanceByLecture(params.lectureId, params.studentId)
       .then((response) => {
@@ -153,6 +149,16 @@ const CheckAttendance = () => {
           <Chip label="Present" color="success" onClick={handlePresent} />
           <Chip label="Late" color="warning" onClick={handleLate} />
           <Chip label="Absent" color="error" onClick={handleAbsent} />
+
+          <Chip
+            label="Manual"
+            color="info"
+            onClick={() => {
+              navigate(
+                `/professor/dashboard/manualAttendance/${params.lectureId}/${params.studentId}`
+              );
+            }}
+          />
         </Stack>
 
         <TableContainer component={Paper}>

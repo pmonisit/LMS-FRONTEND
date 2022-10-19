@@ -14,6 +14,7 @@ import { AdminContext } from "../../../context/admin/account/adminContext";
 import * as professorService from "../../../services/professor/LectureService";
 import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 import * as lectureService from "../../../services/professor/LectureService";
+import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 
 const LectureFormHolder = ({ initialValue, lectureId }) => {
   console.log(initialValue);
@@ -86,7 +87,7 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
                 message: "Successfully added a Degree",
               });
             });
-            accountFormContext.onSetIsEdit(false);
+            AccountFormContext.onSetIsEdit(false);
           } else {
             console.log("add");
             professorService.addLecture(lectureForm).then((res) => {

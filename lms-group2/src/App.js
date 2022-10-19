@@ -80,6 +80,8 @@ import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 
 // JWT Decode
 import decode from "jwt-decode";
+import ManualAttendancePage from "./pages/professor/ManualAttendancePage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -237,10 +239,23 @@ const App = () => {
             }
           />
 
+          <Route
+            path="/professor/dashboard/manualAttendance/:lectureId/:studentId"
+            element={
+              accessToken ? <ManualAttendancePage /> : <Navigate to="/login" />
+            }
+          />
+
           {/* {---------------------End Faculty Routes- Author: Prince-----------------------------------------------} */}
 
           {/* {---------------------Admin Routes- Author: EJ-----------------------------------------------} */}
 
+          <Route
+            path="/admin/dashboard"
+            element={
+              accessToken ? <AdminDashboardPage /> : <Navigate to="/login" />
+            }
+          />
           {/*-----------Users------------ */}
           <Route
             path="/admin/admin-list"
@@ -555,7 +570,6 @@ const App = () => {
             }
           />
         </Routes>
-        <Footer />
       </ThemeProvider>
     </LocalizationProvider>
   );
