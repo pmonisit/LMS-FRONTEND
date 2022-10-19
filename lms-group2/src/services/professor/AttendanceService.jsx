@@ -8,19 +8,19 @@ export function deleteAttendance(id) {
   return http.delete(`/attendance/delete/${id}`);
 }
 
-export function addAttendance(attendance) {
-  const attendanceClone = { ...attendance };
-  Object.keys(attendance).forEach((key) => {
-    if (
-      attendance[key] === "" ||
-      attendance[key] === null ||
-      attendance[key] === "undefined"
-    ) {
-      delete attendanceClone[key];
-    }
-  });
-  return http.post("/attendance/insert", attendanceClone);
-}
+// export function addAttendance(attendance) {
+//   const attendanceClone = { ...attendance };
+//   Object.keys(attendance).forEach((key) => {
+//     if (
+//       attendance[key] === "" ||
+//       attendance[key] === null ||
+//       attendance[key] === "undefined"
+//     ) {
+//       delete attendanceClone[key];
+//     }
+//   });
+//   return http.post("/attendance/insert", attendanceClone);
+// }
 
 export function getMyAttendancesByLectureId(lectureId) {
   return http.get(`/attendance/myattendance/all/lecture/${lectureId}`);
@@ -56,4 +56,8 @@ export function editAttendance(attendanceId, form) {
 
 export function getAttendanceById(attendanceId) {
   return http.get(`/attendance/${attendanceId}`);
+}
+
+export function addManualAttendance(lectureId, studentId, form) {
+  return http.post(`/attendance/insert/${lectureId}/${studentId}`, form);
 }

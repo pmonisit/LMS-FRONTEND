@@ -20,7 +20,7 @@ const GradingSystem = () => {
   }));
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={8} sm={8} md={8} lg={7.5} xl={5} mt={15}>
+      <Grid item xs={8} sm={12} md={9} lg={7.5} xl={5} mt={15} ml={5} mr={1}>
         <Card>
           <Typography
             marginTop={2}

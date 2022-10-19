@@ -3,11 +3,11 @@ import React from "react";
 
 // Material Components
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 // Pages
 import ProfessorScheduleComponent from "../../components/professor/ProfessorScheduleComponent";
 import Profile from "../../components/shared/Profile";
-import { Typography } from "@mui/material";
 
 const ProfessorDashboardPage = () => {
   return (
