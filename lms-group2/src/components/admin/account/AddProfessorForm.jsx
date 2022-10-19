@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -14,8 +14,11 @@ import NativeSelect from "@mui/material/NativeSelect";
 import { getProfessors } from "../../../services/admin/AccountService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import { assignProfessor } from "../../../services/professor/LectureService";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 
 const AddProfessorForm = () => {
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const params = useParams();
   const adminContext = useContext(AdminContext);
   const [professorForm, setProfessorForm] = useState("");
@@ -37,21 +40,15 @@ const AddProfessorForm = () => {
         event.preventDefault();
         console.log(professorForm);
         console.log(params.id);
-        assignProfessor(params.id, professorForm).then((res) =>
-          console.log(res)
-        );
-        //   console.log(timeslotForm);
-        //   if (adminContext.isTimeslotEdit) {
-        //     adminService
-        //       .editTimeslot(timeslotId, timeslotForm)
-        //       .then((res) => console.log(res));
-        //   } else {
-        //     adminService
-        //       .addTimeslot(timeslotForm)
-        //       .then((res) => console.log(res));
-        //   }
-
-        //   adminContext.onSetIsEdit(false);
+        assignProfessor(params.id, professorForm).then((res) => {
+          console.log(res);
+          onOpenSnackbar({
+            open: true,
+            severity: "success",
+            message: "Successfully assigned a Professor",
+          });
+          navigate("/admin/lecture-list");
+        });
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import TablePagination from "@mui/material/TablePagination";
+import Button from "@mui/material/Button";
+import * as semesterService from "../../../services/admin/Semester";
 
 const SemesterListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
@@ -22,6 +24,7 @@ const SemesterListTable = ({ details }) => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isCurrent, setIsCurrent] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -40,10 +43,10 @@ const SemesterListTable = ({ details }) => {
           <TableRow>
             <TableCell>Start Date</TableCell>
 
-            <TableCell align="center">Is Current</TableCell>
             <TableCell align="center">Start Year</TableCell>
             <TableCell align="center">End Year</TableCell>
             <TableCell align="center">Semester Order</TableCell>
+            <TableCell align="center">Is Current</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -58,13 +61,26 @@ const SemesterListTable = ({ details }) => {
                 <TableCell component="th" scope="row">
                   {detail.startDate}
                 </TableCell>
-                <TableCell align="center">
-                  {detail.isCurrent ? "True" : "False"}
-                </TableCell>
+
                 <TableCell align="center">{detail.startingYear}</TableCell>
                 <TableCell align="center">{detail.endingYear}</TableCell>
                 <TableCell align="center">{detail.semOrder}</TableCell>
-
+                <TableCell align="center">
+                  {/* {detail.isCurrent ? "True" : "False"} */}
+                  {detail.isCurrent ? (
+                    "Current Semester"
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        semesterService
+                          .changeIsCurrent(detail.semesterId)
+                          .then((res) => console.log(res));
+                      }}
+                    >
+                      Activate
+                    </Button>
+                  )}
+                </TableCell>
                 <TableCell align="center">
                   <IconButton
                     onClick={() => {

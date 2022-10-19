@@ -11,8 +11,11 @@ import * as prerequisiteService from "../../../services/admin/Prerequisite";
 import CourseSelection from "./CourseSelection";
 import * as courseService from "../../../services/admin/CourseService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 
 const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const [courses, setCourses] = useState([]);
   useEffect(() => {
     courseService.getCourse().then((res) => setCourses(res.data));
@@ -50,14 +53,27 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
 
           prerequisiteService
             .editPrerequisite(prerequisiteId, prerequisiteForm)
-            .then((res) => console.log(res));
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a Prerequisite",
+              });
+            });
           adminContext.onSetIsEditPrerequisite(false);
         } else {
           console.log("Add");
-          prerequisiteService
-            .addPrerequisite(prerequisiteForm)
-            .then((res) => console.log(res));
+          prerequisiteService.addPrerequisite(prerequisiteForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Prerequisite",
+            });
+          });
         }
+        navigate("/admin/prerequisite-list");
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

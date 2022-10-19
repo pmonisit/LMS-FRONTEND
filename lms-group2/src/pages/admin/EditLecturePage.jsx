@@ -1,30 +1,49 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as adminService from "../../services/admin/AccountService";
 import { AdminContext } from "../../context/admin/account/adminContext";
 import LectureFormHolder from "../../components/admin/lecture/LectureFormHolder";
 
 const EditLecturePage = () => {
-  const params = useParams();
-
   const adminContext = useContext(AdminContext);
-  const lecture = adminContext.lectureList.find(
-    (data) => data[0] === +params.id
-  );
+  const params = useParams();
+  const [lecture, setLecture] = useState([]);
+  let tempLecture;
+  useEffect(() => {
+    tempLecture = adminContext.lectureList.find(
+      (data) => data[0] === +params.id
+    );
+    console.log(tempLecture);
+    setLecture(tempLecture);
+  }, []);
 
+  console.log(lecture);
   const lectureObject = {
-    section: lecture[10],
+    section: lecture[11],
     courseId: lecture[1],
-    accountId: "",
-    semesterId: "",
-    dayOne: lecture[11],
-    dayTwo: lecture[12],
-    startTime: lecture[13],
-    endTime: lecture[14],
-    capacity: lecture[15],
-    desired: lecture[16],
+    accountId: lecture[6],
+    semesterId: lecture[19],
+    dayOne: lecture[12],
+    dayTwo: lecture[13],
+    startTime: lecture[14],
+    endTime: lecture[15],
+    capacity: lecture[16],
+    desired: lecture[17],
   };
+  // const lectureObject = {
+  //   section: "",
+  //   courseId: "",
+  //   accountId: "",
+  //   semesterId: "",
+  //   dayOne: "",
+  //   dayTwo: "",
+  //   startTime: "",
+  //   endTime: "",
+  //   capacity: "",
+  //   desired: "",
+  // };
 
+  //console.log(lectureObject);
   //   useEffect(() => {
   //     // console.log(adminContext.lectureList);
   //     const lecture = adminContext.lectureList.find(
@@ -40,7 +59,7 @@ const EditLecturePage = () => {
 
   return (
     <>
-      <LectureFormHolder initialValue={lectureObject} lectureId={lecture[0]} />
+      <LectureFormHolder initialValue={lecture} lectureId={lecture[0]} />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -8,8 +9,11 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import * as adminService from "../../../services/admin/DegreeService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 
 const DegreeForm = ({ initialValue, degreeId }) => {
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   useEffect(() => {
     console.log(initialValue);
     console.log(degreeId);
@@ -42,15 +46,26 @@ const DegreeForm = ({ initialValue, degreeId }) => {
       onSubmit={(event) => {
         event.preventDefault();
         if (adminContext.isEdit) {
-          adminService
-            .editDegree(degreeId, degreeForm)
-            .then((res) => console.log(res));
+          adminService.editDegree(degreeId, degreeForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully edited a Degree",
+            });
+          });
           adminContext.onSetIsEdit(false);
         } else {
           adminService.addDegree(degreeForm).then((res) => {
             console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Degree",
+            });
           });
         }
+        navigate("/admin/degree-list");
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -12,8 +13,11 @@ import StartDatePicker from "./StartDatePicker";
 import IsCurrentRadioButton from "./IsCurrentRadioButton";
 import StartYearSelection from "./StartYearSelection";
 import EndYearSelection from "./EndYearSelection";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 
 const SemesterForm = ({ initialValue, semesterId }) => {
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const adminContext = useContext(AdminContext);
   const [semesterForm, setSemesterForm] = useState(
     initialValue
@@ -47,16 +51,27 @@ const SemesterForm = ({ initialValue, semesterId }) => {
         if (adminContext.isEditSemester) {
           console.log("Edit");
           console.log(semesterForm);
-          adminService
-            .editSemester(semesterId, semesterForm)
-            .then((res) => console.log(res));
+          adminService.editSemester(semesterId, semesterForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully edited a Semester",
+            });
+          });
           adminContext.onSetIsEditSemester(false);
         } else {
           console.log("Add");
-          adminService
-            .addSemester(semesterForm)
-            .then((res) => console.log(res));
+          adminService.addSemester(semesterForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Semester",
+            });
+          });
         }
+        navigate("/admin/semester-list");
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

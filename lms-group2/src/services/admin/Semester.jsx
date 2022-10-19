@@ -41,3 +41,7 @@ export function getMySemestersWithGrades() {
 export function getMyChildSemestersWithGrades() {
   return http.get("/semester/getchildsems/grades");
 }
+
+export function changeIsCurrent(semesterId) {
+  return http.put(`/semester/makecurrrent/${semesterId}`);
+}

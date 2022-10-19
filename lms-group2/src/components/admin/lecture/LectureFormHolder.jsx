@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -12,28 +12,47 @@ import LectureForm from "./LectureForm";
 import LectureForm2 from "./LectureForm2";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import * as professorService from "../../../services/professor/LectureService";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
+import * as lectureService from "../../../services/professor/LectureService";
 
 const LectureFormHolder = ({ initialValue, lectureId }) => {
+  console.log(initialValue);
+
+  const navigate = useNavigate();
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const params = useParams();
   const adminContext = useContext(AdminContext);
   const [lectureStep, setLectureStep] = useState(0);
   const lectureSteps = ["Basic Info", "Other Details"];
-  const [lectureForm, setLectureForm] = useState(
-    initialValue
-      ? initialValue
-      : {
-          section: "",
-          courseId: "",
-          accountId: params.id,
-          semesterId: "",
-          dayOne: "",
-          dayTwo: "",
-          startTime: "",
-          endTime: "",
-          capacity: "",
-          desired: "",
-        }
-  );
+  const [isEdit, setEdit] = useState(true);
+
+  // const lectureObject = {
+  //   section: initialValue[11],
+  //   courseId: initialValue[1],
+  //   accountId: initialValue[6],
+  //   semesterId: initialValue[19],
+  //   dayOne: initialValue[12],
+  //   dayTwo: initialValue[13],
+  //   startTime: initialValue[14],
+  //   endTime: initialValue[15],
+  //   capacity: initialValue[16],
+  //   desired: initialValue[17],
+  // };
+
+  const [lectureForm, setLectureForm] = useState({
+    section: "",
+    courseId: "",
+    accountId: params.id,
+    semesterId: "",
+    dayOne: "",
+    dayTwo: "",
+    startTime: "",
+    endTime: "",
+    capacity: "",
+    desired: "",
+  });
+
+  console.log(lectureForm);
   const handleLectureNext = () => {
     if (lectureStep !== lectureSteps.length - 1) {
       setLectureStep(lectureStep + 1);
@@ -59,22 +78,28 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
           console.log(lectureForm);
           if (adminContext.isEditLecture) {
             console.log("edit");
-            // editAccountBio(accountId, accountForm).then((res) =>
-            //   console.log(res)
-            // );
-            // if (accountForm.role === "parent") {
-            //   setChild(accountId, accountForm).then((res) => console.log(res));
-            //   console.log("set child id");
-            // }
-            // accountFormContext.onSetIsEdit(false);
-            // console.log(accountId, accountForm);
+            lectureService.editLecture(lectureId, lectureForm).then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Degree",
+              });
+            });
+            accountFormContext.onSetIsEdit(false);
           } else {
             console.log("add");
             professorService.addLecture(lectureForm).then((res) => {
               console.log(res.data);
               adminContext.onSetLectureList(res.data);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Degree",
+              });
             });
           }
+          // navigate("/admin/lecture-list");
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >

@@ -17,24 +17,34 @@ To accomplish this weekend:
 4. Dropdowns - done
 5. validation
 6. error handling
-7. Sort Table
+
 8. Pagination - done
-9. Fix Error - accountId, semesterId 
+9. Fix Error - accountId, semesterId - done
+10. Search for semester, timeslot -X
+11. Semester and timeslot table mapping
+12. Toast, useNavigate -done
+13. UI
+14. Schedule - YearNo, SemNo, CourseCode, CourseName, Schedule, Time, 
+15. lecture -list error
+16. Attendance -for clarification
+17. Recommended - for clarification
+18. Filter By Degree
 
 Sidebar
 Dashboard
 Search Function 
 
 
-semester-list remove isCurrent, lagay sa action
+semester-list remove isCurrent, lagay sa action - done
+
+Urgent Items
+- Troubleshooting of Lecture
+- Schedule
+z
+
+Semi-Urgent
+-Filter By Degree
+-Semester and Timeslot Mapping
+-UI
 
 
-
-import AddProfessorForm from "./components/admin/account/AddProfessorForm";
-
- <Route
-            path="/admin/lecture/:id/add-professor"
-            element={
-              accessToken ? <AddProfessorForm /> : <Navigate to="/login" />
-            }
-          />

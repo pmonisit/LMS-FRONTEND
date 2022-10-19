@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -11,8 +12,13 @@ import { AdminContext } from "../../../context/admin/account/adminContext";
 import DegreeSelection from "../account/DegreeSelection";
 import * as degreeService from "../../../services/admin/DegreeService";
 import * as timeslotService from "../../../services/admin/TimeslotService";
+import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
+
 import TimeslotSelection from "./TimeslotSelection";
+
 const CourseForm = ({ initialValue, courseId }) => {
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
+  const navigate = useNavigate();
   const [degrees, setDegrees] = useState([]);
   const [timeslots, setTimeslots] = useState([]);
   useEffect(() => {
@@ -52,15 +58,26 @@ const CourseForm = ({ initialValue, courseId }) => {
         event.preventDefault();
         console.log(courseForm);
         if (adminContext.isEditCourse) {
-          adminService
-            .editCourse(courseId, courseForm)
-            .then((res) => console.log(res));
+          adminService.editCourse(courseId, courseForm).then((res) => {
+            console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully edited a Course",
+            });
+          });
           adminContext.onSetIsEditCourse(false);
         } else {
           adminService.addCourse(courseForm).then((res) => {
             console.log(res);
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Course",
+            });
           });
         }
+        navigate("/admin/course-list");
       }}
     >
       <Grid item xs={12} md={6} sm={6}>

@@ -18,9 +18,6 @@ import AddIcon from "@mui/icons-material/Add";
 
 const LectureListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
-  const handleEdit = (detail) => {
-    console.log(detail);
-  };
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
