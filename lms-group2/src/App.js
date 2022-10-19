@@ -24,7 +24,7 @@ import StudentAttendancePage from "./pages/student/StudentAttendancePage";
 import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
-import StudentAttendanceListPage from "./pages/student/StudentAttendanceListPage";
+import AttendanceList from "./components/student/AttendanceList";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 import EditAttendancePage from "./pages/professor/EditAttendancePage";
 
@@ -182,7 +182,7 @@ const App = () => {
               )
             }
           />
-          {/* <Route path="*" element={<NotFoundPage />} /> */}
+          <Route path="*" element={<NotFoundPage />} />
           <Route
             path="/profile"
             element={accessToken ? <Profile /> : <Navigate to="/login" />}
@@ -481,7 +481,7 @@ const App = () => {
             path="/student/attendance/viewlist"
             element={
               accessToken && role === "student" ? (
-                <StudentAttendanceListPage />
+                <AttendanceList />
               ) : (
                 <Navigate to="/login" />
               )

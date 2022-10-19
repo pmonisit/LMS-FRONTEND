@@ -41,13 +41,13 @@ const Sidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton LinkComponent={Link} to="/student/courses">
-              <ListItemText primary={"Courses"} />
+            <ListItemButton LinkComponent={Link} to="/student/enrolment">
+              <ListItemText primary={"Enrolment"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton LinkComponent={Link} to="/student/enrolment">
-              <ListItemText primary={"Enrolment"} />
+            <ListItemButton LinkComponent={Link} to="/student/courses">
+              <ListItemText primary={"Courses"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

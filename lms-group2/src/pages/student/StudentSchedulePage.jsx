@@ -5,10 +5,12 @@ import { TableContainer, TableHead, TableRow, Box } from "@mui/material";
 import Sidebar from "../../components/shared/Sidebar";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const StudentSchedulePage = () => {
   const [currentSem, setCurrentSem] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
+  const [myTempSLoads, setMyTempSLoads] = useState([]);
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -16,6 +18,9 @@ const StudentSchedulePage = () => {
     });
     studentLoadService.getMyEnrolledStudentLoads().then((response) => {
       setMyEnrolledSLoads(response.data);
+    });
+    studentLoadService.getMyTempLoad().then((response) => {
+      setMyTempSLoads(response.data);
     });
   }, []);
 
@@ -29,8 +34,8 @@ const StudentSchedulePage = () => {
     { id: "Su", label: "Sunday", minWidth: 100 },
   ];
 
-  const handleSchedule = () => {
-    const sortedSchedule = myEnrolledSLoads.sort((a, b) => {
+  const handleSchedule = (load, isFinal) => {
+    const sortedSchedule = load.sort((a, b) => {
       let aminute = a[6].split(":").map(Number);
       let bminute = b[6].split(":").map(Number);
       return aminute[0] * 60 + aminute[1] - (bminute[0] * 60 + bminute[1]);
@@ -89,9 +94,37 @@ const StudentSchedulePage = () => {
               </TableCell>
             );
           })}
+          {isFinal ? null : (
+            <TableCell align="center">
+              <Button
+                onClick={() => {
+                  handleRemoveToSchedule(data[0]);
+                }}
+              >
+                <RemoveCircleIcon />
+              </Button>
+            </TableCell>
+          )}
         </TableRow>
       );
     });
+  };
+
+  const handleRemoveToSchedule = (sloadId) => {
+    studentLoadService.deleteStudentLoad(sloadId);
+  };
+
+  const handleDesiredSchedule = () => {
+    return handleSchedule(myTempSLoads, false);
+  };
+
+  const handleApprovedSchedule = () => {
+    return handleSchedule(myEnrolledSLoads, true);
+  };
+
+  const handleSubmitFoApproval = () => {
+    studentLoadService.sendForApproval();
+    return "hello";
   };
 
   return (
@@ -123,19 +156,29 @@ const StudentSchedulePage = () => {
                                 {column.label}
                               </TableCell>
                             ))}
+                            <TableCell>Action</TableCell>
                           </TableRow>
                         </TableHead>
-                        <TableBody>{handleSchedule()}</TableBody>
+                        <TableBody>{handleDesiredSchedule()}</TableBody>
                       </Table>
                     </TableContainer>
                   </Paper>
+
                   <sub>
                     <i>
                       <span style={{ color: "#ef9a9a" }}>* with conflict</span>
                     </i>
                   </sub>
+
                   <Typography align="center">
-                    <Button color="primary" type="submit" variant="contained">
+                    <Button
+                      color="primary"
+                      type="submit"
+                      variant="contained"
+                      onClick={() => {
+                        handleSubmitFoApproval();
+                      }}
+                    >
                       Submit for Approval
                     </Button>
                   </Typography>
@@ -171,7 +214,7 @@ const StudentSchedulePage = () => {
                             ))}
                           </TableRow>
                         </TableHead>
-                        <TableBody>{handleSchedule()}</TableBody>
+                        <TableBody>{handleApprovedSchedule()}</TableBody>
                       </Table>
                     </TableContainer>
                   </Paper>

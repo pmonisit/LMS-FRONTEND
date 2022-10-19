@@ -12,6 +12,7 @@ const StudentGrade = () => {
     let myGradesWithSem = [];
     let id = 0;
     semesterService.getMySemestersWithGrades().then((response) => {
+      console.log(response.data);
       setMySemestersWithGrades(response.data);
       response.data.map((resp) => {
         let semId = resp[0];
@@ -21,6 +22,7 @@ const StudentGrade = () => {
             merge = [id++, ...resp, ...a];
             myGradesWithSem.push(merge);
             setMyGradesWithSem(myGradesWithSem);
+            console.log(myGradesWithSem);
           });
         });
       });

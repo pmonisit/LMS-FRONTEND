@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import { Grid, Toolbar, Paper, Table, TableBody } from "@mui/material";
 import { TableContainer, TableHead, TableCell, TableRow } from "@mui/material";
-import { Input, Button, Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import Sidebar from "../../components/shared/Sidebar";
 import * as lectureService from "../../services/professor/LectureService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as prereqService from "../../services/admin/Prerequisite";
+import { EnrolContext } from "../../context/student/EnrolContext";
 
 const StudentEnrolmentPage = () => {
-  const navigate = useNavigate();
+  const { handleSearchForClass } = useContext(EnrolContext);
+
   const [myRecommendedCoursesAssigned, setMyRecommendedCoursesAssigned] =
     useState([]);
   const [myDesiredSLoads, setMyDesiredSLoads] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [enrolItems, setEnrolItems] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
@@ -76,7 +76,6 @@ const StudentEnrolmentPage = () => {
     { id: "instructor", label: "Instructor", minWidth: 100 },
     { id: "slots", label: "Slots", minWidth: 100 },
     { id: "demand", label: "Demand", minWidth: 100 },
-    { id: "action", label: "Remarks/Action", minWidth: 100 },
   ];
 
   const handleEnrol = (lectureId) => {
@@ -89,7 +88,7 @@ const StudentEnrolmentPage = () => {
     setUnEnrolText("UNENROL");
   };
 
-  const renderEnrolActions = (lectureId, courseCode) => {
+  const renderEnrolActions = (lectureId, courseCode, isFinal) => {
     const enrolItem = [];
     const courseAssignedOrTaken = myCoursesAssigned.find(
       (data) => data[0] === courseCode
@@ -101,104 +100,78 @@ const StudentEnrolmentPage = () => {
         enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
       );
     });
-    if (enrolItem[0]) {
-      return (
-        <Button
-          onClick={() => {
-            handleUnEnrol(enrolItem[0][0]);
-          }}
-          variant="contained"
-          color="primary"
-        >
-          {unenrolText}
-        </Button>
-      );
-    } else if (
-      typeof courseAssignedOrTaken !== "undefined" &&
-      courseAssignedOrTaken[3] === "TAKEN"
-    ) {
-      return (
-        <Button variant="contained" color="primary" disabled>
-          TAKEN
-        </Button>
-      );
-    } else if (typeof courseAssignedOrTaken == "undefined") {
-      return (
-        <>
-          <Button disabled variant="contained" color="primary">
-            {enrolText}
-          </Button>
-          <div>
-            <sub>
-              <font color="#d32f2f">
-                <i>*this course is restricted</i>
-              </font>
-            </sub>
-          </div>
-        </>
-      );
-    } else if (
-      prereqOfCourse.find(
-        (course) => course[0] === courseCode && course[1].length == 0
-      )
-    ) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            handleEnrol(lectureId);
-          }}
-        >
-          {enrolText}
-        </Button>
-      );
+    if (isFinal) {
+      return;
     } else {
-      return (
-        <>
-          <Button disabled variant="contained" color="primary">
-            {enrolText}
-          </Button>
-          <div>
-            <sub>
-              <font color="#d32f2f">
-                <i>*with prerequisite</i>
-              </font>
-            </sub>
-          </div>
-        </>
-      );
-    }
-  };
-
-  const handleSearchForClass = (term) => {
-    setSearchTerm(term);
-    navigate("/student/courses");
-  };
-
-  const handleTypeSearch = () => {
-    return (
-      <Grid>
-        <div align="center">
-          <Input
-            type="text"
-            placeholder="Search Course..."
-            value={searchTerm}
-            onChange={(event) => {
-              setSearchTerm(event.target.value);
-            }}
-          />
+      if (enrolItem[0]) {
+        return (
           <Button
-            size="small"
+            onClick={() => {
+              handleUnEnrol(enrolItem[0][0]);
+            }}
             variant="contained"
             color="primary"
-            onClick={() => setSearchTerm("")}
           >
-            Clear
+            {unenrolText}
           </Button>
-        </div>
-      </Grid>
-    );
+        );
+      } else if (
+        typeof courseAssignedOrTaken !== "undefined" &&
+        courseAssignedOrTaken[3] === "TAKEN"
+      ) {
+        return (
+          <Button variant="contained" color="primary" disabled>
+            TAKEN
+          </Button>
+        );
+      } else if (typeof courseAssignedOrTaken == "undefined") {
+        return (
+          <>
+            <Button disabled variant="contained" color="primary">
+              {enrolText}
+            </Button>
+            <div>
+              <sub>
+                <font color="#d32f2f">
+                  <i>*this course is restricted</i>
+                </font>
+              </sub>
+            </div>
+          </>
+        );
+      } else if (
+        prereqOfCourse.find(
+          (course) => course[0] === courseCode && course[1].length == 0
+        )
+      ) {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleEnrol(lectureId);
+            }}
+          >
+            {enrolText}
+          </Button>
+        );
+      } else {
+        return (
+          <>
+            <Button disabled variant="contained" color="primary">
+              {enrolText}
+            </Button>
+            <div>
+              <sub>
+                <font color="#d32f2f">
+                  <i>*with prerequisite</i>
+                </font>
+              </sub>
+            </div>
+          </>
+        );
+      }
+    }
   };
 
   const handleRemarks = (courseCode) => {
@@ -233,7 +206,9 @@ const StudentEnrolmentPage = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleSearchForClass(courseCode)}
+          onClick={() => {
+            handleSearchForClass(courseCode);
+          }}
         >
           SEARCH
         </Button>
@@ -241,7 +216,7 @@ const StudentEnrolmentPage = () => {
     }
   };
 
-  const handleEnrolLectures = (lecture) => {
+  const handleEnrolLectures = (lecture, isFinal) => {
     return (
       <TableRow hover role="checkbox" tabIndex={-1} key={lecture[1]}>
         <TableCell>{lecture[2]}</TableCell>
@@ -257,7 +232,9 @@ const StudentEnrolmentPage = () => {
         </TableCell>
         <TableCell>{lecture[14]}</TableCell>
         <TableCell>{lecture[15]}</TableCell>
-        <TableCell>{renderEnrolActions(lecture[1], lecture[2])}</TableCell>
+        <TableCell>
+          {renderEnrolActions(lecture[1], lecture[2], isFinal)}
+        </TableCell>
       </TableRow>
     );
   };
@@ -299,10 +276,10 @@ const StudentEnrolmentPage = () => {
                           tabIndex={-1}
                           key={course[0]}
                         >
-                          <TableCell>{course[0]}</TableCell>
                           <TableCell>{course[1]}</TableCell>
                           <TableCell>{course[2]}</TableCell>
-                          <TableCell>{handleRemarks(course[0])}</TableCell>
+                          <TableCell>{course[3]}</TableCell>
+                          <TableCell>{handleRemarks(course[1])}</TableCell>
                         </TableRow>
                       );
                     })
@@ -319,6 +296,7 @@ const StudentEnrolmentPage = () => {
               </Table>
             </TableContainer>
           </Paper>
+          <br />
           <h4> My Enrolled Courses</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -339,7 +317,8 @@ const StudentEnrolmentPage = () => {
                 <TableBody>
                   {myEnrolledSLoads.length > 0 ? (
                     myEnrolledSLoads.map((lecture) => {
-                      return handleEnrolLectures(lecture);
+                      let isFinal = true;
+                      return handleEnrolLectures(lecture, isFinal);
                     })
                   ) : (
                     <TableRow>
@@ -352,6 +331,7 @@ const StudentEnrolmentPage = () => {
               </Table>
             </TableContainer>
           </Paper>
+          <br />
           <h4> My Desired Courses</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -367,12 +347,14 @@ const StudentEnrolmentPage = () => {
                         {column.label}
                       </TableCell>
                     ))}
+                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {myDesiredSLoads.length > 0 ? (
                     myDesiredSLoads.map((lecture) => {
-                      return handleEnrolLectures(lecture);
+                      let isFinal = false;
+                      return handleEnrolLectures(lecture, isFinal);
                     })
                   ) : (
                     <TableRow>

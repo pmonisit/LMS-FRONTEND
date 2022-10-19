@@ -25,42 +25,48 @@ const StudentCurriculumPage = () => {
 
   const handleCurriculum = () => {
     const curriculum = myCoursesAssigned;
+    console.log(curriculum);
     let groupByYear = curriculum.reduce((groupNow, a) => {
-      (groupNow[a[7]] = groupNow[a[7]] || []).push(a);
+      (groupNow[a[9]] = groupNow[a[9]] || []).push(a);
       return groupNow;
     }, []);
     groupByYear = groupByYear.slice(1);
-    let sortedCurriculum = [];
-    groupByYear.map((data) => {
-      sortedCurriculum.push(
-        data.sort((a, b) => {
-          return a[8].localeCompare(b[8]);
-        })
-      );
-    });
+
+    // console.log(groupByYear);
+    // let sortedCurriculum = [];
+    // groupByYear.map((data) => {
+    //   return sortedCurriculum.push(
+    //     data.sort((a, b) => {
+    //       return parseInt(a[10]) - parseInt(b[10]);
+    //     })
+    //   );
+    // });
+    // console.log(groupByYear);
+    // console.log(sortedCurriculum);
 
     let curriculumSem = groupByYear.map((data) => {
       return data.reduce((groupNow, a) => {
-        (groupNow[a[8]] = groupNow[a[8]] || []).push(a);
+        (groupNow[a[10]] = groupNow[a[10]] || []).push(a);
         return groupNow;
       }, []);
     });
-
+    console.log(curriculumSem);
     let curriculumSemWithoutEmpty = [];
     curriculumSem.map((data) => {
       data.map((a) => {
         curriculumSemWithoutEmpty.push(a);
       });
     });
+    console.log(curriculumSemWithoutEmpty);
     return curriculumSemWithoutEmpty;
   };
 
   const handleSumOfUnits = (year, sem) => {
     let sum = 0;
     myCoursesAssigned
-      .filter((course) => course[7] === year && course[8] === sem)
+      .filter((course) => course[9] === year && course[10] === sem)
       .map((course) => {
-        sum = sum + course[2];
+        sum = sum + course[3];
       });
     return sum;
   };
@@ -69,8 +75,8 @@ const StudentCurriculumPage = () => {
     let sum = 0;
     {
       myCoursesAssigned.map((data) => {
-        if (data[3] === "TAKEN") {
-          sum += data[2];
+        if (data[5] === "TAKEN") {
+          sum += data[3];
         }
       });
     }
@@ -106,15 +112,12 @@ const StudentCurriculumPage = () => {
     <Box sx={{ display: "flex" }}>
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
         <Grid>
-          <Toolbar />
-          <div align="center">
-            <h2>{degree.degreeName}</h2>
-          </div>
-          <br />
           <Paper
             sx={{
               width: 200,
+              height: 130,
               backgroundColor: (theme) =>
                 theme.palette.mode === "dark" ? "#1A2027" : "#fff",
             }}
@@ -147,12 +150,16 @@ const StudentCurriculumPage = () => {
               </Table>
             </TableContainer>
           </Paper>
-
+        </Grid>
+        <Grid>
+          <div align="center">
+            <h2>{degree.degreeName}</h2>
+          </div>
           {handleCurriculum().map((curriculum) => {
             return (
-              <Box key={curriculum[0][9]}>
+              <Box key={curriculum[0][0]}>
                 <Box align="center">
-                  <h4>{handleConvert(curriculum[0][7])} YEAR LEVEL</h4>
+                  <h4>{handleConvert(curriculum[0][9])} YEAR LEVEL</h4>
                 </Box>
                 <Grid sx={{ flexGrow: 1 }} container spacing={5}>
                   <Grid item xs={12}>
@@ -173,7 +180,7 @@ const StudentCurriculumPage = () => {
                               <TableHead align="center">
                                 <TableRow>
                                   <TableCell align="center" colSpan={4}>
-                                    {handleConvert(curriculum[0][8])} SEMESTER
+                                    {handleConvert(curriculum[0][10])} SEMESTER
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -190,14 +197,14 @@ const StudentCurriculumPage = () => {
                               <TableBody>
                                 {curriculum.map((data) => {
                                   return (
-                                    <TableRow key={data[9]}>
-                                      <TableCell>{data[0]}</TableCell>
+                                    <TableRow key={data[0]}>
                                       <TableCell>{data[1]}</TableCell>
+                                      <TableCell>{data[2]}</TableCell>
                                       <TableCell align="center">
-                                        {data[2]}
+                                        {data[3]}
                                       </TableCell>
                                       <TableCell align="center">
-                                        {data[3] === "TAKEN" ? "PASSED" : ""}
+                                        {data[5] === "TAKEN" ? "PASSED" : ""}
                                       </TableCell>
                                     </TableRow>
                                   );
@@ -206,10 +213,10 @@ const StudentCurriculumPage = () => {
                                   <TableCell align="right" colSpan={2}>
                                     TOTAL
                                   </TableCell>
-                                  <TableCell>
+                                  <TableCell align="center">
                                     {handleSumOfUnits(
-                                      curriculum[0][7],
-                                      curriculum[0][8]
+                                      curriculum[0][9],
+                                      curriculum[0][10]
                                     )}
                                   </TableCell>
                                   <TableCell></TableCell>
