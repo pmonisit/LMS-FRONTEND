@@ -40,7 +40,7 @@ semester-list remove isCurrent, lagay sa action - done
 Urgent Items
 - Troubleshooting of Lecture
 - Schedule
-z
+
 
 Semi-Urgent
 -Filter By Degree
@@ -48,3 +48,55 @@ Semi-Urgent
 -UI
 
 
+
+
+Schedule Page
+
+Choose Degree
+
+1st Year Schedule                   View Schedule
+2nd Year Schedule                   View Schedule
+3rd Year Schedule                   View Schedule
+4th Year Schedule                   View Schedule
+5th Year Schedule                   View Schedule
+
+
+
+
+
+
+getLectureByDegree(degreeId) : current semester
+
+
+
+
+1st Year
+
+
+            CourseCode           CourseName         Days        Timeslot        Units       Instructor  
+
+
+2nd Year
+
+
+            CourseCode           CourseName         Days        Timeslot        Units       Instructor  
+
+3rd Year
+
+
+            CourseCode           CourseName         Days        Timeslot        Units       Instructor  
+
+
+4th Year
+
+
+            CourseCode           CourseName         Days        Timeslot        Units       Instructor  
+
+
+
+import SchedulePage from "./pages/admin/SchedulePage";
+
+ <Route
+            path="/admin/degree/:degreeId/schedule"
+            element={accessToken ? <SchedulePage /> : <Navigate to="/login" />}
+          />

@@ -93,14 +93,14 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
             professorService.addLecture(lectureForm).then((res) => {
               console.log(res.data);
               adminContext.onSetLectureList(res.data);
-              onOpenSnackbar({
-                open: true,
-                severity: "success",
-                message: "Successfully added a Degree",
-              });
+            });
+            onOpenSnackbar({
+              open: true,
+              severity: "success",
+              message: "Successfully added a Degree",
             });
           }
-          // navigate("/admin/lecture-list");
+          navigate("/admin/lecture-list");
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >

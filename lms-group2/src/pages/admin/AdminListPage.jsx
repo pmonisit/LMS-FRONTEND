@@ -9,6 +9,7 @@ import PrerequisiteForm2 from "../../components/admin/prerequisite/PrerequisiteF
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 
+import FirstYearScheduleTable from "../../components/admin/degree/FirstYearScheduleTable";
 const AdminListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
   const { adminList, onSetAdminList, onSetAccountList } = accountFormContext;
@@ -16,6 +17,7 @@ const AdminListPage = () => {
   const [searchText, setSearchText] = useState("");
   const [tempList, setTempList] = useState([]);
   const [isSearchSuccessful, setIsSearchSuccessful] = useState(true);
+
   useEffect(() => {
     getAdmins().then((res) => {
       onSetAdminList(res.data);
@@ -98,6 +100,8 @@ const AdminListPage = () => {
         ) : (
           <div>Search not found</div>
         )}
+
+        <FirstYearScheduleTable />
       </div>
     </>
   );
