@@ -51,3 +51,15 @@ export function getMyEnrolledStudentLoads() {
 export function getMyChildSchedule() {
   return http.get("/studentload/mychildschedule");
 }
+
+export function addClassToSched(lectureId) {
+  return http.post(`/studentload/add/${lectureId}`);
+}
+
+export function getMyTempLoad() {
+  return http.get("/studentload/mystudentload/temp");
+}
+
+export function sendForApproval() {
+  return http.put("/studentload/sendforapproval");
+}

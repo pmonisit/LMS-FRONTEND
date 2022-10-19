@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Grid, Input, Box, Paper, TableContainer, Table } from "@mui/material";
+import React, { useState, useEffect, useContext } from "react";
+import { Box, Paper, TableContainer, Table } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
 import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
 import { Toolbar, FormControlLabel, Switch, Button } from "@mui/material";
@@ -10,22 +10,26 @@ import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as prereqService from "../../services/admin/Prerequisite";
+import { EnrolContext } from "../../context/student/EnrolContext";
 
 const Courses = () => {
+  const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("2");
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [dense, setDense] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [lecturesBySem, setLecturesBySem] = useState([]);
   const [lectureObject, setLectureObject] = useState([]);
-  const [searchTerm, setSearchTerm] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
   const [enrolItems, setEnrolItems] = useState([]);
+  const [tempEnrolItems, setTempEnrolItems] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
   const [enrolText, setEnrolText] = useState("ENROL");
   const [unenrolText, setUnEnrolText] = useState("UNENROL");
+  const [addText, setAddText] = useState("ADD");
+  const [removeText, setRemoveText] = useState("REMOVE");
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -55,6 +59,9 @@ const Courses = () => {
     studentLoadService.getAllMyStudentLoads().then((response) => {
       setEnrolItems(response.data);
     });
+    studentLoadService.getMyTempLoad().then((response) => {
+      setTempEnrolItems(response.data);
+    });
     courseAssignedService.getMyCourses().then((response) => {
       setMyCoursesAssigned(response.data);
     });
@@ -63,15 +70,24 @@ const Courses = () => {
   const columns = [
     { id: "2", label: "Course\u00a0Code", minWidth: 100 },
     { id: "3", label: "Course\u00a0Name", minWidth: 100 },
-    { id: "4", label: "Restriction", minWidth: 100 },
-    { id: "17", label: "Units", minWidth: 100 },
-    { id: "11", label: "Schedule", minWidth: 100 },
-    { id: "10", label: "Section", minWidth: 100 },
-    { id: "9", label: "Instructor", minWidth: 100 },
-    { id: "15", label: "Slots", minWidth: 100 },
-    { id: "16", label: "Demand", minWidth: 100 },
-    { id: "action", label: "Remarks/Action", minWidth: 100 },
+    { id: "5", label: "Restriction", minWidth: 100 },
+    { id: "18", label: "Units", minWidth: 100 },
+    { id: "12", label: "Schedule", minWidth: 100 },
+    { id: "11", label: "Section", minWidth: 100 },
+    { id: "10", label: "Instructor", minWidth: 100 },
+    { id: "16", label: "Slots", minWidth: 100 },
+    { id: "17", label: "Demand", minWidth: 100 },
   ];
+
+  const handleAddToSchedule = (lectureId) => {
+    studentLoadService.addClassToSched(lectureId);
+    setAddText("ADD");
+  };
+
+  const handleRemoveToSchedule = (sloadId) => {
+    studentLoadService.deleteStudentLoad(sloadId);
+    setRemoveText("REMOVE");
+  };
 
   const handleEnrol = (lectureId) => {
     studentLoadService.addStudentLoad(lectureId);
@@ -84,32 +100,33 @@ const Courses = () => {
   };
 
   const renderEnrolActions = (lectureId, courseCode) => {
-    const enrolItem = [];
+    const tempEnrolItem = [];
     const courseAssignedOrTaken = myCoursesAssigned.find(
-      (data) => data[0] === courseCode
+      (data) => data[1] === courseCode
     );
-    enrolItems.map((data) => {
-      enrolItem.splice(
+
+    tempEnrolItems.map((data) => {
+      tempEnrolItem.splice(
         0,
         1,
-        enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
+        tempEnrolItems.find((tempEnrolItem) => tempEnrolItem[1] === lectureId)
       );
     });
-    if (enrolItem[0]) {
+    if (tempEnrolItem[0]) {
       return (
         <Button
           onClick={() => {
-            handleUnEnrol(enrolItem[0][0]);
+            handleRemoveToSchedule(tempEnrolItem[0][0]);
           }}
           variant="contained"
           color="primary"
         >
-          {unenrolText}
+          {removeText}
         </Button>
       );
     } else if (
       typeof courseAssignedOrTaken !== "undefined" &&
-      courseAssignedOrTaken[3] === "TAKEN"
+      courseAssignedOrTaken[5] === "TAKEN"
     ) {
       return (
         <Button variant="contained" color="primary" disabled>
@@ -141,17 +158,17 @@ const Courses = () => {
           variant="contained"
           color="primary"
           onClick={() => {
-            handleEnrol(lectureId);
+            handleAddToSchedule(lectureId);
           }}
         >
-          {enrolText}
+          {addText}
         </Button>
       );
     } else {
       return (
         <>
           <Button disabled variant="contained" color="primary">
-            {enrolText}
+            {addText}
           </Button>
           <div>
             <sub>
@@ -163,31 +180,6 @@ const Courses = () => {
         </>
       );
     }
-  };
-
-  const handleTypeSearch = () => {
-    return (
-      <Grid>
-        <div align="center">
-          <Input
-            type="text"
-            placeholder="Search Course..."
-            value={searchTerm}
-            onChange={(event) => {
-              setSearchTerm(event.target.value);
-            }}
-          />
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={() => setSearchTerm("")}
-          >
-            Clear
-          </Button>
-        </div>
-      </Grid>
-    );
   };
 
   const descendingComparator = (a, b, orderBy) => {
@@ -207,7 +199,6 @@ const Courses = () => {
   };
 
   const stableSort = (array, comparator) => {
-    console.log(lectureObject);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -251,6 +242,7 @@ const Courses = () => {
               </TableSortLabel>
             </TableCell>
           ))}
+          <TableCell>Render/Actions</TableCell>
         </TableRow>
       </TableHead>
     );
@@ -293,7 +285,7 @@ const Courses = () => {
         {currentSem.endingYear}
       </h3>
       <>{handleTypeSearch()}</>
-      <Toolbar />
+      <br />
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer>
           <Table
@@ -311,7 +303,9 @@ const Courses = () => {
               {lecturesBySem.length > 0 ? (
                 stableSort(lecturesBySem, getComparator(order, orderBy))
                   .filter((value) => {
-                    if (searchTerm == "") {
+                    if (searchTerm === undefined) {
+                      return value;
+                    } else if (searchTerm == "") {
                       return value;
                     } else if (
                       value[3].toLowerCase().includes(searchTerm.toLowerCase())
@@ -337,17 +331,17 @@ const Courses = () => {
                         <TableCell>
                           <i>for</i> {lecture[4]}
                         </TableCell>
-                        <TableCell>{lecture[17]}</TableCell>
+                        <TableCell>{lecture[18]}</TableCell>
                         <TableCell>
-                          {lecture[11]}
-                          {lecture[12]} {lecture[13]}-{lecture[14]}
+                          {lecture[12]}
+                          {lecture[13]} {lecture[14]}-{lecture[15]}
                         </TableCell>
-                        <TableCell>{lecture[10]}</TableCell>
+                        <TableCell>{lecture[11]}</TableCell>
                         <TableCell>
-                          {lecture[9]}, {lecture[7]}, {lecture[8]}
+                          {lecture[10]}, {lecture[8]}, {lecture[9]}
                         </TableCell>
-                        <TableCell>{lecture[15]}</TableCell>
                         <TableCell>{lecture[16]}</TableCell>
+                        <TableCell>{lecture[17]}</TableCell>
                         <TableCell>
                           {renderEnrolActions(lecture[0], lecture[2])}
                         </TableCell>
