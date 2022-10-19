@@ -25,6 +25,7 @@ import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import AttendanceList from "./components/student/AttendanceList";
+import ParentChildAttendanceList from "./components/parent/ParentChildAttendanceList";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
 import EditAttendancePage from "./pages/professor/EditAttendancePage";
 
@@ -533,6 +534,16 @@ const App = () => {
             element={
               accessToken && role === "parent" ? (
                 <ParentChildAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/child/attendance/viewlist"
+            element={
+              accessToken && role === "parent" ? (
+                <ParentChildAttendanceList />
               ) : (
                 <Navigate to="/login" />
               )

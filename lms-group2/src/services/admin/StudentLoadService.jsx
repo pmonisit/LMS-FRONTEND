@@ -32,7 +32,6 @@ export function addStudentLoad(lectureId) {
 }
 
 export function deleteStudentLoad(sloadId) {
-  console.log(sloadId);
   return http.delete(`/studentload/unenrol/${sloadId}`);
 }
 

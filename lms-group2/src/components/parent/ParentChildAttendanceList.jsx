@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { Box, Paper, TableContainer, Table } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
 import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
@@ -7,10 +8,11 @@ import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
 import * as semesterService from "../../services/admin/Semester";
 import { EnrolContext } from "../../context/student/EnrolContext";
-import Sidebar from "../shared/Sidebar";
 import * as attendanceService from "../../services/professor/AttendanceService";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-const AttendanceList = () => {
+const ParentChildAttendanceList = () => {
   const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("6");
@@ -25,11 +27,12 @@ const AttendanceList = () => {
     semesterService.getCurrentSemester().then((response) => {
       setCurrentSem(response.data);
       const semId = response.data.semesterId;
-      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
-        attendanceBySem.push(res.data);
-        setAttendanceCurrentSem(...attendanceBySem);
-        console.log(attendanceBySem);
-      });
+      attendanceService
+        .parentGetAllMyAttendancesBySemesterId(semId)
+        .then((res) => {
+          attendanceBySem.push(res.data);
+          setAttendanceCurrentSem(...attendanceBySem);
+        });
     });
   }, []);
 
@@ -149,11 +152,16 @@ const AttendanceList = () => {
   });
   return (
     <Box sx={{ display: "flex" }}>
-      <Sidebar />
-
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ width: "100%" }}>
           <Toolbar />
+          <Tooltip title="Back to dashboard">
+            <Link to={`/parent/dashboard`}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           <h2 align="center">
             Attendance List for {currentSem.semOrder} AY{" "}
             {currentSem.startingYear} -{currentSem.endingYear}
@@ -183,6 +191,26 @@ const AttendanceList = () => {
                       </TableRow>
                     ) : (
                       stableSort(filtered, getComparator(order, orderBy))
+                        // .filter((value) => {
+                        //   if (searchTerm === undefined) {
+                        //     return value;
+                        //   } else if (searchTerm == "") {
+                        //     return value;
+                        //   } else if (
+                        //     value[0]
+                        //       .toLowerCase()
+                        //       .includes(searchTerm.toLowerCase())
+                        //   ) {
+                        //     return value;
+                        //   } else if (
+                        //     value[1]
+                        //       .toLowerCase()
+                        //       .includes(searchTerm.toLowerCase())
+                        //   ) {
+                        //     return value;
+                        //   }
+                        // })
+
                         .map((data) => {
                           return (
                             <TableRow
@@ -245,4 +273,4 @@ const AttendanceList = () => {
   );
 };
 
-export default AttendanceList;
+export default ParentChildAttendanceList;
