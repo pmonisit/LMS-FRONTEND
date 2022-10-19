@@ -33,3 +33,7 @@ export function getMyCourses() {
 export function getMyRecommendedCourses() {
   return http.get("/courseassigned/mycourses/recommended");
 }
+
+export function getMyCoursesParent() {
+  return http.get("/courseassigned/parent/mycourses");
+}

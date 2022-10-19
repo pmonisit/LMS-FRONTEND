@@ -29,7 +29,7 @@ const ParentDashboardPage = () => {
     <Box sx={{ display: "flex" }}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        <Typography align="center">
+        <Typography marginBottom={3} textAlign="center" variant="h5">
           <strong>Parent Homepage for {user[8]}</strong>
         </Typography>
         <Grid container>

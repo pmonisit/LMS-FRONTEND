@@ -95,6 +95,10 @@ const ParentChildSchedulePage = () => {
     });
   };
 
+  const handleApprovedSchedule = () => {
+    return handleSchedule(myChildEnrolledSLoads, true);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -132,7 +136,7 @@ const ParentChildSchedulePage = () => {
                             ))}
                           </TableRow>
                         </TableHead>
-                        <TableBody>{handleSchedule()}</TableBody>
+                        <TableBody>{handleApprovedSchedule()}</TableBody>
                       </Table>
                     </TableContainer>
                   </Paper>

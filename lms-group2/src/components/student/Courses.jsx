@@ -11,8 +11,14 @@ import * as semesterService from "../../services/admin/Semester";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as prereqService from "../../services/admin/Prerequisite";
 import { EnrolContext } from "../../context/student/EnrolContext";
+import Snackbar from "@mui/material/Snackbar";
+import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
+import MuiAlert from "@mui/material/Alert";
 
 const Courses = () => {
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
+  const { isDarkMode, snackbarConfig, onCloseSnackbar } =
+    useContext(UserInterfaceContext);
   const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("2");
@@ -23,13 +29,10 @@ const Courses = () => {
   const [lectureObject, setLectureObject] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
-  const [enrolItems, setEnrolItems] = useState([]);
   const [tempEnrolItems, setTempEnrolItems] = useState([]);
+  const [enrolledSL, setEnrolledSL] = useState([]);
+  const [desiredSL, setDesiredSL] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
-  const [enrolText, setEnrolText] = useState("ENROL");
-  const [unenrolText, setUnEnrolText] = useState("UNENROL");
-  const [addText, setAddText] = useState("ADD");
-  const [removeText, setRemoveText] = useState("REMOVE");
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -56,8 +59,12 @@ const Courses = () => {
         });
       });
     });
-    studentLoadService.getAllMyStudentLoads().then((response) => {
-      setEnrolItems(response.data);
+
+    studentLoadService.getMyDesiredStudentLoads().then((response) => {
+      setDesiredSL(response.data);
+    });
+    studentLoadService.getMyEnrolledStudentLoads().then((response) => {
+      setEnrolledSL(response.data);
     });
     studentLoadService.getMyTempLoad().then((response) => {
       setTempEnrolItems(response.data);
@@ -80,31 +87,40 @@ const Courses = () => {
   ];
 
   const handleAddToSchedule = (lectureId) => {
+    let lecture = lecturesBySem.find((data) => data[0] === lectureId);
+    if (lecture && lecture[16] == 0) {
+      onOpenSnackbar({
+        open: true,
+        severity: "info",
+        message:
+          "There are no more slots for this course. This will be added to your desired schedule.",
+      });
+    } else {
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Added successfully.",
+      });
+    }
     studentLoadService.addClassToSched(lectureId);
-    setAddText("ADD");
   };
 
   const handleRemoveToSchedule = (sloadId) => {
     studentLoadService.deleteStudentLoad(sloadId);
-    setRemoveText("REMOVE");
-  };
-
-  const handleEnrol = (lectureId) => {
-    studentLoadService.addStudentLoad(lectureId);
-    setEnrolText("ENROL");
-  };
-
-  const handleUnEnrol = (sloadId) => {
-    studentLoadService.deleteStudentLoad(sloadId);
-    setUnEnrolText("UNENROL");
+    onOpenSnackbar({
+      open: true,
+      severity: "success",
+      message: "Removed Successfully!",
+    });
   };
 
   const renderEnrolActions = (lectureId, courseCode) => {
     const tempEnrolItem = [];
+    const enrolled = [];
+    const desired = [];
     const courseAssignedOrTaken = myCoursesAssigned.find(
       (data) => data[1] === courseCode
     );
-
     tempEnrolItems.map((data) => {
       tempEnrolItem.splice(
         0,
@@ -112,6 +128,21 @@ const Courses = () => {
         tempEnrolItems.find((tempEnrolItem) => tempEnrolItem[1] === lectureId)
       );
     });
+    desiredSL.map((data) => {
+      desired.splice(
+        0,
+        1,
+        desiredSL.find((data) => data[1] === lectureId)
+      );
+    });
+    enrolledSL.map((data) => {
+      enrolled.splice(
+        0,
+        1,
+        enrolledSL.find((data) => data[1] === lectureId)
+      );
+    });
+
     if (tempEnrolItem[0]) {
       return (
         <Button
@@ -121,7 +152,19 @@ const Courses = () => {
           variant="contained"
           color="primary"
         >
-          {removeText}
+          REMOVE
+        </Button>
+      );
+    } else if (enrolled[0]) {
+      return (
+        <Button disabled variant="contained" color="primary">
+          ENROLLED
+        </Button>
+      );
+    } else if (desired[0]) {
+      return (
+        <Button disabled variant="contained" color="primary">
+          DESIRED
         </Button>
       );
     } else if (
@@ -137,7 +180,7 @@ const Courses = () => {
       return (
         <>
           <Button disabled variant="contained" color="primary">
-            {enrolText}
+            ADD
           </Button>
           <div>
             <sub>
@@ -161,14 +204,14 @@ const Courses = () => {
             handleAddToSchedule(lectureId);
           }}
         >
-          {addText}
+          ADD
         </Button>
       );
     } else {
       return (
         <>
           <Button disabled variant="contained" color="primary">
-            {addText}
+            ADD
           </Button>
           <div>
             <sub>
@@ -277,9 +320,36 @@ const Courses = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - lecturesBySem.length) : 0;
 
+  const filtered = lecturesBySem.filter((value) => {
+    if (searchTerm === undefined) {
+      return value;
+    } else if (searchTerm == "") {
+      return value;
+    } else if (value[3].toLowerCase().includes(searchTerm.toLowerCase())) {
+      return value;
+    } else if (value[2].toLowerCase().includes(searchTerm.toLowerCase())) {
+      return value;
+    }
+  });
   return (
     <Box sx={{ width: "100%" }}>
       <Toolbar />
+      <Snackbar
+        open={snackbarConfig.open}
+        autoHideDuration={6000}
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+        onClose={onCloseSnackbar}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={onCloseSnackbar}
+          severity={snackbarConfig.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarConfig.message}
+        </MuiAlert>
+      </Snackbar>
       <h3 align="center">
         Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
         {currentSem.endingYear}
@@ -301,53 +371,46 @@ const Courses = () => {
             />
             <TableBody>
               {lecturesBySem.length > 0 ? (
-                stableSort(lecturesBySem, getComparator(order, orderBy))
-                  .filter((value) => {
-                    if (searchTerm === undefined) {
-                      return value;
-                    } else if (searchTerm == "") {
-                      return value;
-                    } else if (
-                      value[3].toLowerCase().includes(searchTerm.toLowerCase())
-                    ) {
-                      return value;
-                    } else if (
-                      value[2].toLowerCase().includes(searchTerm.toLowerCase())
-                    ) {
-                      return value;
-                    }
-                  })
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((lecture) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={lecture[0]}
-                      >
-                        <TableCell>{lecture[2]}</TableCell>
-                        <TableCell>{lecture[3]}</TableCell>
-                        <TableCell>
-                          <i>for</i> {lecture[4]}
-                        </TableCell>
-                        <TableCell>{lecture[18]}</TableCell>
-                        <TableCell>
-                          {lecture[12]}
-                          {lecture[13]} {lecture[14]}-{lecture[15]}
-                        </TableCell>
-                        <TableCell>{lecture[11]}</TableCell>
-                        <TableCell>
-                          {lecture[10]}, {lecture[8]}, {lecture[9]}
-                        </TableCell>
-                        <TableCell>{lecture[16]}</TableCell>
-                        <TableCell>{lecture[17]}</TableCell>
-                        <TableCell>
-                          {renderEnrolActions(lecture[0], lecture[2])}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
+                !filtered.length ? (
+                  <TableRow>
+                    <TableCell align="center" colSpan={10}>
+                      No Match Found.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  stableSort(filtered, getComparator(order, orderBy))
+                    .map((lecture) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={lecture[0]}
+                        >
+                          <TableCell>{lecture[2]}</TableCell>
+                          <TableCell>{lecture[3]}</TableCell>
+                          <TableCell>
+                            <i>for</i> {lecture[4]}
+                          </TableCell>
+                          <TableCell>{lecture[18]}</TableCell>
+                          <TableCell>
+                            {lecture[12]}
+                            {lecture[13]} {lecture[14]}-{lecture[15]}
+                          </TableCell>
+                          <TableCell>{lecture[11]}</TableCell>
+                          <TableCell>
+                            {lecture[10]}, {lecture[8]}, {lecture[9]}
+                          </TableCell>
+                          <TableCell>{lecture[16]}</TableCell>
+                          <TableCell>{lecture[17]}</TableCell>
+                          <TableCell>
+                            {renderEnrolActions(lecture[0], lecture[2])}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                )
               ) : (
                 <TableRow>
                   <TableCell align="center" colSpan={9}>

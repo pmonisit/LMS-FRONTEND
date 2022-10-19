@@ -100,6 +100,7 @@ const StudentEnrolmentPage = () => {
         enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
       );
     });
+
     if (isFinal) {
       return;
     } else {
@@ -108,11 +109,12 @@ const StudentEnrolmentPage = () => {
           <Button
             onClick={() => {
               handleUnEnrol(enrolItem[0][0]);
+              handleEnrol(enrolItem[0][1]);
             }}
             variant="contained"
             color="primary"
           >
-            {unenrolText}
+            ADD
           </Button>
         );
       } else if (
@@ -347,13 +349,12 @@ const StudentEnrolmentPage = () => {
                         {column.label}
                       </TableCell>
                     ))}
-                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {myDesiredSLoads.length > 0 ? (
                     myDesiredSLoads.map((lecture) => {
-                      let isFinal = false;
+                      let isFinal = true;
                       return handleEnrolLectures(lecture, isFinal);
                     })
                   ) : (
