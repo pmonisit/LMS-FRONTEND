@@ -16,10 +16,10 @@ const ProfessorDashboardPage = () => {
         FACULTY DASHBOARD
       </Typography>
       <Grid container>
-        <Grid item xs={12} sm={12} md={4} lg={4} xl={3}>
+        <Grid item xs={12} sm={12} md={4} lg={4} xl={3} marginBottom={15}>
           <Profile />
         </Grid>
-        <Grid item xs={12} sm={12} md={8} lg={7.7} xl={9}>
+        <Grid item xs={12} sm={12} md={8} lg={7.7} xl={9} marginBottom={15}>
           <ProfessorScheduleComponent />
         </Grid>
       </Grid>

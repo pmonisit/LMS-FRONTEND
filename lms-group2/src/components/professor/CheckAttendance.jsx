@@ -103,7 +103,13 @@ const CheckAttendance = () => {
   };
 
   return (
-    <Grid container justifyContent="center" component="form" marginTop={10}>
+    <Grid
+      container
+      justifyContent="center"
+      component="form"
+      marginTop={10}
+      marginBottom={15}
+    >
       <Grid item xs={10} sm={10} md={10} lg={10} xl={6}>
         <Tooltip title="Back to dashboard">
           <Link to={`/professor/dashboard/studentLists/${params.lectureId}`}>

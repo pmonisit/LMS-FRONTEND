@@ -43,7 +43,7 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
-    gradeValue: Joi.number().min(0).max(5).required(),
+    gradeValue: Joi.number().min(1).max(5).required(),
   });
 
   const handleChange = (event) => {
@@ -83,7 +83,16 @@ const AddGradeForm = ({ onSubmit, initialValue }) => {
         component="form"
         onSubmit={handleSubmit}
       >
-        <Grid item xs={10} sm={10} md={5} lg={5} xl={3} mt={10}>
+        <Grid
+          item
+          xs={10}
+          sm={10}
+          md={5}
+          lg={5}
+          xl={3}
+          mt={10}
+          marginBottom={15}
+        >
           <Card>
             <Typography
               marginTop={2}

@@ -27,7 +27,6 @@ import StudentProfilePage from "./pages/student/StudentProfilePage";
 import AttendanceList from "./components/student/AttendanceList";
 import ParentChildAttendanceList from "./components/parent/ParentChildAttendanceList";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
-import EditAttendancePage from "./pages/professor/EditAttendancePage";
 
 import ParentDashboardPage from "./pages/parent/ParentDashboardPage";
 import ParentProfilePage from "./pages/parent/ParentProfilePage";
@@ -84,6 +83,7 @@ import CheckAttendancePage from "./pages/professor/CheckAttendancePage";
 import decode from "jwt-decode";
 import ManualAttendancePage from "./pages/professor/ManualAttendancePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import EditAttendanceComponent from "./components/professor/EditAttendanceComponent";
 
 const App = () => {
   const [accessToken, setAccessToken] = React.useState(
@@ -123,7 +123,7 @@ const App = () => {
 
   const handleLogout = () => {
     accountService.logout();
-    navigate("/login");
+    window.location.reload();
   };
 
   const handleLogin = async (username, password) => {
@@ -131,13 +131,8 @@ const App = () => {
       const response = await accountService.loginUser(username, password);
       localStorage.setItem("accessToken", response.data.access_token);
       setAccessToken(response.data.access_token);
+      window.location.reload();
       console.log(response.data);
-
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: "Login successfully!",
-      });
       navigate("/");
     } catch (error) {
       onOpenSnackbar({
@@ -231,7 +226,11 @@ const App = () => {
           <Route
             path="/professor/dashboard/editAttendance/:id"
             element={
-              accessToken ? <EditAttendancePage /> : <Navigate to="/login" />
+              accessToken ? (
+                <EditAttendanceComponent />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 

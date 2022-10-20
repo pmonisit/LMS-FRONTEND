@@ -15,36 +15,67 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+// JOI
+import Joi from "joi";
+
 // Service
 import * as attendanceService from "../../services/professor/AttendanceService";
 
-// JOI
-import Joi from "joi";
 import { Typography } from "@mui/material";
 
-const EditAttendanceForm = ({ onSubmit }) => {
+const EditAttendanceForm = ({ onSubmit, initialValue }) => {
   const [attendanceDetails, setAttendanceDetails] = useState([]);
-  const [form, setForm] = useState("");
+
   const params = useParams();
   const navigate = useNavigate();
+
+  const [form, setForm] = useState(
+    initialValue || {
+      status: "",
+    }
+  );
 
   useEffect(() => {
     attendanceService.getAttendanceById(params.id).then((response) => {
       setAttendanceDetails(response.data[0]);
       // console.log(attendanceDetails);
     });
-  }, [attendanceDetails]);
+  }, [attendanceDetails, params.id]);
+
+  const [errors, setErrors] = useState({});
+
+  const schema = Joi.object({
+    status: Joi.string().required(),
+  });
 
   const handleChange = (event) => {
-    console.log(event.target.name);
-    // setForm({ ...form, [event.target.name]: event.target.value });
-    setForm(event.target.value);
+    setForm({ ...form, [event.currentTarget.name]: event.currentTarget.value });
+
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+    // setForm(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(form);
     onSubmit(form);
+  };
+
+  const isFormInvalid = () => {
+    const result = schema.validate(form);
+    return !!result.error;
   };
 
   return (
@@ -89,38 +120,42 @@ const EditAttendanceForm = ({ onSubmit }) => {
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12}></Grid>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6} marginBottom={5}>
-                <FormControl fullWidth>
+                {/* <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Status</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
-                    name="form"
-                    id="form"
-                    value={form}
-                    label="Status"
+                    value={form.status}
                     onChange={handleChange}
+                    label="Status"
                   >
-                    <MenuItem></MenuItem>
+                    <MenuItem value={""}></MenuItem>
                     <MenuItem value={"PRESENT"}>PRESENT</MenuItem>
                     <MenuItem value={"LATE"}>LATE</MenuItem>
                     <MenuItem value={"ABSENT"}>ABSENT</MenuItem>
                   </Select>
                 </FormControl>
+                <Typography>{form}</Typography> */}
 
-                {/* <TextField
+                <TextField
                   name="status"
                   error={!!errors.status}
                   helpertext={errors.status}
-                  value={form}
+                  value={form.status}
                   onChange={handleChange}
                   label="Status"
                   variant="standard"
                   fullWidth
-                /> */}
+                />
               </Grid>
             </Grid>
           </CardContent>
           <CardActions>
-            <Button variant="contained" type="submit" fullWidth>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              disabled={isFormInvalid()}
+            >
               Save
             </Button>
 
