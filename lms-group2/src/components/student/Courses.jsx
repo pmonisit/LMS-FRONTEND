@@ -53,7 +53,7 @@ const Courses = () => {
             setLectureObject(arrobj);
             let prereq = [];
             prereqService.getPrereqOfCourse(a[1]).then((response) => {
-              prereq = [a[2], response.data, a[1]];
+              prereq = [a[2], response.data, a[1], a[0]];
               prereqCourse.push(prereq);
               setPrereqOfCourse(prereqCourse);
             });
@@ -115,29 +115,6 @@ const Courses = () => {
       message: "Removed Successfully!",
     });
   };
-
-  // const handleButonToggle = (id) => {
-  //   setButtonText(
-  //     buttonText.map((button) => {
-  //       if (button.id === id) {
-  //         return {
-  //           ...button,
-  //           value: !button.value,
-  //         };
-  //       }
-  //       return button;
-  //     })
-  //   );
-  // };
-
-  // const handleText = () => {
-  //   if (buttonText.value === true) {
-  //     // console.log("ADD");
-  //     return "ADD";
-  //   }
-  //   // console.log("REMOVE");
-  //   return "REMOVE";
-  // };
   const toggleText = (id) => {
     const { opened } = text;
     setText({
@@ -188,12 +165,12 @@ const Courses = () => {
         )
       );
     });
-    // console.log(prereqOfCourse);
+
     if (tempEnrolItem[0]) {
       return opened[tempEnrolItem[0][1]] ? (
         <Button
           onClick={() => {
-            handleRemoveToSchedule(tempEnrolItem[0][0]);
+            handleAddToSchedule(tempEnrolItem[0][1]);
             toggleText(tempEnrolItem[0][1]);
           }}
           variant="contained"
@@ -251,12 +228,11 @@ const Courses = () => {
       );
     } else if (prereq[0]) {
       let prereq1 = [...prereq[0]];
-      console.log(prereq1[2]);
-      // return "Hello";
-      return opened[prereq[0][2]] ? (
+
+      return opened[prereq1[2]] ? (
         <Button
           onClick={() => {
-            handleRemoveToSchedule(lectureId);
+            handleRemoveToSchedule(prereq1[3]);
             toggleText(prereq1[2]);
           }}
           variant="contained"
@@ -267,7 +243,7 @@ const Courses = () => {
       ) : (
         <Button
           onClick={() => {
-            handleAddToSchedule(lectureId);
+            handleAddToSchedule(prereq1[2]);
             toggleText(prereq1[2]);
           }}
           variant="contained"
@@ -515,12 +491,12 @@ const Courses = () => {
       />
       <Typography align="right">
         <Link to="/student/enrolment">
-          <Button variant="contained" color="primary" align="right">
+          <Button color="primary" align="right">
             CHECK YOUR ENROLMENT SUMMARY
           </Button>
         </Link>
         <Link to="/student/schedule">
-          <Button variant="contained" color="primary" align="right">
+          <Button color="primary" align="right">
             CHECK YOUR SCHEDULE
           </Button>
         </Link>

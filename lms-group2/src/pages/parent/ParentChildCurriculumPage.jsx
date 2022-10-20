@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Grid, Paper, Toolbar, TableRow, Box } from "@mui/material";
 import { TableHead, TableContainer, TableCell } from "@mui/material";
-import { TableBody, Table } from "@mui/material";
+import { TableBody, Table, IconButton, Tooltip } from "@mui/material";
 import Sidebar from "../../components/shared/Sidebar";
 import * as accountService from "../../services/admin/AccountService";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as degreeService from "../../services/admin/DegreeService";
+import { Link } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const ParentChildCurriculumPage = () => {
   const [myChildCoursesAssigned, setMyChildCoursesAssigned] = useState([]);
@@ -95,9 +97,15 @@ const ParentChildCurriculumPage = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+        <Tooltip title="Back to dashboard">
+          <Link to={`/parent/dashboard`}>
+            <IconButton>
+              <ArrowBackIcon />
+            </IconButton>
+          </Link>
+        </Tooltip>
         <Grid container>
           <Grid>
             <br />

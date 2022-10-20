@@ -140,11 +140,6 @@ const ParentChildSchedulePage = () => {
                       </Table>
                     </TableContainer>
                   </Paper>
-                  <sub>
-                    <i>
-                      <span style={{ color: "#ef9a9a" }}>* with conflict</span>
-                    </i>
-                  </sub>
                 </Grid>
               </Grid>
             </Grid>
