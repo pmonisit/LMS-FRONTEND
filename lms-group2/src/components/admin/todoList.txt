@@ -28,7 +28,7 @@ To accomplish this weekend:
 15. lecture -list error
 16. Attendance -for clarification
 17. Recommended - for clarification
-18. Filter By Degree
+18. Filter By Degree for student
 
 Sidebar
 Dashboard
@@ -38,15 +38,26 @@ Search Function
 semester-list remove isCurrent, lagay sa action - done
 
 Urgent Items
-- Troubleshooting of Lecture
-- Schedule
+- Troubleshooting of Lecture -done
+- Schedule - done
 
 
 Semi-Urgent
 -Filter By Degree
 -Semester and Timeslot Mapping
 -UI
+-Search Function in Lecture
+- Sem Activate -done
+-pagination of lecture
 
+
+Items Left
+Filter By Degree for students
+Semester and Timeslot Mapping
+Search Functions In Lecture
+pagination in lecture
+Joi
+error  handling
 
 
 
@@ -94,9 +105,3 @@ getLectureByDegree(degreeId) : current semester
 
 
 
-import SchedulePage from "./pages/admin/SchedulePage";
-
- <Route
-            path="/admin/degree/:degreeId/schedule"
-            element={accessToken ? <SchedulePage /> : <Navigate to="/login" />}
-          />
