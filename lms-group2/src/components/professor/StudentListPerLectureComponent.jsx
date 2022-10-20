@@ -48,7 +48,6 @@ const StudentListPerLectureComponent = () => {
 
     lectureService.getStudentsPerLecture(params.id).then((response) => {
       setStudents(response.data);
-      // console.log(students);
     });
 
     lectureService.getLectureById(params.id).then((response) => {
