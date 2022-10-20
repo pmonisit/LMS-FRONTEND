@@ -5,6 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // Component
 import EditAttendanceForm from "./EditAttendanceForm";
 
+// Moment
+import Moment from "moment";
+
 // Context
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 
@@ -26,18 +29,30 @@ const EditAttendanceComponent = () => {
 
   const handleEditAttendance = async (form) => {
     try {
-      await attendanceService.editAttendance(attendanceDetails[0], form);
-      console.log(form);
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: `Attendance has been updated`,
-      });
-      navigate(
-        `/professor/dashboard/checkAttendance/${attendanceDetails[3]}/${attendanceDetails[7]}`
-      );
+      if (form.status === attendanceDetails[2]) {
+        onOpenSnackbar({
+          open: true,
+          severity: "info",
+          message: `No changes has been made`,
+        });
+        navigate(
+          `/professor/dashboard/checkAttendance/${attendanceDetails[3]}/${attendanceDetails[7]}`
+        );
+      } else {
+        await attendanceService.editAttendance(attendanceDetails[0], form);
+
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: `${Moment(attendanceDetails[1]).format(
+            "MMMM DD, YYYY"
+          )} attendance status has been updated`,
+        });
+        navigate(
+          `/professor/dashboard/checkAttendance/${attendanceDetails[3]}/${attendanceDetails[7]}`
+        );
+      }
     } catch (error) {
-      console.log(form);
       onOpenSnackbar({
         open: true,
         severity: "error",
@@ -47,7 +62,14 @@ const EditAttendanceComponent = () => {
   };
 
   if (attendanceDetails) {
-    return <EditAttendanceForm onSubmit={handleEditAttendance} />;
+    return (
+      <EditAttendanceForm
+        initialValue={{
+          status: attendanceDetails[2],
+        }}
+        onSubmit={handleEditAttendance}
+      />
+    );
   }
   return null;
 };
