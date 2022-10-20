@@ -36,7 +36,6 @@ const LectureForm = ({ lectureForm, onSetLectureForm, lectureId }) => {
     startTime,
     endTime,
     capacity,
-    desired,
   } = lectureForm;
 
   const handleChange = (event) => {

@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import LectureListTable2 from "../../components/admin/lecture/LectureListTable2";
 
 const LectureListPage = () => {
   const adminContext = useContext(AdminContext);
@@ -15,18 +16,32 @@ const LectureListPage = () => {
   const [tempList, setTempList] = useState([]);
   const [isSearchSuccessful, setIsSearchSuccessful] = useState(true);
 
+  //returns array
+  // useEffect(() => {
+  //   lectureService.getLecture().then((res) => {
+  //     // console.log(res.data);
+  //     adminContext.onSetLectureList(res.data);
+  //   });
+  // }, []);
+
+  //returns object
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await lectureService.getAllBasicLectures();
+  //     console.log(response.data);
+  //     adminContext.onSetLectureList(response.data);
+  //     console.log(adminContext.lectureList);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
-    lectureService.getLecture().then((res) => {
-      // console.log(res.data);
+    lectureService.getAllBasicLectures().then((res) => {
+      console.log(res.data);
       adminContext.onSetLectureList(res.data);
     });
   }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await lectureService.
-  //   };
-  // }, []);
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -68,11 +83,12 @@ const LectureListPage = () => {
           </Button>
         </Grid>
 
-        {isSearchSuccessful ? (
+        {/* {isSearchSuccessful ? (
           <LectureListTable details={adminContext.lectureList} />
         ) : (
           <div>Search not found</div>
-        )}
+        )} */}
+        <LectureListTable2 details={adminContext.lectureList} />
       </div>
     </>
   );

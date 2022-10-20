@@ -40,18 +40,22 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
   //   desired: initialValue[17],
   // };
 
-  const [lectureForm, setLectureForm] = useState({
-    section: "",
-    courseId: "",
-    accountId: params.id,
-    semesterId: "",
-    dayOne: "",
-    dayTwo: "",
-    startTime: "",
-    endTime: "",
-    capacity: "",
-    desired: "",
-  });
+  const [lectureForm, setLectureForm] = useState(
+    initialValue
+      ? initialValue
+      : {
+          section: "",
+          courseId: "",
+          accountId: params.id,
+          semesterId: "",
+          dayOne: "",
+          dayTwo: "",
+          startTime: "",
+          endTime: "",
+          capacity: "",
+          desired: "",
+        }
+  );
 
   console.log(lectureForm);
   const handleLectureNext = () => {
@@ -68,6 +72,16 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
     }
   };
 
+  const handleAddLecture = async (lecture) => {
+    const response = await professorService.addLecture(lecture);
+    adminContext.onSetLectureList(response.data);
+    onOpenSnackbar({
+      open: true,
+      severity: "success",
+      message: "Successfully added a Lecture",
+    });
+  };
+
   return (
     <>
       <Grid
@@ -77,6 +91,7 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log(lectureForm);
+
           if (adminContext.isEditLecture) {
             console.log("edit");
             lectureService.editLecture(lectureId, lectureForm).then((res) => {
@@ -84,23 +99,57 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
               onOpenSnackbar({
                 open: true,
                 severity: "success",
-                message: "Successfully added a Degree",
+                message: "Successfully edited a Lecture",
               });
+              adminContext.onSetIsEditLecture(false);
+              navigate("/admin/lecture-list");
             });
-            AccountFormContext.onSetIsEdit(false);
           } else {
-            console.log("add");
-            professorService.addLecture(lectureForm).then((res) => {
-              console.log(res.data);
-              adminContext.onSetLectureList(res.data);
-            });
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Degree",
+            console.log("Add");
+            handleAddLecture(lectureForm);
+
+            setLectureStep(0);
+            setLectureForm({
+              section: "",
+              courseId: "",
+              accountId: params.id,
+              semesterId: "",
+              dayOne: "",
+              dayTwo: "",
+              startTime: "",
+              endTime: "",
+              capacity: "",
             });
           }
-          navigate("/admin/lecture-list");
+
+          // if (adminContext.isEditLecture) {
+          //   console.log("edit");
+          //   lectureService.editLecture(lectureId, lectureForm).then((res) => {
+          //     console.log(res);
+          //     onOpenSnackbar({
+          //       open: true,
+          //       severity: "success",
+          //       message: "Successfully edited a Lecture",
+          //     });
+          //     // navigate("/admin/lecture-list");
+          //   });
+          //   adminContext.onSetIsEdit(false);
+          // } else {
+          //   console.log("add");
+          //   // handleAddLecture(lectureForm);
+          //   // navigate("/admin/lecture-list");
+          //   professorService.addLecture(lectureForm).then((res) => {
+          //     console.log(res.data);
+          //     adminContext.onSetLectureList(res.data);
+          //     console.log(adminContext.lectureList);
+          //     // navigate("/admin/lecture-list");
+          //   });
+          //   onOpenSnackbar({
+          //     open: true,
+          //     severity: "success",
+          //     message: "Successfully added a Lecture",
+          //   });
+          // }
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >

@@ -26,7 +26,6 @@ const LectureForm2 = ({ lectureForm, onSetLectureForm, lectureId }) => {
     startTime,
     endTime,
     capacity,
-    desired,
   } = lectureForm;
 
   const handleChange = (event) => {
@@ -117,16 +116,6 @@ const LectureForm2 = ({ lectureForm, onSetLectureForm, lectureId }) => {
                   onChange={handleChange}
                   value={capacity}
                   label="Capacity"
-                  variant="standard"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="desired"
-                  onChange={handleChange}
-                  value={desired}
-                  label="Desired"
                   variant="standard"
                   fullWidth
                 />

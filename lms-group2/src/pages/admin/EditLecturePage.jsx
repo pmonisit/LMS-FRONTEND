@@ -7,30 +7,42 @@ import LectureFormHolder from "../../components/admin/lecture/LectureFormHolder"
 const EditLecturePage = () => {
   const adminContext = useContext(AdminContext);
   const params = useParams();
-  const [lecture, setLecture] = useState([]);
-  let tempLecture;
-  useEffect(() => {
-    const findLecture = async () => {};
-    tempLecture = adminContext.lectureList.find(
-      (data) => data[0] === +params.id
-    );
-    console.log(tempLecture);
-    setLecture(tempLecture);
-  }, []);
 
-  console.log(lecture);
-  const lectureObject = {
-    section: lecture[11],
-    courseId: lecture[1],
-    accountId: lecture[6],
-    semesterId: lecture[19],
-    dayOne: lecture[12],
-    dayTwo: lecture[13],
-    startTime: lecture[14],
-    endTime: lecture[15],
-    capacity: lecture[16],
-    desired: lecture[17],
-  };
+  const { lectureId, ...lecture } = adminContext.lectureList.find(
+    (data) => data.lectureId === +params.id
+  );
+
+  const lectureClone = { ...lecture };
+  Object.keys(lecture).forEach((key) => {
+    if (lecture[key] === null || lecture[key] === "undefined") {
+      lectureClone[key] = "";
+    }
+  });
+
+  // const [lecture, setLecture] = useState([]);
+  //let tempLecture;
+  // useEffect(() => {
+  //   const findLecture = async () => {};
+  //   tempLecture = adminContext.lectureList.find(
+  //     (data) => data[0] === +params.id
+  //   );
+  //   console.log(tempLecture);
+  //   setLecture(tempLecture);
+  // }, []);
+
+  // console.log(lecture);
+  // const lectureObject = {
+  //   section: lecture[11],
+  //   courseId: lecture[1],
+  //   accountId: lecture[6],
+  //   semesterId: lecture[19],
+  //   dayOne: lecture[12],
+  //   dayTwo: lecture[13],
+  //   startTime: lecture[14],
+  //   endTime: lecture[15],
+  //   capacity: lecture[16],
+  //   desired: lecture[17],
+  // };
   // const lectureObject = {
   //   section: "",
   //   courseId: "",
@@ -60,7 +72,7 @@ const EditLecturePage = () => {
 
   return (
     <>
-      <LectureFormHolder initialValue={lecture} lectureId={lecture[0]} />
+      <LectureFormHolder initialValue={lectureClone} lectureId={lectureId} />
     </>
   );
 };

@@ -52,3 +52,7 @@ export function getAllMyAtttendancePerLecture(lectureId) {
 export function getLecturesByDegree(degreeId) {
   return http.get(`/lecture/all/currentsem/degree/${degreeId}`);
 }
+
+export function getAllBasicLectures() {
+  return http.get("/lecture/fetch/all");
+}

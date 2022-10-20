@@ -31,13 +31,6 @@ const SchedulePage = () => {
         label="Section"
         value={section}
       />
-      <Button
-        onClick={() => {
-          setIsViewSchedule(true);
-        }}
-      >
-        View Schedule
-      </Button>
       <FirstYearScheduleTable
         degreeId={params.degreeId}
         yearNo={year}

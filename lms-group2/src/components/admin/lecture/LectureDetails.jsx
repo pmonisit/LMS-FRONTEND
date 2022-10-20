@@ -55,7 +55,7 @@ const LectureDetails = () => {
               </IconButton>
             }
             title={lecture[0][3]}
-            subheader={`Section : ${lecture[0][10]}`}
+            subheader={`Section : ${lecture[0][11]}`}
           />
           <CardContent>
             <Menu
@@ -94,10 +94,7 @@ const LectureDetails = () => {
                 <Typography variant="overline">Capacity</Typography>
                 <Typography variant="body2">{lecture[0][16]}</Typography>
               </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Desired</Typography>
-                <Typography variant="body2">{lecture[0][17]}</Typography>
-              </Grid>
+
               <Grid item xs={6}>
                 <Typography variant="overline">Schedule</Typography>
                 <Typography variant="body2">{`${lecture[0][12]} & ${lecture[0][13]}`}</Typography>
