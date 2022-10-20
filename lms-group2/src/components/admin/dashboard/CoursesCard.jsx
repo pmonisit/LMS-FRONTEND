@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Material Components
 import {
@@ -9,10 +9,19 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
+// Service
+import { getTotalCourses } from "../../../services/admin/DashboardService";
+
 const CoursesCard = () => {
+  const [totalCourses, setTotalCourses] = useState(0);
+
+  useEffect(() => {
+    getTotalCourses().then((response) => {
+      setTotalCourses(response.data);
+    });
+  }, []);
   return (
     <Card>
       <CardContent>
@@ -22,7 +31,7 @@ const CoursesCard = () => {
               COURSES
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              10
+              {totalCourses}
             </Typography>
           </Grid>
           <Grid item>
@@ -45,7 +54,7 @@ const CoursesCard = () => {
           }}
         >
           <Typography color="textSecondary" variant="caption">
-            Offered
+            Available
           </Typography>
         </Box>
       </CardContent>

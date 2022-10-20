@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Material Components
 import {
@@ -11,7 +11,18 @@ import {
 } from "@mui/material";
 import Face3Icon from "@mui/icons-material/Face3";
 
+// Service
+import { getTotalParent } from "../../../services/admin/DashboardService";
+
 const ParentCard = () => {
+  const [totalParent, setTotalParent] = useState(0);
+
+  useEffect(() => {
+    getTotalParent().then((response) => {
+      setTotalParent(response.data);
+    });
+  }, []);
+
   return (
     <Card>
       <CardContent>
@@ -21,7 +32,7 @@ const ParentCard = () => {
               PARENT
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              530
+              {totalParent}
             </Typography>
           </Grid>
           <Grid item>

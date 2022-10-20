@@ -6,9 +6,9 @@ import AdminCard from "./AdminCard";
 import StudentCard from "./StudentCard";
 import FacultyCard from "./FacultyCard";
 import ParentCard from "./ParentCard";
-import GraduateCard from "./GraduateCard";
 import CoursesCard from "./CoursesCard";
 import { Typography } from "@mui/material";
+import DegreeCard from "./DegreeCard";
 
 export default function MiniDrawer() {
   return (
@@ -30,7 +30,7 @@ export default function MiniDrawer() {
           <ParentCard />
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={3} xl={3} margin={5}>
-          <GraduateCard />
+          <DegreeCard />
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={3} xl={3} margin={5}>
           <CoursesCard />

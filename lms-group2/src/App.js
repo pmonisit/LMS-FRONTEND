@@ -198,7 +198,7 @@ const App = () => {
           <Route
             path="/professor/dashboard/:id"
             element={
-              accessToken ? (
+              accessToken && role === "professor" ? (
                 <ProfessorDashboardPage />
               ) : (
                 <Navigate to="/login" />
@@ -209,28 +209,40 @@ const App = () => {
           <Route
             path="/professor/dashboard/addGrade/:studentId/:id"
             element={
-              accessToken ? <AddGradePerStudent /> : <Navigate to="/login" />
+              accessToken && role === "professor" ? (
+                <AddGradePerStudent />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
           <Route
             path="/professor/dashboard/studentLists/:id"
             element={
-              accessToken ? <ListOfStudentsPage /> : <Navigate to="/login" />
+              accessToken && role === "professor" ? (
+                <ListOfStudentsPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
           <Route
             path="/professor/dashboard/checkAttendance/:studentId/:lectureId"
             element={
-              accessToken ? <CheckAttendancePage /> : <Navigate to="/login" />
+              accessToken && role === "professor" ? (
+                <CheckAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
           <Route
             path="/professor/dashboard/editAttendance/:id"
             element={
-              accessToken ? (
+              accessToken && role === "professor" ? (
                 <EditAttendanceComponent />
               ) : (
                 <Navigate to="/login" />
@@ -241,7 +253,11 @@ const App = () => {
           <Route
             path="/professor/dashboard/manualAttendance/:lectureId/:studentId"
             element={
-              accessToken ? <ManualAttendancePage /> : <Navigate to="/login" />
+              accessToken && role === "professor" ? (
+                <ManualAttendancePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
@@ -252,121 +268,219 @@ const App = () => {
           <Route
             path="/admin/dashboard"
             element={
-              accessToken ? <AdminDashboardPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <AdminDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           {/*-----------Users------------ */}
           <Route
             path="/admin/admin-list"
-            element={accessToken ? <AdminListPage /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <AdminListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/admin/student-list"
             element={
-              accessToken ? <StudentListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <StudentListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/professor-list"
             element={
-              accessToken ? <ProfessorListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <ProfessorListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/parent-list"
             element={
-              accessToken ? <ParentListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <ParentListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/add-user"
-            element={accessToken ? <GenericForm /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <GenericForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/admin/user/:id/edit"
-            element={accessToken ? <EditUserPage /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <EditUserPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/admin/user-details/:id"
-            element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <UserDetails />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
 
           <Route
             path="/admin/user-details/:id"
-            element={accessToken ? <UserDetails /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <UserDetails />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
 
           {/*-----------Degree------------ */}
           <Route
             path="/admin/add-degree"
-            element={accessToken ? <DegreeForm /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <DegreeForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/admin/degree-list"
             element={
-              accessToken ? <DegreeListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <DegreeListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/degree/:id/edit"
             element={
-              accessToken ? <EditDegreePage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditDegreePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
           {/*-----------Course------------ */}
           <Route
             path="/admin/add-course"
-            element={accessToken ? <CourseForm /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <CourseForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
 
           <Route
             path="/admin/course-list"
             element={
-              accessToken ? <CourseListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <CourseListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/course/:id/edit"
             element={
-              accessToken ? <EditCoursePage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditCoursePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           {/*-----------Lecture------------ */}
           <Route
             path="/admin/add-lecture"
             element={
-              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <LectureFormHolder />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/lecture-list"
             element={
-              accessToken ? <LectureListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <LectureListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/lecture/:id/edit"
             element={
-              accessToken ? <EditLecturePage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditLecturePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/lecture-details/:id"
             element={
-              accessToken ? <LectureDetails /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <LectureDetails />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/assign-lecture/:id"
             element={
-              accessToken ? <LectureFormHolder /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <LectureFormHolder />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/lecture/:id/add-professor"
             element={
-              accessToken ? <AddProfessorForm /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <AddProfessorForm />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
 
@@ -374,54 +488,94 @@ const App = () => {
           <Route
             path="/admin/add-prerequisite/:id"
             element={
-              accessToken ? <PrerequisiteForm2 /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <PrerequisiteForm2 />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/prerequisite-list"
             element={
-              accessToken ? <PrerequisiteListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <PrerequisiteListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/prerequisite/:id/edit"
             element={
-              accessToken ? <EditPrerequisitePage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditPrerequisitePage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           {/*-----------Semester------------ */}
           <Route
             path="/admin/add-semester"
-            element={accessToken ? <SemesterForm /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <SemesterForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           <Route
             path="/admin/semester-list"
             element={
-              accessToken ? <SemesterListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <SemesterListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/semester/:id/edit"
             element={
-              accessToken ? <EditSemesterPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditSemesterPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           {/*-----------Timeslot------------ */}
           <Route
             path="/admin/add-timeslot"
-            element={accessToken ? <TimeslotForm /> : <Navigate to="/login" />}
+            element={
+              accessToken && role === "admin" ? (
+                <TimeslotForm />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
 
           <Route
             path="/admin/timeslot-list"
             element={
-              accessToken ? <TimeslotListPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <TimeslotListPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route
             path="/admin/timeslot/:id/edit"
             element={
-              accessToken ? <EditTimeslotPage /> : <Navigate to="/login" />
+              accessToken && role === "admin" ? (
+                <EditTimeslotPage />
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           {/* {---------------------End of Admin Routes- Author: EJ-----------------------------------------------} */}
