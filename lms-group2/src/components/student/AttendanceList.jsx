@@ -28,7 +28,6 @@ const AttendanceList = () => {
       attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
         attendanceBySem.push(res.data);
         setAttendanceCurrentSem(...attendanceBySem);
-        console.log(attendanceBySem);
       });
     });
   }, []);

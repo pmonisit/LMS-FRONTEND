@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import { Paper, Table, TableBody, TableCell } from "@mui/material";
 import { TableContainer, TableHead, TableRow, Box } from "@mui/material";
@@ -6,13 +6,23 @@ import Sidebar from "../../components/shared/Sidebar";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import Snackbar from "@mui/material/Snackbar";
+import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
+import MuiAlert from "@mui/material/Alert";
 
 const StudentSchedulePage = () => {
+  const { onOpenSnackbar } = useContext(UserInterfaceContext);
+  const { isDarkMode, snackbarConfig, onCloseSnackbar } =
+    useContext(UserInterfaceContext);
   const [currentSem, setCurrentSem] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [myTempSLoads, setMyTempSLoads] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  let isConflict = false;
+  const [desiredSched, setDesiredSched] = useState(false);
+  const [isConflict, setIsConflict] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  // let isConflict = false;
+  // let isEnabled = false;
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -66,55 +76,88 @@ const StudentSchedulePage = () => {
             (newEndMinute > startMinute && newEndMinute < endMinute)
           ) {
             result = true;
-            isConflict = true;
+            setIsConflict(true);
           }
         }
       });
       return result;
     };
 
-    return sortedSchedule.map((data) => {
-      return (
-        <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
-          <TableCell>
-            {data[6]} - {data[7]}
-          </TableCell>
-          {scheduleColumns.map((response) => {
-            return (
-              <TableCell
-                key={response.id}
-                sx={{
-                  backgroundColor: conflict(data[6], data[7], data[4], data[5])
-                    ? "#ef9a9a"
-                    : "white",
-                }}
-              >
-                {response.id === data[4]
-                  ? data[2] + "-" + data[8]
-                  : response.id === data[5]
-                  ? data[2] + "-" + data[8]
-                  : ""}
+    if (sortedSchedule.length > 0) {
+      return sortedSchedule.map((data) => {
+        return (
+          <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
+            <TableCell>
+              {data[6]} - {data[7]}
+            </TableCell>
+            {scheduleColumns.map((response) => {
+              return (
+                <TableCell
+                  key={response.id}
+                  sx={{
+                    backgroundColor: conflict(
+                      data[6],
+                      data[7],
+                      data[4],
+                      data[5]
+                    )
+                      ? "#ef9a9a"
+                      : "white",
+                  }}
+                >
+                  {response.id === data[4]
+                    ? data[2] + "-" + data[8]
+                    : response.id === data[5]
+                    ? data[2] + "-" + data[8]
+                    : ""}
+                </TableCell>
+              );
+            })}
+            {isFinal ? null : (
+              <TableCell align="center">
+                <Button
+                  onClick={() => {
+                    handleRemoveToSchedule(data[0]);
+                  }}
+                >
+                  <RemoveCircleIcon />
+                </Button>
               </TableCell>
-            );
-          })}
-          {isFinal ? null : (
-            <TableCell align="center">
-              <Button
-                onClick={() => {
-                  handleRemoveToSchedule(data[0]);
-                }}
-              >
-                <RemoveCircleIcon />
-              </Button>
+            )}
+          </TableRow>
+        );
+      });
+    } else {
+      return (
+        <TableRow>
+          {isFinal ? (
+            <TableCell align="center" colSpan={8}>
+              No Final Schedule.
+            </TableCell>
+          ) : (
+            <TableCell align="center" colSpan={9}>
+              No Desired Schedule.
             </TableCell>
           )}
         </TableRow>
       );
-    });
+    }
   };
 
-  const handleRemoveToSchedule = (sloadId) => {
-    studentLoadService.deleteStudentLoad(sloadId);
+  const handleRemoveToSchedule = async (sloadId) => {
+    try {
+      await studentLoadService.deleteStudentLoad(sloadId);
+      setMyTempSLoads(myTempSLoads.filter((sloads) => sloads[0] !== sloadId));
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Removed Successfully!",
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        alert("This have already been deleted.");
+      }
+    }
   };
 
   const handleDesiredSchedule = () => {
@@ -126,12 +169,36 @@ const StudentSchedulePage = () => {
   };
 
   const handleSubmitFoApproval = () => {
-    studentLoadService.sendForApproval();
-    setIsSubmitted(true);
+    if (window.confirm("Are you sure you want to submit this schedule?")) {
+      studentLoadService.sendForApproval();
+      setIsSubmitted(true);
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Submitted Successfully!",
+      });
+      window.location.reload();
+    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
+      <Snackbar
+        open={snackbarConfig.open}
+        autoHideDuration={6000}
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+        onClose={onCloseSnackbar}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={onCloseSnackbar}
+          severity={snackbarConfig.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarConfig.message}
+        </MuiAlert>
+      </Snackbar>
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Grid>
@@ -185,7 +252,7 @@ const StudentSchedulePage = () => {
 
                   <Typography align="center">
                     <Button
-                      disabled={isConflict}
+                      disabled={isConflict || isSubmitted}
                       color="primary"
                       type="submit"
                       variant="contained"
@@ -193,7 +260,7 @@ const StudentSchedulePage = () => {
                         handleSubmitFoApproval();
                       }}
                     >
-                      Submit for Approval
+                      SUBMIT
                     </Button>
                   </Typography>
                 </Grid>
@@ -204,7 +271,7 @@ const StudentSchedulePage = () => {
         <Grid>
           <Toolbar />
           <h3 align="center">
-            Approved Schedule for {currentSem.semOrder} AY{" "}
+            Final Schedule for {currentSem.semOrder} AY{" "}
             {currentSem.startingYear} -{currentSem.endingYear}
           </h3>
           <Grid sx={{ flexGrow: 1 }} container spacing={5}>
