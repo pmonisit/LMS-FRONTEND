@@ -9,30 +9,29 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import SchoolIcon from "@mui/icons-material/School";
 
 // Service
-import { getTotalAdmin } from "../../../services/admin/DashboardService";
+import { getTotalDegree } from "../../../services/admin/DashboardService";
 
-const AdminCard = () => {
-  const [totalAdmin, setTotalAdmin] = useState(0);
+const DegreeCard = () => {
+  const [totalDegree, setTotalDegree] = useState(0);
 
   useEffect(() => {
-    getTotalAdmin().then((response) => {
-      setTotalAdmin(response.data);
+    getTotalDegree().then((response) => {
+      setTotalDegree(response.data);
     });
   }, []);
-
   return (
     <Card>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="overline">
-              ADMIN
+              DEGREE
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              {totalAdmin}
+              {totalDegree}
             </Typography>
           </Grid>
           <Grid item>
@@ -43,7 +42,7 @@ const AdminCard = () => {
                 width: 56,
               }}
             >
-              <AdminPanelSettingsIcon />
+              <SchoolIcon />
             </Avatar>
           </Grid>
         </Grid>
@@ -55,7 +54,7 @@ const AdminCard = () => {
           }}
         >
           <Typography color="textSecondary" variant="caption">
-            Assigned
+            Offered
           </Typography>
         </Box>
       </CardContent>
@@ -63,4 +62,4 @@ const AdminCard = () => {
   );
 };
 
-export default AdminCard;
+export default DegreeCard;

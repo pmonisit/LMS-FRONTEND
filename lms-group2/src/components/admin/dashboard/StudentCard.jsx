@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Material Components
 import {
@@ -11,7 +11,17 @@ import {
 } from "@mui/material";
 import WcIcon from "@mui/icons-material/Wc";
 
+import { getTotalStudents } from "../../../services/admin/DashboardService";
+
 const StudentCard = () => {
+  const [totalStudents, setTotalStudents] = useState(0);
+
+  useEffect(() => {
+    getTotalStudents().then((response) => {
+      setTotalStudents(response.data);
+    });
+  }, []);
+
   return (
     <Card>
       <CardContent>
@@ -21,7 +31,7 @@ const StudentCard = () => {
               STUDENTS
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              2,000
+              {totalStudents}
             </Typography>
           </Grid>
           <Grid item>

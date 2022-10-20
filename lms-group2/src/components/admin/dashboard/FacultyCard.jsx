@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Material Components
 import {
@@ -11,7 +11,18 @@ import {
 } from "@mui/material";
 import Face4Icon from "@mui/icons-material/Face4";
 
+// Service
+import { getTotalFaculty } from "../../../services/admin/DashboardService";
+
 const FacultyCard = () => {
+  const [totalFaculty, setTotalFaculty] = useState(0);
+
+  useEffect(() => {
+    getTotalFaculty().then((response) => {
+      setTotalFaculty(response.data);
+    });
+  }, []);
+
   return (
     <Card>
       <CardContent>
@@ -21,7 +32,7 @@ const FacultyCard = () => {
               Faculty
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              130
+              {totalFaculty}
             </Typography>
           </Grid>
           <Grid item>
