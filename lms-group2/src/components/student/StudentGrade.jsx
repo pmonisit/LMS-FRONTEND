@@ -40,22 +40,63 @@ const StudentGrade = () => {
   const renderGrades = (semId) => {
     const sgrades = myGradesWithSem.filter((data) => data[1] === semId);
 
-    return sgrades.map((data) => {
-      return (
-        <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
-          <TableCell>{data[5]}</TableCell>
-          <TableCell>{data[6]}</TableCell>
-          <TableCell>{data[9]}</TableCell>
-          <TableCell>
-            {data[11]}, {data[10]}
-          </TableCell>
-          <TableCell>{data[12]}</TableCell>
-          <TableCell>{data[7]}</TableCell>
-          <TableCell>{data[8]}</TableCell>
-        </TableRow>
-      );
-    });
+    return sgrades;
+    // if (sgrades.length > 0) {
+    //   let sum = 0;
+    //   let units = 0;
+    //   let gwa = 0;
+    //   return sgrades.map((data) => {
+    //     return (
+    //       <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
+    //         <TableCell>{data[5]}</TableCell>
+    //         <TableCell>{data[6]}</TableCell>
+    //         <TableCell>{data[9]}</TableCell>
+    //         <TableCell>
+    //           {data[11]}, {data[10]}
+    //         </TableCell>
+    //         <TableCell>{data[12]}</TableCell>
+    //         <TableCell>{data[7]}</TableCell>
+    //         <TableCell>{data[8]}</TableCell>
+    //       </TableRow>
+    //     );
+    //   });
+    // } else {
+    //   return (
+    //     <TableRow>
+    //       <TableCell align="center" colSpan={9}>
+    //         No Grades Available.
+    //       </TableCell>
+    //     </TableRow>
+    //   );
+    // }
   };
+
+  const handleAverage = (semester) => {
+    let average = 0;
+    let units = 0;
+    let sumGradesXUnits = 0;
+    let result = [];
+    myGradesWithSem
+      .filter(
+        (data) =>
+          data[1] === semester[0] &&
+          data[2] === semester[1] &&
+          data[3] === semester[2]
+      )
+      .map((data) => {
+        units = units + data[12];
+        sumGradesXUnits = sumGradesXUnits + data[7] * data[12];
+      });
+
+    result.push(units);
+    if (units > 0) {
+      result.push(sumGradesXUnits / units);
+    } else {
+      result.push(0);
+    }
+    return result;
+  };
+
   return (
     <Grid>
       <Toolbar />
@@ -66,7 +107,11 @@ const StudentGrade = () => {
               {semester[3]} AY {semester[1]} - {semester[2]}
             </h3>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+              <Table
+                sx={{ minWidth: 650 }}
+                size="small"
+                aria-label="a dense table"
+              >
                 <TableHead>
                   <TableRow>
                     {gradeColumns.map((column) => (
@@ -80,7 +125,45 @@ const StudentGrade = () => {
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>{renderGrades(semester[0])}</TableBody>
+                <TableBody>
+                  {renderGrades(semester[0]).length > 0 ? (
+                    renderGrades(semester[0]).map((data) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={data[0]}
+                        >
+                          <TableCell>{data[5]}</TableCell>
+                          <TableCell>{data[6]}</TableCell>
+                          <TableCell>{data[9]}</TableCell>
+                          <TableCell>
+                            {data[11]}, {data[10]}
+                          </TableCell>
+                          <TableCell>{data[12]}</TableCell>
+                          <TableCell>{data[7]}</TableCell>
+                          <TableCell>{data[8]}</TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell align="center" colSpan={9}>
+                        No Grades Available.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  <TableRow>
+                    <TableCell colSpan={4}></TableCell>
+                    <TableCell>
+                      <b>{handleAverage(semester)[0]}</b>
+                    </TableCell>
+                    <TableCell align="left" colSpan={2}>
+                      <b>{handleAverage(semester)[1]}</b>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
             </TableContainer>
           </Paper>

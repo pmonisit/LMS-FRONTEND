@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Paper, TableContainer, Table } from "@mui/material";
+import { Box, Paper, TableContainer, Table, Typography } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
 import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
 import { Toolbar, FormControlLabel, Switch, Button } from "@mui/material";
@@ -14,6 +14,7 @@ import { EnrolContext } from "../../context/student/EnrolContext";
 import Snackbar from "@mui/material/Snackbar";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 import MuiAlert from "@mui/material/Alert";
+import { Link } from "react-router-dom";
 
 const Courses = () => {
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
@@ -33,6 +34,7 @@ const Courses = () => {
   const [enrolledSL, setEnrolledSL] = useState([]);
   const [desiredSL, setDesiredSL] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
+  const [text, setText] = useState({ opened: false });
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -51,7 +53,7 @@ const Courses = () => {
             setLectureObject(arrobj);
             let prereq = [];
             prereqService.getPrereqOfCourse(a[1]).then((response) => {
-              prereq = [a[2], response.data];
+              prereq = [a[2], response.data, a[1]];
               prereqCourse.push(prereq);
               setPrereqOfCourse(prereqCourse);
             });
@@ -114,10 +116,45 @@ const Courses = () => {
     });
   };
 
+  // const handleButonToggle = (id) => {
+  //   setButtonText(
+  //     buttonText.map((button) => {
+  //       if (button.id === id) {
+  //         return {
+  //           ...button,
+  //           value: !button.value,
+  //         };
+  //       }
+  //       return button;
+  //     })
+  //   );
+  // };
+
+  // const handleText = () => {
+  //   if (buttonText.value === true) {
+  //     // console.log("ADD");
+  //     return "ADD";
+  //   }
+  //   // console.log("REMOVE");
+  //   return "REMOVE";
+  // };
+  const toggleText = (id) => {
+    const { opened } = text;
+    setText({
+      opened: {
+        ...opened,
+        [id]: !opened[id],
+      },
+    });
+  };
+
   const renderEnrolActions = (lectureId, courseCode) => {
+    const { opened } = text;
+
     const tempEnrolItem = [];
     const enrolled = [];
     const desired = [];
+    const prereq = [];
     const courseAssignedOrTaken = myCoursesAssigned.find(
       (data) => data[1] === courseCode
     );
@@ -142,12 +179,33 @@ const Courses = () => {
         enrolledSL.find((data) => data[1] === lectureId)
       );
     });
-
+    prereqOfCourse.map((data) => {
+      prereq.splice(
+        0,
+        1,
+        prereqOfCourse.find(
+          (course) => course[0] === courseCode && course[1].length == 0
+        )
+      );
+    });
+    // console.log(prereqOfCourse);
     if (tempEnrolItem[0]) {
-      return (
+      return opened[tempEnrolItem[0][1]] ? (
         <Button
           onClick={() => {
             handleRemoveToSchedule(tempEnrolItem[0][0]);
+            toggleText(tempEnrolItem[0][1]);
+          }}
+          variant="contained"
+          color="primary"
+        >
+          ADD
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            handleRemoveToSchedule(tempEnrolItem[0][0]);
+            toggleText(tempEnrolItem[0][1]);
           }}
           variant="contained"
           color="primary"
@@ -191,18 +249,29 @@ const Courses = () => {
           </div>
         </>
       );
-    } else if (
-      prereqOfCourse.find(
-        (course) => course[0] === courseCode && course[1].length == 0
-      )
-    ) {
-      return (
+    } else if (prereq[0]) {
+      let prereq1 = [...prereq[0]];
+      console.log(prereq1[2]);
+      // return "Hello";
+      return opened[prereq[0][2]] ? (
         <Button
+          onClick={() => {
+            handleRemoveToSchedule(lectureId);
+            toggleText(prereq1[2]);
+          }}
           variant="contained"
           color="primary"
+        >
+          REMOVE
+        </Button>
+      ) : (
+        <Button
           onClick={() => {
             handleAddToSchedule(lectureId);
+            toggleText(prereq1[2]);
           }}
+          variant="contained"
+          color="primary"
         >
           ADD
         </Button>
@@ -444,6 +513,18 @@ const Courses = () => {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <Typography align="right">
+        <Link to="/student/enrolment">
+          <Button variant="contained" color="primary" align="right">
+            CHECK YOUR ENROLMENT SUMMARY
+          </Button>
+        </Link>
+        <Link to="/student/schedule">
+          <Button variant="contained" color="primary" align="right">
+            CHECK YOUR SCHEDULE
+          </Button>
+        </Link>
+      </Typography>
     </Box>
   );
 };

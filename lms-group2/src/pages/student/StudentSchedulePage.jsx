@@ -11,6 +11,8 @@ const StudentSchedulePage = () => {
   const [currentSem, setCurrentSem] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [myTempSLoads, setMyTempSLoads] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  let isConflict = false;
 
   useEffect(() => {
     semesterService.getCurrentSemester().then((response) => {
@@ -64,6 +66,7 @@ const StudentSchedulePage = () => {
             (newEndMinute > startMinute && newEndMinute < endMinute)
           ) {
             result = true;
+            isConflict = true;
           }
         }
       });
@@ -124,7 +127,7 @@ const StudentSchedulePage = () => {
 
   const handleSubmitFoApproval = () => {
     studentLoadService.sendForApproval();
-    return "hello";
+    setIsSubmitted(true);
   };
 
   return (
@@ -143,19 +146,25 @@ const StudentSchedulePage = () => {
                 <Grid item>
                   <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer>
-                      <Table>
+                      <Table
+                        sx={{ minWidth: 650 }}
+                        size="small"
+                        aria-label="a dense table"
+                      >
                         <TableHead align="center">
                           <TableRow>
                             <TableCell>Time</TableCell>
-                            {scheduleColumns.map((column) => (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ minWidth: column.minWidth }}
-                              >
-                                {column.label}
-                              </TableCell>
-                            ))}
+                            {scheduleColumns.map((column) => {
+                              return (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  style={{ minWidth: column.minWidth }}
+                                >
+                                  {column.label}
+                                </TableCell>
+                              );
+                            })}
                             <TableCell>Action</TableCell>
                           </TableRow>
                         </TableHead>
@@ -163,15 +172,20 @@ const StudentSchedulePage = () => {
                       </Table>
                     </TableContainer>
                   </Paper>
-
-                  <sub>
-                    <i>
-                      <span style={{ color: "#ef9a9a" }}>* with conflict</span>
-                    </i>
-                  </sub>
+                  {isConflict ? (
+                    <sub>
+                      <i>
+                        <span style={{ color: "#ef9a9a" }}>
+                          * with conflict
+                        </span>
+                      </i>
+                    </sub>
+                  ) : null}
+                  <br />
 
                   <Typography align="center">
                     <Button
+                      disabled={isConflict}
                       color="primary"
                       type="submit"
                       variant="contained"
@@ -199,7 +213,11 @@ const StudentSchedulePage = () => {
                 <Grid item>
                   <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer>
-                      <Table>
+                      <Table
+                        sx={{ minWidth: 650 }}
+                        size="small"
+                        aria-label="a dense table"
+                      >
                         <TableHead align="center">
                           <TableRow>
                             <TableCell>Time</TableCell>
@@ -218,11 +236,6 @@ const StudentSchedulePage = () => {
                       </Table>
                     </TableContainer>
                   </Paper>
-                  <sub>
-                    <i>
-                      <span style={{ color: "#ef9a9a" }}>* with conflict</span>
-                    </i>
-                  </sub>
                 </Grid>
               </Grid>
             </Grid>
