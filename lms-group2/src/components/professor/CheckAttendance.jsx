@@ -22,6 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 // Service
 import * as attendanceService from "../../services/professor/AttendanceService";
+import * as gradeService from "../../services/professor/GradeService";
 
 // Context
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
@@ -40,8 +41,13 @@ const CheckAttendance = () => {
     attendanceService
       .getAllAttendanceByLecture(params.lectureId, params.studentId)
       .then((response) => {
-        setStudentInfo(response.data?.[0]);
         setAttendanceDetails(response.data);
+      });
+
+    gradeService
+      .getStudentGradePerLecture(params.studentId, params.lectureId)
+      .then((response) => {
+        setStudentInfo(response?.data[0]);
       });
   }, [attendanceDetails, params.lectureId, params.studentId, studentInfo]);
 
@@ -135,7 +141,7 @@ const CheckAttendance = () => {
         >
           <strong>
             {" "}
-            {studentInfo?.[4]} {studentInfo?.[6]}
+            {studentInfo?.[5]} {studentInfo?.[7]}
           </strong>
         </Typography>
         <Typography
