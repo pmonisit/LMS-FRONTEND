@@ -36,7 +36,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/admin-list">
               <ListItemIcon>
                 <AdminPanelSettingsIcon />
               </ListItemIcon>
@@ -44,7 +44,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/student-list">
               <ListItemIcon>
                 <WcIcon />
               </ListItemIcon>
@@ -52,7 +52,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/professor-list">
               <ListItemIcon>
                 <Face4Icon />
               </ListItemIcon>
@@ -60,7 +60,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/parent-list">
               <ListItemIcon>
                 <Face3Icon />
               </ListItemIcon>
@@ -68,7 +68,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/degree-list">
               <ListItemIcon>
                 <SchoolIcon />
               </ListItemIcon>
@@ -76,7 +76,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/course-list">
               <ListItemIcon>
                 <AutoStoriesIcon />
               </ListItemIcon>
@@ -84,7 +84,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/lecture-list">
               <ListItemIcon>
                 <LibraryBooksIcon />
               </ListItemIcon>
@@ -92,7 +92,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/prerequisite-list">
               <ListItemIcon>
                 <BookmarksIcon />
               </ListItemIcon>
@@ -100,7 +100,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/semester-list">
               <ListItemIcon>
                 <LocalLibraryIcon />
               </ListItemIcon>
@@ -108,7 +108,7 @@ const AdminSidebar = () => {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
+            <ListItemButton LinkComponent={Link} to="/admin/timeslot-list">
               <ListItemIcon>
                 <AccessTimeIcon />
               </ListItemIcon>

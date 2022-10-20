@@ -15,6 +15,7 @@ import { AdminContext } from "../../../context/admin/account/adminContext";
 import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import * as semesterService from "../../../services/admin/Semester";
+import { WindowScrollController } from "@fullcalendar/react";
 
 const SemesterListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
@@ -46,7 +47,7 @@ const SemesterListTable = ({ details }) => {
             <TableCell align="center">Start Year</TableCell>
             <TableCell align="center">End Year</TableCell>
             <TableCell align="center">Semester Order</TableCell>
-            <TableCell align="center">Is Current</TableCell>
+            <TableCell align="center">Current Semester</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -74,7 +75,9 @@ const SemesterListTable = ({ details }) => {
                       onClick={() => {
                         semesterService
                           .changeIsCurrent(detail.semesterId)
-                          .then((res) => console.log(res));
+                          .then((res) => {
+                            window.location.reload();
+                          });
                       }}
                     >
                       Activate
