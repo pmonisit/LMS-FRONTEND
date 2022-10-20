@@ -29,8 +29,8 @@ export const UserInterfaceProvider = ({ children }) => {
   const handleCloseSnackbar = () => {
     setSnackbarConfig({
       open: false,
-      severity: "",
-      message: "",
+      // severity: "",
+      // message: "",
     });
   };
 

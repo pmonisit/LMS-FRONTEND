@@ -254,7 +254,11 @@ const StudentEnrolmentPage = () => {
           <h4> My Advised Courses </h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table>
+              <Table
+                sx={{ minWidth: 650 }}
+                size="small"
+                aria-label="a dense table"
+              >
                 <TableHead>
                   <TableRow>
                     {coursesAssignedColumns.map((column) => (
@@ -292,8 +296,6 @@ const StudentEnrolmentPage = () => {
                       </TableCell>
                     </TableRow>
                   )}
-
-                  {}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -302,7 +304,11 @@ const StudentEnrolmentPage = () => {
           <h4> My Enrolled Courses</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+              <Table
+                sx={{ minWidth: 650 }}
+                size="small"
+                aria-label="a dense table"
+              >
                 <TableHead>
                   <TableRow>
                     {enrolColumns.map((column) => (
@@ -337,7 +343,11 @@ const StudentEnrolmentPage = () => {
           <h4> My Desired Courses</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+              <Table
+                sx={{ minWidth: 650 }}
+                size="small"
+                aria-label="a dense table"
+              >
                 <TableHead>
                   <TableRow>
                     {enrolColumns.map((column) => (

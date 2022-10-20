@@ -32,7 +32,7 @@ export function addStudentLoad(lectureId) {
 }
 
 export function deleteStudentLoad(sloadId) {
-  return http.delete(`/studentload/unenrol/${sloadId}`);
+  return http.delete(`/studentload/unenrol/remove/${sloadId}`);
 }
 
 export function getAllMyStudentLoads() {
