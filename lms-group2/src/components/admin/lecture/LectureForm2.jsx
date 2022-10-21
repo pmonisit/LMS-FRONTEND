@@ -36,9 +36,9 @@ const LectureForm2 = ({ lectureForm, onSetLectureForm, lectureId }) => {
   };
   return (
     <Grid container justifyContent="center" sx={{ marginTop: "5vh" }}>
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={12} sm={6} md={4}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Other Details" />
 
           <CardContent>
             <Grid container spacing={2}>

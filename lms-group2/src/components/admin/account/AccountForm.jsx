@@ -38,10 +38,10 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{ marginTop: "5vh" }}>
-      <Grid item xs={12} md={6} sm={6}>
+    <Grid container justifyContent="center">
+      <Grid item xs={12} md={3} sm={3}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Personal Details" />
 
           <CardContent>
             <Grid container spacing={2}>

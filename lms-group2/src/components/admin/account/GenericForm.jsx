@@ -15,7 +15,7 @@ import { AccountFormContext } from "../../../context/admin/account/AccountFormCo
 import ProfessorForm from "./ProfessorForm";
 import AdminForm from "./AdminForm";
 import ParentForm from "./ParentForm";
-import { Snackbar } from "@mui/material";
+import { Snackbar, Typography } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 
 import {
@@ -178,9 +178,14 @@ const GenericForm = ({ initialValue, accountId }) => {
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >
         <Grid item xs={12} md={12} sm={12}>
-          <MultiStepper />
+          <Typography variant="h5" textAlign="center" mb={3}>
+            Account Registration
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12} sm={12}>
+          <MultiStepper />
+        </Grid>
+        <Grid item xs={10} sm={10} md={12} margin={5}>
           {accountFormContext.step === 0 && (
             <AccountForm
               accountForm={accountForm}
@@ -204,26 +209,28 @@ const GenericForm = ({ initialValue, accountId }) => {
         </Grid>
 
         <CardActions>
-          <Button
-            type="button"
-            onClick={(e) => {
-              console.log("prev");
-              accountFormContext.onPrev();
-            }}
-          >
-            Previous
-          </Button>
-          {step === steps.length - 1 && <Button type="submit">Submit</Button>}
-          {step !== steps.length - 1 && (
+          <Grid container justifyContent="center" mb={5}>
             <Button
               type="button"
-              onClick={() => {
-                accountFormContext.onNext();
+              onClick={(e) => {
+                console.log("prev");
+                accountFormContext.onPrev();
               }}
             >
-              Next
+              Previous
             </Button>
-          )}
+            {step === steps.length - 1 && <Button type="submit">Submit</Button>}
+            {step !== steps.length - 1 && (
+              <Button
+                type="button"
+                onClick={() => {
+                  accountFormContext.onNext();
+                }}
+              >
+                Next
+              </Button>
+            )}
+          </Grid>
         </CardActions>
       </Grid>
     </>

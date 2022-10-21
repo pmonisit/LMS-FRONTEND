@@ -35,7 +35,7 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
     <Grid
       container
       justifyContent="center"
-      sx={{ marginTop: "5vh" }}
+      sx={{ marginTop: "15vh" }}
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
@@ -64,9 +64,9 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
         navigate("/admin/timeslot-list");
       }}
     >
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={10} md={4} sm={6}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Create Timeslot" />
 
           <CardContent>
             <Grid container spacing={2}>
@@ -101,11 +101,12 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
                 />
               </Grid>
             </Grid>
-
-            <CardActions>
-              <Button type="submit">Submit</Button>
-            </CardActions>
           </CardContent>
+          <CardActions>
+            <Button type="submit" fullWidth variant="contained">
+              Submit
+            </Button>
+          </CardActions>
         </Card>
       </Grid>
     </Grid>

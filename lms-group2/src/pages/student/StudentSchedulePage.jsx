@@ -9,6 +9,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import Snackbar from "@mui/material/Snackbar";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 import MuiAlert from "@mui/material/Alert";
+import Swal from "sweetalert2";
 
 const StudentSchedulePage = () => {
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
@@ -169,16 +170,34 @@ const StudentSchedulePage = () => {
   };
 
   const handleSubmitFoApproval = () => {
-    if (window.confirm("Are you sure you want to submit this schedule?")) {
-      studentLoadService.sendForApproval();
-      setIsSubmitted(true);
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: "Submitted Successfully!",
-      });
-      window.location.reload();
-    }
+    Swal.fire({
+      title: "Are you sure you want to submit this schedule?",
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      confirmButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        studentLoadService.sendForApproval();
+        setIsSubmitted(true);
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: "Submitted Successfully!",
+        });
+        window.location.reload();
+      }
+    });
+
+    // if (window.confirm("Are you sure you want to submit this schedule?")) {
+    //   studentLoadService.sendForApproval();
+    //   setIsSubmitted(true);
+    //   onOpenSnackbar({
+    //     open: true,
+    //     severity: "success",
+    //     message: "Submitted Successfully!",
+    //   });
+    //   window.location.reload();
+    // }
   };
 
   return (
