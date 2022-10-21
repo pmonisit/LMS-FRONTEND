@@ -25,3 +25,7 @@ export function addCourse(course) {
   });
   return http.post("/course/insert", courseClone);
 }
+
+export function getAllCoursesWithDegreeAndTimeSlot() {
+  return http.get("/course/fetch/all");
+}

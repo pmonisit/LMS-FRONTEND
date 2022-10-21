@@ -7,7 +7,7 @@ import { AccountFormContext } from "../../../context/admin/account/AccountFormCo
 
 const StudentFilterSelection = ({ list, form, onSetForm, value, label }) => {
   const accountFormContext = useContext(AccountFormContext);
-
+  console.log(list);
   const handleChange = (event) => {
     onSetForm(event.target.value);
     console.log(event.target.value);
@@ -27,7 +27,7 @@ const StudentFilterSelection = ({ list, form, onSetForm, value, label }) => {
             id: "uncontrolled-native",
           }}
         >
-          <option>All</option>
+          <option value="all">All</option>
           {list.map((item) => {
             return (
               <option key={item.degreeId} value={item.degreeId}>
