@@ -52,7 +52,7 @@ const StudentListPage = () => {
   useEffect(() => {
     const fetchStudent = async (degreeId) => {
       const res = await accountService.getStudents();
-      if (degreeId === "all") {
+      if (degreeId == "all") {
         onSetStudentList(res.data);
       } else {
         const students = res.data;
