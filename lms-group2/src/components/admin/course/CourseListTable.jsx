@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,12 +14,24 @@ import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import TablePagination from "@mui/material/TablePagination";
+import * as courseService from "../../../services/admin/CourseService";
 
 const CourseListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
+
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const res = await courseService.getAllCoursesWithDegreeAndTimeSlot();
+      setCourses(res.data);
+      console.log(courses);
+    };
+    fetchCourses();
+  }, []);
   const handleEdit = (detail) => {
     console.log(detail);
   };
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -57,8 +69,21 @@ const CourseListTable = ({ details }) => {
                 <TableCell align="center">{detail.courseCode}</TableCell>
                 <TableCell align="center">{detail.courseName}</TableCell>
                 <TableCell align="center">{detail.units}</TableCell>
-                <TableCell align="center">{detail.degreeId}</TableCell>
-                <TableCell align="center">{detail.timeslotId}</TableCell>
+                <TableCell align="center">
+                  {courses.map((data) => {
+                    if (detail.courseId == data[0]) {
+                      return data[6];
+                    }
+                  })}
+                </TableCell>
+                <TableCell align="center">
+                  {" "}
+                  {courses.map((data) => {
+                    if (detail.courseId == data[0]) {
+                      return `Y${data[9]} Sem${data[10]}`;
+                    }
+                  })}
+                </TableCell>
                 <TableCell align="center">
                   <IconButton
                     LinkComponent={Link}

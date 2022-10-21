@@ -149,7 +149,7 @@ const StudentListPerLectureComponent = () => {
                     ) : row[9] === "FAILED" ? (
                       <Chip label="Failed" color="primary" />
                     ) : (
-                      "Not Yet Evaluated"
+                      "No Evaluation Given"
                     )}
                   </TableCell>
                   <TableCell align="center">

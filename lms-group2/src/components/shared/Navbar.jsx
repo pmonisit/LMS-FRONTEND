@@ -263,7 +263,7 @@ const Navbar = ({ onLogout }) => {
                         color="inherit"
                         onClick={handleCloseUserMenu}
                         LinkComponent={Link}
-                        to="/admin/admin-list"
+                        to="/admin/dashboard"
                       >
                         Dashboard
                       </Button>

@@ -54,11 +54,10 @@ const AccountForm2 = ({ accountForm, onSetAccountForm }) => {
       justifyContent="center"
       //component="form"
       //onSubmit={handleSubmit}
-      sx={{ marginTop: "5vh" }}
     >
-      <Grid item xs={12} md={6} sm={6} lg={6}>
+      <Grid item xs={12} md={3} sm={6} lg={3}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Basic Details" />
 
           <CardContent>
             <Grid container spacing={2}>

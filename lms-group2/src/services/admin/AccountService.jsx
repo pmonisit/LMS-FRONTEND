@@ -124,3 +124,7 @@ export function getCurrentChildInfo() {
   // console.log("getCurrentChildInfo()");
   return http.get("/account/currentuser/childinfo");
 }
+
+export function getStudentsByDegree(degreeId) {
+  return http.get(`/account/student/${degreeId}`);
+}

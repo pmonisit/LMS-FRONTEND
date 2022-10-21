@@ -46,68 +46,70 @@ const LectureDetails = () => {
 
   if (lecture) {
     return (
-      <div style={{ marginTop: "80px" }}>
-        <Card>
-          <CardHeader
-            action={
-              <IconButton onClick={handleOpenMenu}>
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={lecture[0][3]}
-            subheader={`Section : ${lecture[0][11]}`}
-          />
-          <CardContent>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem
-              // onClick={() => navigate(`/admin/lecture/${lecture[0][0]}/edit`)}
+      <Grid container justifyContent="center" marginTop={15} marginBottom={15}>
+        <Grid item xs={10} sm={10} md={6}>
+          <Card>
+            <CardHeader
+              action={
+                <IconButton onClick={handleOpenMenu}>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={lecture[0][3]}
+              subheader={`Section : ${lecture[0][11]}`}
+            />
+            <CardContent>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleCloseMenu}
               >
-                Edit
-              </MenuItem>
-              <MenuItem>Delete</MenuItem>
-            </Menu>
-            <Grid container spacing={5}>
-              <Grid item xs={6}>
-                <Typography variant="overline">Lecture Id</Typography>
-                <Typography variant="body2">{lecture[0][0]}</Typography>
-              </Grid>
+                <MenuItem
+                // onClick={() => navigate(`/admin/lecture/${lecture[0][0]}/edit`)}
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem>Delete</MenuItem>
+              </Menu>
+              <Grid container spacing={5}>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Lecture Id</Typography>
+                  <Typography variant="body2">{lecture[0][0]}</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Typography variant="overline">Professor Name</Typography>
-                <Typography variant="body2">{` ${lecture[0][8]} ${lecture[0][10]}`}</Typography>
-              </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Professor Name</Typography>
+                  <Typography variant="body2">{` ${lecture[0][8]} ${lecture[0][10]}`}</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Typography variant="overline">Semester</Typography>
-                <Typography variant="body2">{lecture[0][23]}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Degree</Typography>
-                <Typography variant="body2">{lecture[0][5]}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Capacity</Typography>
-                <Typography variant="body2">{lecture[0][16]}</Typography>
-              </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Semester</Typography>
+                  <Typography variant="body2">{lecture[0][23]}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Degree</Typography>
+                  <Typography variant="body2">{lecture[0][5]}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Capacity</Typography>
+                  <Typography variant="body2">{lecture[0][16]}</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Typography variant="overline">Schedule</Typography>
-                <Typography variant="body2">{`${lecture[0][12]} & ${lecture[0][13]}`}</Typography>
-              </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Schedule</Typography>
+                  <Typography variant="body2">{`${lecture[0][12]} & ${lecture[0][13]}`}</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Typography variant="overline">Time</Typography>
-                <Typography variant="body2">{`${lecture[0][14]} - ${lecture[0][15]}`}</Typography>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Time</Typography>
+                  <Typography variant="body2">{`${lecture[0][14]} - ${lecture[0][15]}`}</Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     );
   }
 };

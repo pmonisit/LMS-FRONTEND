@@ -14,6 +14,9 @@ import FormLabel from "@mui/material/FormLabel";
 // JOI
 import Joi from "joi";
 
+// Sweet Alert
+import Swal from "sweetalert2";
+
 const LoginPage = ({ onLogin }) => {
   const [form, setForm] = useState({
     username: "",
@@ -115,7 +118,13 @@ const LoginPage = ({ onLogin }) => {
               <FormLabel>Don't have an account? </FormLabel>
             </Grid>
             <Grid item xs={12}>
-              <Button>Contact administrator</Button>
+              <Button
+                onClick={() => {
+                  Swal.fire("Admin Hotline: 9867-4583");
+                }}
+              >
+                Contact administrator
+              </Button>
             </Grid>
           </Grid>
         </Card>

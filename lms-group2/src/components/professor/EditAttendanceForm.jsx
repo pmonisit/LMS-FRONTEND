@@ -64,12 +64,10 @@ const EditAttendanceForm = ({ onSubmit, initialValue }) => {
       delete errors[event.currentTarget.name];
       setErrors(errors);
     }
-    // setForm(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(form);
     onSubmit(form);
   };
 
