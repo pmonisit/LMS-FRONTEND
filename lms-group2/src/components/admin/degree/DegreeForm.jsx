@@ -68,9 +68,9 @@ const DegreeForm = ({ initialValue, degreeId }) => {
         navigate("/admin/degree-list");
       }}
     >
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={10} sm={4} md={4} xl={3}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Add Degree Form" />
 
           <CardContent>
             <Grid container spacing={2}>
@@ -105,11 +105,12 @@ const DegreeForm = ({ initialValue, degreeId }) => {
                 />
               </Grid>
             </Grid>
-
-            <CardActions>
-              <Button type="submit">Submit</Button>
-            </CardActions>
           </CardContent>
+          <CardActions>
+            <Button variant="contained" type="submit" fullWidth>
+              SUBMIT
+            </Button>
+          </CardActions>
         </Card>
       </Grid>
     </Grid>

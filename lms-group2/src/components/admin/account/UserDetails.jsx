@@ -50,76 +50,80 @@ const UserDetails = () => {
       .getDegreeById(user.degreeId)
       .then((res) => setDegree(res.data.degreeName));
     return (
-      <div style={{ marginTop: "80px" }}>
-        <Card>
-          <CardHeader
-            action={
-              <IconButton onClick={handleOpenMenu}>
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={`${user.firstName} ${
-              user.middleName ? user.middleName : ""
-            } ${user.lastName}`}
-            subheader={`@${user.username}`}
-          />
-          <CardContent>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem onClick={() => navigate(`/employees/${user.id}/edit`)}>
-                Edit
-              </MenuItem>
-              <MenuItem
-                onClick={async () => {
-                  await handleDelete(user.AccountId);
-                  navigate("/");
-                }}
+      <Grid container marginTop={15} justifyContent="center">
+        <Grid item xs={10} sm={10} md={6}>
+          <Card>
+            <CardHeader
+              action={
+                <IconButton onClick={handleOpenMenu}>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={`${user.firstName} ${
+                user.middleName ? user.middleName : ""
+              } ${user.lastName}`}
+              subheader={`@${user.username}`}
+            />
+            <CardContent>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleCloseMenu}
               >
-                Delete
-              </MenuItem>
-            </Menu>
-            <Grid container spacing={5}>
-              <Grid item xs={6}>
-                <Typography variant="overline">Role</Typography>
-                <Typography variant="body2">
-                  {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Account Id</Typography>
-                <Typography variant="body2">{user.accountId}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Gender</Typography>
-                <Typography variant="body2">
-                  {user.gender === "m" ? "Male" : "Female"}
-                </Typography>
-              </Grid>
-
-              <Grid item xs={6}>
-                <Typography variant="overline">Birth Date</Typography>
-                <Typography variant="body2">{user.birthdate}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="overline">Active</Typography>
-                <Typography variant="body2">
-                  {user.active ? "Yes" : "No"}
-                </Typography>
-              </Grid>
-              {user.role === "student" && (
+                <MenuItem
+                  onClick={() => navigate(`/employees/${user.id}/edit`)}
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  onClick={async () => {
+                    await handleDelete(user.AccountId);
+                    navigate("/");
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+              <Grid container spacing={5}>
                 <Grid item xs={6}>
-                  <Typography variant="overline">Degree</Typography>
-                  <Typography variant="body2">{degree}</Typography>
+                  <Typography variant="overline">Role</Typography>
+                  <Typography variant="body2">
+                    {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                  </Typography>
                 </Grid>
-              )}
-            </Grid>
-          </CardContent>
-        </Card>
-      </div>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Account Id</Typography>
+                  <Typography variant="body2">{user.accountId}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Gender</Typography>
+                  <Typography variant="body2">
+                    {user.gender === "m" ? "Male" : "Female"}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography variant="overline">Birth Date</Typography>
+                  <Typography variant="body2">{user.birthdate}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="overline">Active</Typography>
+                  <Typography variant="body2">
+                    {user.active ? "Yes" : "No"}
+                  </Typography>
+                </Grid>
+                {user.role === "student" && (
+                  <Grid item xs={6}>
+                    <Typography variant="overline">Degree</Typography>
+                    <Typography variant="body2">{degree}</Typography>
+                  </Grid>
+                )}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     );
   }
 };

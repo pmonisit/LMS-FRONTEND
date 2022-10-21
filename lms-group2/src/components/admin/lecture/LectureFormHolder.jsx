@@ -15,6 +15,7 @@ import * as professorService from "../../../services/professor/LectureService";
 import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 import * as lectureService from "../../../services/professor/LectureService";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
+import { Typography } from "@mui/material";
 
 const LectureFormHolder = ({ initialValue, lectureId }) => {
   console.log(initialValue);
@@ -154,9 +155,14 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >
         <Grid item xs={12} md={12} sm={12}>
-          <MultiStepper step={lectureStep} steps={lectureSteps} />
+          <Typography variant="h5" textAlign="center" mb={3}>
+            Create Lecture
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12} sm={12}>
+          <MultiStepper step={lectureStep} steps={lectureSteps} />
+        </Grid>
+        <Grid item xs={10} sm={10} md={12} margin={5}>
           {lectureStep === 0 && (
             <LectureForm
               lectureForm={lectureForm}
@@ -174,28 +180,30 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
         </Grid>
 
         <CardActions>
-          <Button
-            type="button"
-            onClick={(e) => {
-              console.log("prev");
-              handleLecturePrev();
-            }}
-          >
-            Previous
-          </Button>
-          {lectureStep === lectureSteps.length - 1 && (
-            <Button type="submit">Submit</Button>
-          )}
-          {lectureStep !== lectureSteps.length - 1 && (
+          <Grid container justifyContent="center" mb={5}>
             <Button
               type="button"
-              onClick={() => {
-                handleLectureNext();
+              onClick={(e) => {
+                console.log("prev");
+                handleLecturePrev();
               }}
             >
-              Next
+              Previous
             </Button>
-          )}
+            {lectureStep === lectureSteps.length - 1 && (
+              <Button type="submit">Submit</Button>
+            )}
+            {lectureStep !== lectureSteps.length - 1 && (
+              <Button
+                type="button"
+                onClick={() => {
+                  handleLectureNext();
+                }}
+              >
+                Next
+              </Button>
+            )}
+          </Grid>
         </CardActions>
       </Grid>
     </>

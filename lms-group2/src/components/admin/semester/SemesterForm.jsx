@@ -43,7 +43,7 @@ const SemesterForm = ({ initialValue, semesterId }) => {
     <Grid
       container
       justifyContent="center"
-      sx={{ marginTop: "5vh" }}
+      sx={{ marginTop: "15vh", marginBottom: "15vh" }}
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
@@ -74,9 +74,9 @@ const SemesterForm = ({ initialValue, semesterId }) => {
         navigate("/admin/semester-list");
       }}
     >
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={10} md={4} sm={6}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Create Semester" />
 
           <CardContent>
             <Grid container spacing={2}>
@@ -151,11 +151,12 @@ const SemesterForm = ({ initialValue, semesterId }) => {
                 />
               </Grid>
             </Grid>
-
-            <CardActions>
-              <Button type="submit">Submit</Button>
-            </CardActions>
           </CardContent>
+          <CardActions>
+            <Button type="submit" fullWidth variant="contained">
+              Submit
+            </Button>
+          </CardActions>
         </Card>
       </Grid>
     </Grid>

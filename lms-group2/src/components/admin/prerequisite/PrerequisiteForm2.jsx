@@ -42,7 +42,7 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
     <Grid
       container
       justifyContent="center"
-      sx={{ marginTop: "5vh" }}
+      sx={{ marginTop: "15vh" }}
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
@@ -76,9 +76,9 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
         navigate("/admin/prerequisite-list");
       }}
     >
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={10} md={3} sm={6}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Add Pre-Requisite" />
 
           <CardContent>
             <Grid container spacing={2}>
@@ -101,11 +101,12 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
                 />
               </Grid>
             </Grid>
-
-            <CardActions>
-              <Button type="submit">Submit</Button>
-            </CardActions>
           </CardContent>
+          <CardActions>
+            <Button type="submit" variant="contained" fullWidth>
+              Submit
+            </Button>
+          </CardActions>
         </Card>
       </Grid>
     </Grid>
