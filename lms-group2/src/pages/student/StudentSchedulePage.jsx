@@ -249,20 +249,23 @@ const StudentSchedulePage = () => {
                     </sub>
                   ) : null}
                   <br />
-
-                  <Typography align="center">
-                    <Button
-                      disabled={isConflict || isSubmitted}
-                      color="primary"
-                      type="submit"
-                      variant="contained"
-                      onClick={() => {
-                        handleSubmitFoApproval();
-                      }}
-                    >
-                      SUBMIT
-                    </Button>
-                  </Typography>
+                  {myTempSLoads.length === 0 ? (
+                    ""
+                  ) : (
+                    <Typography align="center">
+                      <Button
+                        disabled={isConflict || isSubmitted}
+                        color="primary"
+                        type="submit"
+                        variant="contained"
+                        onClick={() => {
+                          handleSubmitFoApproval();
+                        }}
+                      >
+                        SUBMIT
+                      </Button>
+                    </Typography>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

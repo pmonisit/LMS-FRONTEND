@@ -8,8 +8,16 @@ import { Link } from "react-router-dom";
 import PrerequisiteForm2 from "../../components/admin/prerequisite/PrerequisiteForm2";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import Fab from "@mui/material/Fab";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import InputAdornment from "@mui/material/InputAdornment";
+
+// Component
+import AdminSidebar from "../../components/admin/dashboard/AdminSidebar";
 
 import FirstYearScheduleTable from "../../components/admin/degree/FirstYearScheduleTable";
+import { Box, Typography } from "@mui/material";
+import LinkMenu from "../../components/admin/dashboard/LinkMenu";
 const AdminListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
   const { adminList, onSetAdminList, onSetAccountList } = accountFormContext;
@@ -66,43 +74,85 @@ const AdminListPage = () => {
   };
   return (
     <>
-      <div style={{ marginTop: "80px" }}>
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item xs={12} md={6} sm={6}>
-            <TextField
-              label="Search"
-              variant="standard"
-              value={searchText}
-              onChange={handleSearchChange}
-            />
-            <Button onClick={handleSearch}>Search</Button>
-          </Grid>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            LinkComponent={Link}
-            to="/admin/add-user"
-            onClick={() => {
-              accountFormContext.onSetIsRole({
-                isStudent: false,
-                isProfessor: false,
-                isParent: false,
-                isAdmin: true,
-              });
-            }}
-          >
-            Add Administrator
-          </Button>
+      <Grid container mt={7}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          <Box display={{ xs: "none", md: "block" }}>
+            <AdminSidebar />
+          </Box>
+          <Box display={{ sm: "none" }}>
+            <LinkMenu />
+          </Box>
         </Grid>
+        <Grid
+          item
+          xs={11}
+          sm={10}
+          md={8}
+          lg={8}
+          xl={8}
+          margin={2}
+          marginBottom={10}
+        >
+          <Grid item xs={12} lg={12} marginBottom={5}>
+            <Typography
+              textAlign="center"
+              color="#b71c1c"
+              variant="h5"
+              marginTop={4}
+            >
+              ADMIN ACCOUNTS
+            </Typography>
+          </Grid>
 
-        {isSearchSuccessful ? (
-          <ListTable details={adminList} />
-        ) : (
-          <div>Search not found</div>
-        )}
+          <Grid container justifyContent="start" spacing={2}>
+            <Grid item xs={12} md={8} marginBottom={2}>
+              <TextField
+                label="Search"
+                variant="standard"
+                value={searchText}
+                onChange={handleSearchChange}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PersonSearchIcon
+                        onClick={handleSearch}
+                        cursor="pointer"
+                        mr={5}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
 
-        <FirstYearScheduleTable />
-      </div>
+          <Grid container justifyContent="end" spacing={2} marginBottom={2}>
+            <Fab
+              color="primary"
+              LinkComponent={Link}
+              to="/admin/add-user"
+              onClick={() => {
+                accountFormContext.onSetIsRole({
+                  isStudent: false,
+                  isProfessor: false,
+                  isParent: false,
+                  isAdmin: true,
+                });
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Grid>
+
+          {isSearchSuccessful ? (
+            <ListTable details={adminList} />
+          ) : (
+            <div>Search not found</div>
+          )}
+
+          <FirstYearScheduleTable />
+        </Grid>
+      </Grid>
     </>
   );
 };
