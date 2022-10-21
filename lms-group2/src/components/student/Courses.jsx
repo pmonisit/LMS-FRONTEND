@@ -17,8 +17,7 @@ import MuiAlert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 
 const Courses = () => {
-  const { onOpenSnackbar } = useContext(UserInterfaceContext);
-  const { isDarkMode, snackbarConfig, onCloseSnackbar } =
+  const { onOpenSnackbar, snackbarConfig, onCloseSnackbar } =
     useContext(UserInterfaceContext);
   const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
   const [order, setOrder] = useState("asc");
@@ -27,69 +26,126 @@ const Courses = () => {
   const [dense, setDense] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [lecturesBySem, setLecturesBySem] = useState([]);
-  const [lectureObject, setLectureObject] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
   const [prereqOfCourse, setPrereqOfCourse] = useState([]);
-  const [tempEnrolItems, setTempEnrolItems] = useState([]);
+  const [myTempSLoads, setMyTempSLoads] = useState([]);
   const [enrolledSL, setEnrolledSL] = useState([]);
   const [desiredSL, setDesiredSL] = useState([]);
   const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
-  const [text, setText] = useState({ opened: false });
 
   useEffect(() => {
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-      const semId = response.data.semesterId;
-      let lecturesBySem = [];
-      let prereqCourse = [];
-      lectureService.getAllLecturesBySemID(semId).then((response) => {
-        lecturesBySem.push(response.data);
-        lecturesBySem.map((data) => {
-          setLecturesBySem(data);
-          let arrobj = [];
-          data.map((a) => {
-            let obj = { ...a };
-            arrobj.push(obj);
-            setLectureObject(arrobj);
+    semesterService
+      .getCurrentSemester()
+      .then((response) => {
+        setCurrentSem(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
+      });
+    let lectures = [];
+    let prereqCourse = [];
+    lectureService
+      .getAllLecturesByCurrentSem()
+      .then((response) => {
+        setLecturesBySem(response.data);
+        lectures.push(response.data);
+        lectures.map((lecture) => {
+          lecture.map((a) => {
             let prereq = [];
-            prereqService.getPrereqOfCourse(a[1]).then((response) => {
-              prereq = [a[2], response.data, a[1], a[0]];
+            prereqService.getPrereqOfCourse(a[1]).then((res) => {
+              prereq = [a[0], a[1], a[2], res.data];
               prereqCourse.push(prereq);
               setPrereqOfCourse(prereqCourse);
             });
           });
         });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Lecture may have already been deleted.");
+        }
       });
-    });
 
-    studentLoadService.getMyDesiredStudentLoads().then((response) => {
-      setDesiredSL(response.data);
-    });
-    studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      setEnrolledSL(response.data);
-    });
-    studentLoadService.getMyTempLoad().then((response) => {
-      setTempEnrolItems(response.data);
-    });
-    courseAssignedService.getMyCourses().then((response) => {
-      setMyCoursesAssigned(response.data);
-    });
+    courseAssignedService
+      .getMyCourses()
+      .then((response) => {
+        setMyCoursesAssigned(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
+
+    studentLoadService
+      .getMyTempLoad()
+      .then((response) => {
+        setMyTempSLoads(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Lecture may have already been deleted.");
+        }
+      });
+
+    studentLoadService
+      .getMyEnrolledStudentLoads()
+      .then((response) => {
+        setEnrolledSL(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
+
+    studentLoadService
+      .getMyDesiredStudentLoads()
+      .then((response) => {
+        setDesiredSL(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
   }, []);
 
   const columns = [
-    { id: "2", label: "Course\u00a0Code", minWidth: 100 },
-    { id: "3", label: "Course\u00a0Name", minWidth: 100 },
-    { id: "5", label: "Restriction", minWidth: 100 },
-    { id: "18", label: "Units", minWidth: 100 },
-    { id: "12", label: "Schedule", minWidth: 100 },
-    { id: "11", label: "Section", minWidth: 100 },
-    { id: "10", label: "Instructor", minWidth: 100 },
-    { id: "16", label: "Slots", minWidth: 100 },
-    { id: "17", label: "Demand", minWidth: 100 },
+    { id: "2", label: "Course\u00a0Code" },
+    { id: "3", label: "Course\u00a0Name" },
+    { id: "5", label: "Restriction" },
+    { id: "18", label: "Units" },
+    { id: "12", label: "Schedule" },
+    { id: "11", label: "Section" },
+    { id: "10", label: "Instructor" },
+    { id: "16", label: "Slots" },
+    { id: "17", label: "Demand" },
   ];
 
-  const handleAddToSchedule = (lectureId) => {
+  const handleAddToSchedule = async (lectureId) => {
     let lecture = lecturesBySem.find((data) => data[0] === lectureId);
+    try {
+      await studentLoadService.addClassToSched(lectureId).then((response) => {
+        console.log("success");
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        alert("Course may have already been deleted.");
+      }
+    }
+    try {
+      await studentLoadService.getMyTempLoad().then((response) => {
+        setMyTempSLoads(response.data);
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        alert("Course may have already been deleted.");
+      }
+    }
+
     if (lecture && lecture[16] == 0) {
       onOpenSnackbar({
         open: true,
@@ -104,154 +160,98 @@ const Courses = () => {
         message: "Added successfully.",
       });
     }
-    studentLoadService.addClassToSched(lectureId);
   };
 
-  const handleRemoveToSchedule = (sloadId) => {
-    studentLoadService.deleteStudentLoad(sloadId);
-    onOpenSnackbar({
-      open: true,
-      severity: "success",
-      message: "Removed Successfully!",
-    });
-  };
-  const toggleText = (id) => {
-    const { opened } = text;
-    setText({
-      opened: {
-        ...opened,
-        [id]: !opened[id],
-      },
-    });
+  const handleRemoveToSchedule = async (sloadId) => {
+    try {
+      await studentLoadService.deleteStudentLoad(sloadId);
+      setMyTempSLoads(myTempSLoads.filter((sloads) => sloads[0] !== sloadId));
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Removed Successfully!",
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        alert("Course may have already been deleted.");
+      }
+    }
   };
 
-  const renderEnrolActions = (lectureId, courseCode) => {
-    const { opened } = text;
-
-    const tempEnrolItem = [];
-    const enrolled = [];
-    const desired = [];
-    const prereq = [];
-    const courseAssignedOrTaken = myCoursesAssigned.find(
-      (data) => data[1] === courseCode
+  const renderEnrolActions = (lectureId, courseId) => {
+    const courseAssigned = myCoursesAssigned.find(
+      (data) => data[0] === courseId
     );
-    tempEnrolItems.map((data) => {
-      tempEnrolItem.splice(
-        0,
-        1,
-        tempEnrolItems.find((tempEnrolItem) => tempEnrolItem[1] === lectureId)
-      );
-    });
-    desiredSL.map((data) => {
-      desired.splice(
-        0,
-        1,
-        desiredSL.find((data) => data[1] === lectureId)
-      );
-    });
-    enrolledSL.map((data) => {
-      enrolled.splice(
-        0,
-        1,
-        enrolledSL.find((data) => data[1] === lectureId)
-      );
-    });
-    prereqOfCourse.map((data) => {
-      prereq.splice(
-        0,
-        1,
-        prereqOfCourse.find(
-          (course) => course[0] === courseCode && course[1].length == 0
-        )
-      );
-    });
 
-    if (tempEnrolItem[0]) {
-      return opened[tempEnrolItem[0][1]] ? (
-        <Button
-          onClick={() => {
-            handleAddToSchedule(tempEnrolItem[0][1]);
-            toggleText(tempEnrolItem[0][1]);
-          }}
-          variant="contained"
-          color="primary"
-        >
-          ADD
-        </Button>
-      ) : (
-        <Button
-          onClick={() => {
-            handleRemoveToSchedule(tempEnrolItem[0][0]);
-            toggleText(tempEnrolItem[0][1]);
-          }}
-          variant="contained"
-          color="primary"
-        >
-          REMOVE
-        </Button>
-      );
-    } else if (enrolled[0]) {
-      return (
-        <Button disabled variant="contained" color="primary">
-          ENROLLED
-        </Button>
-      );
-    } else if (desired[0]) {
-      return (
-        <Button disabled variant="contained" color="primary">
-          DESIRED
-        </Button>
-      );
-    } else if (
-      typeof courseAssignedOrTaken !== "undefined" &&
-      courseAssignedOrTaken[5] === "TAKEN"
-    ) {
-      return (
-        <Button variant="contained" color="primary" disabled>
-          TAKEN
-        </Button>
-      );
-    } else if (typeof courseAssignedOrTaken == "undefined") {
-      return (
-        <>
+    const enrolled = enrolledSL.find((data) => data[1] === lectureId);
+
+    const desired = desiredSL.find((data) => data[1] === lectureId);
+
+    const prereq = prereqOfCourse.find(
+      (data) => data[1] === courseId && data[3].length > 0
+    );
+
+    const temp = myTempSLoads.find((data) => data[1] === lectureId);
+
+    if (courseAssigned) {
+      if (courseAssigned[5] === "TAKEN") {
+        return (
+          <Button variant="contained" color="primary" disabled>
+            TAKEN
+          </Button>
+        );
+      } else if (enrolled) {
+        return (
           <Button disabled variant="contained" color="primary">
+            ENROLLED
+          </Button>
+        );
+      } else if (desired) {
+        return (
+          <Button disabled variant="contained" color="primary">
+            DESIRED
+          </Button>
+        );
+      } else if (prereq) {
+        return (
+          <>
+            <Button disabled variant="contained" color="primary">
+              ADD
+            </Button>
+            <div>
+              <sub>
+                <font color="#d32f2f">
+                  <i>*with prerequisite</i>
+                </font>
+              </sub>
+            </div>
+          </>
+        );
+      } else if (temp) {
+        return (
+          <Button
+            onClick={() => {
+              handleRemoveToSchedule(temp[0]);
+            }}
+            variant="contained"
+            color="primary"
+          >
+            REMOVE
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            onClick={() => {
+              handleAddToSchedule(lectureId);
+            }}
+            variant="contained"
+            color="primary"
+          >
             ADD
           </Button>
-          <div>
-            <sub>
-              <font color="#d32f2f">
-                <i>*this course is restricted</i>
-              </font>
-            </sub>
-          </div>
-        </>
-      );
-    } else if (prereq[0]) {
-      let prereq1 = [...prereq[0]];
-
-      return opened[prereq1[2]] ? (
-        <Button
-          onClick={() => {
-            handleRemoveToSchedule(prereq1[3]);
-            toggleText(prereq1[2]);
-          }}
-          variant="contained"
-          color="primary"
-        >
-          REMOVE
-        </Button>
-      ) : (
-        <Button
-          onClick={() => {
-            handleAddToSchedule(prereq1[2]);
-            toggleText(prereq1[2]);
-          }}
-          variant="contained"
-          color="primary"
-        >
-          ADD
-        </Button>
-      );
+        );
+      }
     } else {
       return (
         <>
@@ -261,7 +261,7 @@ const Courses = () => {
           <div>
             <sub>
               <font color="#d32f2f">
-                <i>*with prerequisite</i>
+                <i>*this course is restricted</i>
               </font>
             </sub>
           </div>
@@ -310,7 +310,7 @@ const Courses = () => {
           {columns.map((headCell) => (
             <TableCell
               key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
+              align="center"
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
@@ -368,7 +368,7 @@ const Courses = () => {
   const filtered = lecturesBySem.filter((value) => {
     if (searchTerm === undefined) {
       return value;
-    } else if (searchTerm == "") {
+    } else if (searchTerm === "") {
       return value;
     } else if (value[3].toLowerCase().includes(searchTerm.toLowerCase())) {
       return value;
@@ -376,6 +376,7 @@ const Courses = () => {
       return value;
     }
   });
+
   return (
     <Box sx={{ width: "100%" }}>
       <Toolbar />
@@ -449,7 +450,7 @@ const Courses = () => {
                           <TableCell>{lecture[16]}</TableCell>
                           <TableCell>{lecture[17]}</TableCell>
                           <TableCell>
-                            {renderEnrolActions(lecture[0], lecture[2])}
+                            {renderEnrolActions(lecture[0], lecture[1])}
                           </TableCell>
                         </TableRow>
                       );
