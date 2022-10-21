@@ -594,6 +594,26 @@ const App = () => {
             }
           />
           <Route
+            path="/student/profile/edit/:id"
+            element={
+              accessToken && role === "student" ? (
+                <EditProfileInfo />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/student/profile/changePassword/:id"
+            element={
+              accessToken && role === "student" ? (
+                <ChangePassword />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
             path="/student/enrolment"
             element={
               accessToken && role === "student" ? (
@@ -669,6 +689,27 @@ const App = () => {
             element={
               accessToken && role === "parent" ? (
                 <ParentDashboardPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/parent/profile/edit/:id"
+            element={
+              accessToken && role === "parent" ? (
+                <EditProfileInfo />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/parent/profile/changePassword/:id"
+            element={
+              accessToken && role === "parent" ? (
+                <ChangePassword />
               ) : (
                 <Navigate to="/login" />
               )

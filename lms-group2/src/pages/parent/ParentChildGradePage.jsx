@@ -47,7 +47,7 @@ const ParentChildGrade = () => {
     { id: "section", label: "Section", minWidth: 100, align: "center" },
     { id: "instructor", label: "Instructor", minWidth: 100, align: "center" },
     { id: "units", label: "Units", minWidth: 100, align: "center" },
-    { id: "grade", label: "Grade", minWidth: 100, align: "right" },
+    { id: "grade", label: "Grade", minWidth: 100, align: "center" },
     { id: "remark", label: "Remarks", minWidth: 100, align: "center" },
   ];
 
@@ -55,21 +55,6 @@ const ParentChildGrade = () => {
     const sgrades = myChildGradesWithSem.filter((data) => data[1] === semId);
 
     return sgrades;
-    // sgrades.map((data) => {
-    //   return (
-    //     <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
-    //       <TableCell>{data[5]}</TableCell>
-    //       <TableCell>{data[6]}</TableCell>
-    //       <TableCell>{data[9]}</TableCell>
-    //       <TableCell>
-    //         {data[11]}, {data[10]}
-    //       </TableCell>
-    //       <TableCell>{data[12]}</TableCell>
-    //       <TableCell>{data[7]}</TableCell>
-    //       <TableCell>{data[8]}</TableCell>
-    //     </TableRow>
-    //   );
-    // });
   };
 
   const handleAverage = (semester) => {
@@ -151,7 +136,7 @@ const ParentChildGrade = () => {
                               {data[11]}, {data[10]}
                             </TableCell>
                             <TableCell align="center">{data[12]}</TableCell>
-                            <TableCell align="right">{data[7]}</TableCell>
+                            <TableCell align="center">{data[7]}</TableCell>
                             <TableCell align="center">{data[8]}</TableCell>
                           </TableRow>
                         );
@@ -164,16 +149,15 @@ const ParentChildGrade = () => {
                       </TableRow>
                     )}
                     <TableRow>
-                      <TableCell colSpan={3}></TableCell>
-                      <TableCell align="right">
-                        <b>Total:</b>
+                      <TableCell colSpan={4}></TableCell>
+
+                      <TableCell align="center">
+                        <b>Total:{handleAverage(semester)[0]}</b>
                       </TableCell>
                       <TableCell align="center">
-                        <b>{handleAverage(semester)[0]}</b>
+                        <b>Ave: {handleAverage(semester)[1]}</b>
                       </TableCell>
-                      <TableCell align="left" colSpan={2}>
-                        <b>Average: {handleAverage(semester)[1]}</b>
-                      </TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

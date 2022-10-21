@@ -1,4 +1,4 @@
-import Profile from "../../components/shared/Profile";
+import StudentProfile from "../../components/student/StudentProfile";
 import Box from "@mui/material/Box";
 import Sidebar from "../../components/shared/Sidebar";
 
@@ -7,7 +7,7 @@ const StudentProfilePage = () => {
     <Box sx={{ display: "flex" }}>
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Profile />
+        <StudentProfile />
       </Box>
     </Box>
   );
