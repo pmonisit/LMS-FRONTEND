@@ -11,6 +11,11 @@ import { AdminContext } from "../../context/admin/account/adminContext";
 import StudentFilterSelection from "../../components/admin/account/StudentFilterSelection";
 import TextField from "@mui/material/TextField";
 import * as accountService from "../../services/admin/AccountService";
+import AdminSidebar from "../../components/admin/dashboard/AdminSidebar";
+import LinkMenu from "../../components/admin/dashboard/LinkMenu";
+import { Box, Fab, Typography } from "@mui/material";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const StudentListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
@@ -96,51 +101,89 @@ const StudentListPage = () => {
 
   return (
     <>
-      <div style={{ marginTop: "80px" }}>
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item xs={12} md={6} sm={6}>
-            <StudentFilterSelection
-              list={degrees}
-              label="List of Degrees"
-              form={degreeId}
-              onSetForm={setDegreeId}
-              value={degreeId}
-            />
-          </Grid>
-          <Grid item xs={12} md={6} sm={6}>
-            <TextField
-              label="Search"
-              variant="standard"
-              value={searchText}
-              onChange={handleSearchChange}
-            />
-            <Button onClick={handleSearch}>Search</Button>
-          </Grid>
-          <Grid item xs={12} md={6} sm={6}>
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              LinkComponent={Link}
-              to="/admin/add-user"
-              onClick={() => {
-                accountFormContext.onSetIsRole({
-                  isStudent: true,
-                  isAdmin: false,
-                  isParent: false,
-                  isProfessor: false,
-                });
-              }}
-            >
-              Add Student
-            </Button>
-          </Grid>
+      <Grid container mt={7}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+          <Box display={{ xs: "none", md: "block" }}>
+            <AdminSidebar />
+          </Box>
+          <Box display={{ sm: "none" }}>
+            <LinkMenu />
+          </Box>
         </Grid>
-        {isSearchSuccessful ? (
-          <ListTable details={studentList} />
-        ) : (
-          <div>Search not found</div>
-        )}
-      </div>
+        <Grid
+          item
+          xs={11}
+          sm={10}
+          md={8}
+          lg={8}
+          xl={8}
+          margin={2}
+          marginBottom={10}
+        >
+          <Grid item xs={12} lg={12} marginBottom={5}>
+            <Typography
+              textAlign="center"
+              color="#b71c1c"
+              variant="h5"
+              marginTop={4}
+            >
+              STUDENT ACCOUNTS
+            </Typography>
+          </Grid>
+          <Grid container justifyContent="center" spacing={2}>
+            <Grid item xs={12} md={6} sm={6}>
+              <StudentFilterSelection
+                list={degrees}
+                label="List of Degrees"
+                form={degreeId}
+                onSetForm={setDegreeId}
+                value={degreeId}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} sm={6}>
+              <TextField
+                label="Search"
+                variant="standard"
+                value={searchText}
+                onChange={handleSearchChange}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PersonSearchIcon
+                        onClick={handleSearch}
+                        cursor="pointer"
+                        mr={5}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid container justifyContent="end" spacing={2} marginBottom={2}>
+              <Fab
+                color="primary"
+                LinkComponent={Link}
+                to="/admin/add-user"
+                onClick={() => {
+                  accountFormContext.onSetIsRole({
+                    isStudent: true,
+                    isAdmin: false,
+                    isParent: false,
+                    isProfessor: false,
+                  });
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </Grid>
+          </Grid>
+          {isSearchSuccessful ? (
+            <ListTable details={studentList} />
+          ) : (
+            <div>Search not found</div>
+          )}
+        </Grid>
+      </Grid>
     </>
   );
 };

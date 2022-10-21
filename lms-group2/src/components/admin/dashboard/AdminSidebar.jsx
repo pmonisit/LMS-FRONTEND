@@ -28,7 +28,7 @@ const AdminSidebar = () => {
       <Box sx={{ display: "flex" }}>
         <List>
           <ListItem>
-            <ListItemButton LinkComponent={Link} to="/student/dashboard">
+            <ListItemButton LinkComponent={Link} to="/admin/dashboard">
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
@@ -113,14 +113,6 @@ const AdminSidebar = () => {
                 <AccessTimeIcon />
               </ListItemIcon>
               <ListItemText primary={"Timeslot"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton LinkComponent={Link} to="/">
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Settings"} />
             </ListItemButton>
           </ListItem>
         </List>
