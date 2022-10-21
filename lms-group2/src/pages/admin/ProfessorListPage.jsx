@@ -130,9 +130,9 @@ const ProfessorListPage = () => {
               onClick={() => {
                 accountFormContext.onSetIsRole({
                   isStudent: false,
-                  isProfessor: false,
+                  isProfessor: true,
                   isParent: false,
-                  isAdmin: true,
+                  isAdmin: false,
                 });
               }}
             >

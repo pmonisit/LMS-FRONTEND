@@ -128,8 +128,8 @@ const ParentListPage = () => {
                 accountFormContext.onSetIsRole({
                   isStudent: false,
                   isProfessor: false,
-                  isParent: false,
-                  isAdmin: true,
+                  isParent: true,
+                  isAdmin: false,
                 });
               }}
             >
