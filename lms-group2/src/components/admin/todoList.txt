@@ -52,13 +52,13 @@ Semi-Urgent
 
 
 Items Left
-Filter By Degree for students
-Semester and Timeslot Mapping
-Search Functions In Lecture
+Filter By Degree for students - done
+course-list mapping
+Search Functions In Lecture - done
 pagination in lecture
-Joi
+Joi-validation
 error  handling
-
+UI
 
 
 Schedule Page

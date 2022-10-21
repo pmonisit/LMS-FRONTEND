@@ -10,6 +10,7 @@ import * as degreeService from "../../services/admin/DegreeService";
 import { AdminContext } from "../../context/admin/account/adminContext";
 import StudentFilterSelection from "../../components/admin/account/StudentFilterSelection";
 import TextField from "@mui/material/TextField";
+import * as accountService from "../../services/admin/AccountService";
 
 const StudentListPage = () => {
   const accountFormContext = useContext(AccountFormContext);
@@ -20,6 +21,7 @@ const StudentListPage = () => {
   const [searchText, setSearchText] = useState("");
   const [tempStudentList, setTempStudentList] = useState([]);
   const [isSearchSuccessful, setIsSearchSuccessful] = useState(true);
+  const [degrees, setDegrees] = useState([]);
   useEffect(() => {
     getStudents().then((res) => {
       onSetStudentList(res.data);
@@ -33,26 +35,35 @@ const StudentListPage = () => {
     getStudents().then((res) => setTempStudentList(res.data));
   }, [accountFormContext.studentList]);
 
-  // -----For filter by degree
-  // useEffect(() => {
-  //   degreeService.getDegree().then((res) => {
-  //     adminContext.onSetDegreeList(res.data);
-  //     adminContext.degreeList.map((degree) => {
-  //       if (degree.id === degreeId) {
-  //         adminContext.studentList.filter((student) => {
-  //           if (student.degreeId === degreeId) {
-  //             return onSetStudentList(...studentList, student);
-  //           }
-  //         });
-  //       }
-  //     });
-  //   });
-  // }, []);
+  useEffect(() => {
+    const fetchDegree = async () => {
+      const res = await degreeService.getDegree();
+      console.log(res.data);
+      setDegrees(res.data);
+    };
+    fetchDegree();
+  }, []);
+
+  useEffect(() => {
+    const fetchStudent = async (degreeId) => {
+      const res = await accountService.getStudents();
+      if (degreeId === "all") {
+        onSetStudentList(res.data);
+      } else {
+        const students = res.data;
+        const studentByDegree = students.filter((student) => {
+          if (student.degreeId == degreeId) {
+            return student;
+          }
+        });
+        onSetStudentList(studentByDegree);
+      }
+    };
+    fetchStudent(degreeId);
+  }, [degreeId]);
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
   const handleSearch = () => {
     if (searchText) {
@@ -82,13 +93,14 @@ const StudentListPage = () => {
       });
     }
   };
+
   return (
     <>
       <div style={{ marginTop: "80px" }}>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={12} md={6} sm={6}>
             <StudentFilterSelection
-              list={adminContext.degreeList}
+              list={degrees}
               label="List of Degrees"
               form={degreeId}
               onSetForm={setDegreeId}

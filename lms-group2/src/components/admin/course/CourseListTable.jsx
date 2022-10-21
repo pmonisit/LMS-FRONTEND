@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -17,9 +17,11 @@ import TablePagination from "@mui/material/TablePagination";
 
 const CourseListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
+
   const handleEdit = (detail) => {
     console.log(detail);
   };
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 

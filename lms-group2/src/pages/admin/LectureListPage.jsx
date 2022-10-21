@@ -14,33 +14,36 @@ const LectureListPage = () => {
   const adminContext = useContext(AdminContext);
   const [searchText, setSearchText] = useState("");
   const [tempList, setTempList] = useState([]);
+  const [tempListObject, setTempListObject] = useState([]);
   const [isSearchSuccessful, setIsSearchSuccessful] = useState(true);
+  const [isLecture, setIsLecture] = useState(false);
 
-  //returns array
-  // useEffect(() => {
-  //   lectureService.getLecture().then((res) => {
-  //     // console.log(res.data);
-  //     adminContext.onSetLectureList(res.data);
-  //   });
-  // }, []);
-
-  //returns object
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await lectureService.getAllBasicLectures();
-  //     console.log(response.data);
-  //     adminContext.onSetLectureList(response.data);
-  //     console.log(adminContext.lectureList);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  useEffect(() => {
-    lectureService.getAllBasicLectures().then((res) => {
-      console.log(res.data);
+  const fetchBasicLecture = async () => {
+    const res = await lectureService.getAllBasicLectures().then((res) => {
       adminContext.onSetLectureList(res.data);
     });
+  };
+  const fetchTempListObject = async () => {
+    const res = await lectureService.getAllBasicLectures().then((res) => {
+      setTempListObject(res.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchBasicLecture();
+    // lectureService.getAllBasicLectures().then((res) => {
+    //   adminContext.onSetLectureList(res.data);
+    // });
+  }, []);
+  const fetchLecture = async () => {
+    const res = await lectureService.getLecture();
+    console.log(res.data);
+    setTempList(res.data);
+  };
+
+  useEffect(() => {
+    fetchLecture();
+    fetchTempListObject();
   }, []);
 
   const handleSearchChange = (event) => {
@@ -51,13 +54,30 @@ const LectureListPage = () => {
 
   const handleSearch = () => {
     if (searchText) {
-      lectureService
-        .searchLecture(searchText)
-        .then((res) => adminContext.onSetLectureList(res.data));
+      const searchResult = tempList.filter((data) => {
+        if (
+          data[3].includes(searchText) ||
+          data[3].includes(searchText) ||
+          data[4].includes(searchText) ||
+          data[5].includes(searchText)
+        ) {
+          return data[0];
+        }
+      });
+      console.log(searchResult[0]);
+      console.log(adminContext.lectureList);
+      let searchResult2 = [];
+      tempListObject.map((lecture) => {
+        searchResult.map((result) => {
+          if (lecture.lectureId == result[0]) {
+            searchResult2.push(lecture);
+          }
+        });
+      });
+      console.log(searchResult2);
+      adminContext.onSetLectureList(searchResult2);
     } else {
-      lectureService
-        .getLecture()
-        .then((res) => adminContext.onSetLectureList(res.data));
+      fetchBasicLecture();
     }
   };
   return (

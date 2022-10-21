@@ -107,3 +107,7 @@ export function addStudents(studentAccount) {
 export function getCurrentChildInfo() {
   return http.get("/account/currentuser/childinfo");
 }
+
+export function getStudentsByDegree(degreeId) {
+  return http.get(`/account/student/${degreeId}`);
+}
