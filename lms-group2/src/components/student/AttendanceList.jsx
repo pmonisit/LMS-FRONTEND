@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { Box, Paper, TableContainer, Table } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
 import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
@@ -9,6 +10,8 @@ import * as semesterService from "../../services/admin/Semester";
 import { EnrolContext } from "../../context/student/EnrolContext";
 import Sidebar from "../shared/Sidebar";
 import * as attendanceService from "../../services/professor/AttendanceService";
+import { Tooltip, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const AttendanceList = () => {
   const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
@@ -149,10 +152,16 @@ const AttendanceList = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
-
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ width: "100%" }}>
           <Toolbar />
+          <Tooltip title="Back to dashboard">
+            <Link to={`/student/attendance`}>
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           <h2 align="center">
             Attendance List for {currentSem.semOrder} AY{" "}
             {currentSem.startingYear} -{currentSem.endingYear}

@@ -156,7 +156,7 @@ const ParentChildAttendanceList = () => {
         <Box sx={{ width: "100%" }}>
           <Toolbar />
           <Tooltip title="Back to dashboard">
-            <Link to={`/parent/dashboard`}>
+            <Link to={`/parent/attendance`}>
               <IconButton>
                 <ArrowBackIcon />
               </IconButton>

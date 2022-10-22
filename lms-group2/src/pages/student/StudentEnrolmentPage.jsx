@@ -1,14 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { Grid, Toolbar, Paper, Table, TableBody } from "@mui/material";
 import { TableContainer, TableHead, TableCell, TableRow } from "@mui/material";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
+import { useReactToPrint } from "react-to-print";
+import { EnrolContext } from "../../context/student/EnrolContext";
 import Sidebar from "../../components/shared/Sidebar";
-import * as lectureService from "../../services/professor/LectureService";
 import * as studentLoadService from "../../services/admin/StudentLoadService";
 import * as semesterService from "../../services/admin/Semester";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
-import * as prereqService from "../../services/admin/Prerequisite";
-import { EnrolContext } from "../../context/student/EnrolContext";
 
 const StudentEnrolmentPage = () => {
   const { handleSearchForClass } = useContext(EnrolContext);
@@ -18,48 +17,56 @@ const StudentEnrolmentPage = () => {
   const [myDesiredSLoads, setMyDesiredSLoads] = useState([]);
   const [myEnrolledSLoads, setMyEnrolledSLoads] = useState([]);
   const [currentSem, setCurrentSem] = useState([]);
-  const [myCoursesAssigned, setMyCoursesAssigned] = useState([]);
-  const [enrolItems, setEnrolItems] = useState([]);
-  const [prereqOfCourse, setPrereqOfCourse] = useState([]);
-  const [enrolText, setEnrolText] = useState("ENROL");
-  const [unenrolText, setUnEnrolText] = useState("UNENROL");
 
   useEffect(() => {
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-      const semId = response.data.semesterId;
-      let lecturesBySem = [];
-      let prereqCourse = [];
-      lectureService.getAllLecturesBySemID(semId).then((response) => {
-        lecturesBySem.push(response.data);
-        lecturesBySem.map((data) => {
-          data.map((a) => {
-            let prereq = [];
-            prereqService.getPrereqOfCourse(a[1]).then((response) => {
-              prereq = [a[2], response.data];
-              prereqCourse.push(prereq);
-              setPrereqOfCourse(prereqCourse);
-            });
-          });
-        });
+    semesterService
+      .getCurrentSemester()
+      .then((response) => {
+        setCurrentSem(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
       });
-    });
-    studentLoadService.getMyEnrolledStudentLoads().then((response) => {
-      setMyEnrolledSLoads(response.data);
-    });
-    studentLoadService.getMyDesiredStudentLoads().then((response) => {
-      setMyDesiredSLoads(response.data);
-    });
-    courseAssignedService.getMyCourses().then((response) => {
-      setMyCoursesAssigned(response.data);
-    });
-    studentLoadService.getAllMyStudentLoads().then((response) => {
-      setEnrolItems(response.data);
-    });
-    courseAssignedService.getMyRecommendedCourses().then((response) => {
-      setMyRecommendedCoursesAssigned(response.data);
-    });
+    studentLoadService
+      .getMyEnrolledStudentLoads()
+      .then((response) => {
+        setMyEnrolledSLoads(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
+    studentLoadService
+      .getMyDesiredStudentLoads()
+      .then((response) => {
+        setMyDesiredSLoads(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
+
+    courseAssignedService
+      .getMyRecommendedCourses()
+      .then((response) => {
+        setMyRecommendedCoursesAssigned(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
   }, []);
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Enrolment",
+  });
 
   const coursesAssignedColumns = [
     { id: "courseCode", label: "Course\u00a0Code", minWidth: 100 },
@@ -77,104 +84,6 @@ const StudentEnrolmentPage = () => {
     { id: "slots", label: "Slots", minWidth: 100 },
     { id: "demand", label: "Demand", minWidth: 100 },
   ];
-
-  const handleEnrol = (lectureId) => {
-    studentLoadService.addStudentLoad(lectureId);
-    setEnrolText("ENROL");
-  };
-
-  const handleUnEnrol = (sloadId) => {
-    studentLoadService.deleteStudentLoad(sloadId);
-    setUnEnrolText("UNENROL");
-  };
-
-  const renderEnrolActions = (lectureId, courseCode, isFinal) => {
-    const enrolItem = [];
-    const courseAssignedOrTaken = myCoursesAssigned.find(
-      (data) => data[0] === courseCode
-    );
-    enrolItems.map((data) => {
-      enrolItem.splice(
-        0,
-        1,
-        enrolItems.find((enrolItem) => enrolItem[1] === lectureId)
-      );
-    });
-
-    if (isFinal) {
-      return;
-    } else {
-      if (enrolItem[0]) {
-        return (
-          <Button
-            onClick={() => {
-              handleUnEnrol(enrolItem[0][0]);
-              handleEnrol(enrolItem[0][1]);
-            }}
-            variant="contained"
-            color="primary"
-          >
-            ADD
-          </Button>
-        );
-      } else if (
-        typeof courseAssignedOrTaken !== "undefined" &&
-        courseAssignedOrTaken[3] === "TAKEN"
-      ) {
-        return (
-          <Button variant="contained" color="primary" disabled>
-            TAKEN
-          </Button>
-        );
-      } else if (typeof courseAssignedOrTaken == "undefined") {
-        return (
-          <>
-            <Button disabled variant="contained" color="primary">
-              {enrolText}
-            </Button>
-            <div>
-              <sub>
-                <font color="#d32f2f">
-                  <i>*this course is restricted</i>
-                </font>
-              </sub>
-            </div>
-          </>
-        );
-      } else if (
-        prereqOfCourse.find(
-          (course) => course[0] === courseCode && course[1].length == 0
-        )
-      ) {
-        return (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              handleEnrol(lectureId);
-            }}
-          >
-            {enrolText}
-          </Button>
-        );
-      } else {
-        return (
-          <>
-            <Button disabled variant="contained" color="primary">
-              {enrolText}
-            </Button>
-            <div>
-              <sub>
-                <font color="#d32f2f">
-                  <i>*with prerequisite</i>
-                </font>
-              </sub>
-            </div>
-          </>
-        );
-      }
-    }
-  };
 
   const handleRemarks = (courseCode) => {
     const sl = [];
@@ -218,7 +127,7 @@ const StudentEnrolmentPage = () => {
     }
   };
 
-  const handleEnrolLectures = (lecture, isFinal) => {
+  const handleEnrolLectures = (lecture) => {
     return (
       <TableRow hover role="checkbox" tabIndex={-1} key={lecture[1]}>
         <TableCell>{lecture[2]}</TableCell>
@@ -234,19 +143,40 @@ const StudentEnrolmentPage = () => {
         </TableCell>
         <TableCell>{lecture[14]}</TableCell>
         <TableCell>{lecture[15]}</TableCell>
-        <TableCell>
-          {renderEnrolActions(lecture[1], lecture[2], isFinal)}
-        </TableCell>
       </TableRow>
     );
+  };
+
+  const handleSumOfUnits = (load) => {
+    let sum = 0;
+    if (load.length > 0) {
+      load.map((data) => {
+        sum = sum + data[16];
+      });
+    }
+
+    return sum;
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Grid>
+        <Grid ref={componentRef}>
           <Toolbar />
+          <Grid sx={{ flexGrow: 1 }}>
+            <Typography align="right">
+              <Button
+                onClick={() => {
+                  handlePrint();
+                }}
+                variant="contained"
+                color="primary"
+              >
+                PRINT
+              </Button>
+            </Typography>
+          </Grid>
           <h3 align="center">
             Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
             {currentSem.endingYear}
@@ -259,7 +189,7 @@ const StudentEnrolmentPage = () => {
                 size="small"
                 aria-label="a dense table"
               >
-                <TableHead>
+                <TableHead sx={{ backgroundColor: "#ff7961" }}>
                   <TableRow>
                     {coursesAssignedColumns.map((column) => (
                       <TableCell
@@ -301,7 +231,9 @@ const StudentEnrolmentPage = () => {
             </TableContainer>
           </Paper>
           <br />
-          <h4> My Enrolled Courses</h4>
+          <h4>
+            My Enrolled Courses {handleSumOfUnits(myEnrolledSLoads)} units
+          </h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table
@@ -309,7 +241,7 @@ const StudentEnrolmentPage = () => {
                 size="small"
                 aria-label="a dense table"
               >
-                <TableHead>
+                <TableHead sx={{ backgroundColor: "#ff7961" }}>
                   <TableRow>
                     {enrolColumns.map((column) => (
                       <TableCell
@@ -325,8 +257,7 @@ const StudentEnrolmentPage = () => {
                 <TableBody>
                   {myEnrolledSLoads.length > 0 ? (
                     myEnrolledSLoads.map((lecture) => {
-                      let isFinal = true;
-                      return handleEnrolLectures(lecture, isFinal);
+                      return handleEnrolLectures(lecture);
                     })
                   ) : (
                     <TableRow>
@@ -340,7 +271,7 @@ const StudentEnrolmentPage = () => {
             </TableContainer>
           </Paper>
           <br />
-          <h4> My Desired Courses</h4>
+          <h4> My Desired Courses {handleSumOfUnits(myDesiredSLoads)} units</h4>
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table
@@ -348,7 +279,7 @@ const StudentEnrolmentPage = () => {
                 size="small"
                 aria-label="a dense table"
               >
-                <TableHead>
+                <TableHead sx={{ backgroundColor: "#ff7961" }}>
                   <TableRow>
                     {enrolColumns.map((column) => (
                       <TableCell
@@ -364,8 +295,7 @@ const StudentEnrolmentPage = () => {
                 <TableBody>
                   {myDesiredSLoads.length > 0 ? (
                     myDesiredSLoads.map((lecture) => {
-                      let isFinal = true;
-                      return handleEnrolLectures(lecture, isFinal);
+                      return handleEnrolLectures(lecture);
                     })
                   ) : (
                     <TableRow>

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import { Grid, Paper, Toolbar, TableRow, Box } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { Grid, Paper, Toolbar, TableRow, Box, Typography } from "@mui/material";
 import { TableHead, TableContainer, TableCell } from "@mui/material";
-import { TableBody, Table } from "@mui/material";
+import { TableBody, Table, Button } from "@mui/material";
+import { useReactToPrint } from "react-to-print";
 import Sidebar from "../../components/shared/Sidebar";
 import * as accountService from "../../services/admin/AccountService";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
@@ -12,16 +13,37 @@ const StudentCurriculumPage = () => {
   const [degree, setDegree] = useState([]);
 
   useEffect(() => {
-    accountService.getCurrent().then((response) => {
-      let degreeId = response.data[0][10];
-      degreeService.getDegreeById(degreeId).then((degree) => {
-        setDegree(degree.data);
+    accountService
+      .getCurrent()
+      .then((response) => {
+        let degreeId = response.data[0][10];
+        degreeService.getDegreeById(degreeId).then((degree) => {
+          setDegree(degree.data);
+        });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Account may have already been deleted.");
+        }
       });
-    });
-    courseAssignedService.getMyCourses().then((response) => {
-      setMyCoursesAssigned(response.data);
-    });
+
+    courseAssignedService
+      .getMyCourses()
+      .then((response) => {
+        setMyCoursesAssigned(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
   }, []);
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Curriculum",
+  });
 
   const handleCurriculum = () => {
     const curriculum = myCoursesAssigned;
@@ -41,7 +63,9 @@ const StudentCurriculumPage = () => {
     curriculumSem.map((data) => {
       data.map((a) => {
         curriculumSemWithoutEmpty.push(a);
+        return;
       });
+      return;
     });
     return curriculumSemWithoutEmpty;
   };
@@ -52,19 +76,21 @@ const StudentCurriculumPage = () => {
       .filter((course) => course[9] === year && course[10] === sem)
       .map((course) => {
         sum = sum + course[3];
+        return;
       });
     return sum;
   };
 
   const handlePassedUnits = () => {
     let sum = 0;
-    {
-      myCoursesAssigned.map((data) => {
-        if (data[5] === "TAKEN") {
-          sum += data[3];
-        }
-      });
-    }
+
+    myCoursesAssigned.map((data) => {
+      if (data[5] === "TAKEN") {
+        sum += data[3];
+      }
+      return;
+    });
+
     return sum;
   };
 
@@ -98,6 +124,19 @@ const StudentCurriculumPage = () => {
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+        <Grid sx={{ flexGrow: 1 }}>
+          <Typography align="right">
+            <Button
+              onClick={() => {
+                handlePrint();
+              }}
+              variant="contained"
+              color="primary"
+            >
+              PRINT
+            </Button>
+          </Typography>
+        </Grid>
         <Grid container>
           <Grid>
             <br />
@@ -112,7 +151,7 @@ const StudentCurriculumPage = () => {
               <TableContainer>
                 <Table size="small" aria-label="a dense table">
                   <TableBody align="center">
-                    <TableRow>
+                    <TableRow sx={{ backgroundColor: "#ff7961" }}>
                       <TableCell align="center" colSpan={2}>
                         <b>Summary</b>
                       </TableCell>
@@ -138,7 +177,7 @@ const StudentCurriculumPage = () => {
               </TableContainer>
             </Paper>
           </Grid>
-          <Grid sx={{ flexGrow: 1 }}>
+          <Grid sx={{ flexGrow: 1 }} ref={componentRef}>
             <div align="center">
               <h2>{degree.degreeName}</h2>
             </div>
@@ -154,7 +193,6 @@ const StudentCurriculumPage = () => {
                         <Grid item>
                           <Paper
                             sx={{
-                              // height: 280,
                               width: 700,
                               backgroundColor: (theme) =>
                                 theme.palette.mode === "dark"
@@ -171,7 +209,7 @@ const StudentCurriculumPage = () => {
                                       SEMESTER
                                     </TableCell>
                                   </TableRow>
-                                  <TableRow>
+                                  <TableRow sx={{ backgroundColor: "#ff7961" }}>
                                     <TableCell align="center" width="25%">
                                       Course Code
                                     </TableCell>
@@ -228,7 +266,6 @@ const StudentCurriculumPage = () => {
               );
             })}
           </Grid>
-          <Toolbar />
         </Grid>
       </Box>
     </Box>

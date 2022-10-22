@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Grid,
   Paper,
@@ -7,9 +7,10 @@ import {
   Table,
   Typography,
 } from "@mui/material";
-import { TableBody, TableCell, TableRow, Toolbar } from "@mui/material";
+import { TableBody, TableCell, TableRow, Toolbar, Button } from "@mui/material";
 import * as semesterService from "../../services/admin/Semester";
 import * as gradeService from "../../services/professor/GradeService";
+import { useReactToPrint } from "react-to-print";
 
 const StudentGrade = () => {
   const [mySemestersWithGrades, setMySemestersWithGrades] = useState([]);
@@ -28,11 +29,20 @@ const StudentGrade = () => {
             merge = [id++, ...resp, ...a];
             myGradesWithSem.push(merge);
             setMyGradesWithSem(myGradesWithSem);
+            return;
           });
+          return;
         });
+        return;
       });
     });
   }, []);
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Grades",
+  });
 
   const gradeColumns = [
     {
@@ -61,7 +71,6 @@ const StudentGrade = () => {
   };
 
   const handleAverage = (semester) => {
-    let average = 0;
     let units = 0;
     let sumGradesXUnits = 0;
     let result = [];
@@ -75,6 +84,7 @@ const StudentGrade = () => {
       .map((data) => {
         units = units + data[12];
         sumGradesXUnits = sumGradesXUnits + data[7] * data[12];
+        return;
       });
 
     result.push(units);
@@ -89,10 +99,23 @@ const StudentGrade = () => {
   return (
     <Grid>
       <Toolbar />
+      <Grid sx={{ flexGrow: 1 }}>
+        <Typography align="right">
+          <Button
+            onClick={() => {
+              handlePrint();
+            }}
+            variant="contained"
+            color="primary"
+          >
+            PRINT
+          </Button>
+        </Typography>
+      </Grid>
 
       {mySemestersWithGrades.length > 0 ? (
         mySemestersWithGrades.map((semester) => (
-          <Grid key={semester[0]}>
+          <Grid key={semester[0]} ref={componentRef}>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <h3 align="center">
                 {semester[3]} AY {semester[1]} - {semester[2]}
@@ -103,7 +126,7 @@ const StudentGrade = () => {
                   size="small"
                   aria-label="a dense table"
                 >
-                  <TableHead>
+                  <TableHead sx={{ backgroundColor: "#ff7961" }}>
                     <TableRow>
                       {gradeColumns.map((column) => (
                         <TableCell

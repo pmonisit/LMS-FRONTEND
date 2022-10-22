@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Grid, Toolbar, Typography } from "@mui/material";
 import { Paper, Table, TableBody, TableCell } from "@mui/material";
 import { TableContainer, TableHead, TableRow, Box } from "@mui/material";
@@ -10,8 +11,10 @@ import Snackbar from "@mui/material/Snackbar";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 import MuiAlert from "@mui/material/Alert";
 import Swal from "sweetalert2";
+import { useReactToPrint } from "react-to-print";
 
 const StudentSchedulePage = () => {
+  const navigate = useNavigate();
   const { onOpenSnackbar, snackbarConfig, onCloseSnackbar } =
     useContext(UserInterfaceContext);
   const [currentSem, setCurrentSem] = useState([]);
@@ -54,6 +57,12 @@ const StudentSchedulePage = () => {
       });
   }, []);
 
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Schedule",
+  });
+
   const scheduleColumns = [
     { id: "M", label: "Monday", minWidth: 100, align: "center" },
     { id: "T", label: "Tuesday", minWidth: 100, align: "center" },
@@ -86,7 +95,6 @@ const StudentSchedulePage = () => {
       let bminute = b[6].split(":").map(Number);
       return aminute[0] * 60 + aminute[1] - (bminute[0] * 60 + bminute[1]);
     });
-    console.log(sortedSchedule);
 
     const conflict = (sloadId, startTime, endTime, startDate, endDate) => {
       let result = false;
@@ -108,7 +116,7 @@ const StudentSchedulePage = () => {
             startDate === data[5] ||
             (endDate !== null && (endDate === data[4] || endDate === data[5]))
           ) {
-            if (newStartMinute == startMinute && newEndMinute == endMinute) {
+            if (newStartMinute === startMinute && newEndMinute === endMinute) {
               result = true;
               isConflict = true;
             }
@@ -129,6 +137,7 @@ const StudentSchedulePage = () => {
               isConflict = true;
             }
           }
+          return;
         });
       return result;
     };
@@ -229,8 +238,45 @@ const StudentSchedulePage = () => {
               {snackbarConfig.message}
             </MuiAlert>
           </Snackbar>
+          <Grid sx={{ flexGrow: 1 }}>
+            <Typography align="right">
+              {myEnrolledSLoads.length > 0 ? (
+                <Button
+                  onClick={() => {
+                    navigate("/student/enrolment");
+                  }}
+                  variant="outlined"
+                  color="primary"
+                  align="right"
+                >
+                  CHECK ENROLMENT SUMMARY
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    navigate("/student/courses");
+                  }}
+                  variant="outlined"
+                  color="primary"
+                  align="right"
+                >
+                  ADD MORE COURSES
+                </Button>
+              )}
+              {"  "}
+              <Button
+                onClick={() => {
+                  handlePrint();
+                }}
+                variant="contained"
+                color="primary"
+              >
+                PRINT
+              </Button>
+            </Typography>
+          </Grid>
           {myEnrolledSLoads.length <= 0 ? (
-            <Grid>
+            <Grid ref={componentRef}>
               <h3 align="center">
                 Desired Schedule for {currentSem.semOrder} AY{" "}
                 {currentSem.startingYear} -{currentSem.endingYear}
@@ -246,7 +292,10 @@ const StudentSchedulePage = () => {
                             size="small"
                             aria-label="a dense table"
                           >
-                            <TableHead align="center">
+                            <TableHead
+                              align="center"
+                              sx={{ backgroundColor: "#ff7961" }}
+                            >
                               <TableRow>
                                 <TableCell>Time</TableCell>
                                 {scheduleColumns.map((column) => {
@@ -324,7 +373,10 @@ const StudentSchedulePage = () => {
                             size="small"
                             aria-label="a dense table"
                           >
-                            <TableHead align="center">
+                            <TableHead
+                              align="center"
+                              sx={{ backgroundColor: "#ff7961" }}
+                            >
                               <TableRow>
                                 <TableCell>Time</TableCell>
                                 {scheduleColumns.map((column) => (
