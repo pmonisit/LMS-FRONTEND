@@ -74,13 +74,21 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
   };
 
   const handleAddLecture = async (lecture) => {
-    const response = await professorService.addLecture(lecture);
-    adminContext.onSetLectureList(response.data);
-    onOpenSnackbar({
-      open: true,
-      severity: "success",
-      message: "Successfully added a Lecture",
-    });
+    try {
+      const response = await professorService.addLecture(lecture);
+      adminContext.onSetLectureList(response.data);
+      onOpenSnackbar({
+        open: true,
+        severity: "success",
+        message: "Successfully added a Lecture",
+      });
+    } catch (error) {
+      onOpenSnackbar({
+        open: true,
+        severity: "error",
+        message: "Please fill up all the fields",
+      });
+    }
   };
 
   return (
@@ -95,19 +103,31 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
 
           if (adminContext.isEditLecture) {
             console.log("edit");
-            lectureService.editLecture(lectureId, lectureForm).then((res) => {
-              console.log(res);
-              onOpenSnackbar({
-                open: true,
-                severity: "success",
-                message: "Successfully edited a Lecture",
+            lectureService
+              .editLecture(lectureId, lectureForm)
+              .then((res) => {
+                console.log(res);
+                onOpenSnackbar({
+                  open: true,
+                  severity: "success",
+                  message: "Successfully edited a Lecture",
+                });
+                adminContext.onSetIsEditLecture(false);
+                navigate("/admin/lecture-list");
+              })
+              .catch((error) => {
+                if (error.response.status == 400) {
+                  onOpenSnackbar({
+                    open: true,
+                    severity: "error",
+                    message: "Please fill up all the fields",
+                  });
+                }
               });
-              adminContext.onSetIsEditLecture(false);
-              navigate("/admin/lecture-list");
-            });
           } else {
             console.log("Add");
             handleAddLecture(lectureForm);
+            adminContext.onSetIsEditLecture(false);
 
             setLectureStep(0);
             setLectureForm({
@@ -122,35 +142,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
               capacity: "",
             });
           }
-
-          // if (adminContext.isEditLecture) {
-          //   console.log("edit");
-          //   lectureService.editLecture(lectureId, lectureForm).then((res) => {
-          //     console.log(res);
-          //     onOpenSnackbar({
-          //       open: true,
-          //       severity: "success",
-          //       message: "Successfully edited a Lecture",
-          //     });
-          //     // navigate("/admin/lecture-list");
-          //   });
-          //   adminContext.onSetIsEdit(false);
-          // } else {
-          //   console.log("add");
-          //   // handleAddLecture(lectureForm);
-          //   // navigate("/admin/lecture-list");
-          //   professorService.addLecture(lectureForm).then((res) => {
-          //     console.log(res.data);
-          //     adminContext.onSetLectureList(res.data);
-          //     console.log(adminContext.lectureList);
-          //     // navigate("/admin/lecture-list");
-          //   });
-          //   onOpenSnackbar({
-          //     open: true,
-          //     severity: "success",
-          //     message: "Successfully added a Lecture",
-          //   });
-          // }
         }}
         sx={{ marginTop: "15vh", display: "flex", flexDirection: "column" }}
       >

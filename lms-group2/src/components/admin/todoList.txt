@@ -64,6 +64,12 @@ UI
 -register ng prof and parents sa student pumapasok  -done
 
 
+ // middleName: Joi.string().min(2).required(),
+    // middleName: Joi.string().min(2).required(),
+    // gender: Joi.string().min(1).required(),
+    // birthdate: Joi.required(),
+    // username: Joi.string().min(5).required(),
+
 
 
 

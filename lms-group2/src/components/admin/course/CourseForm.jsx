@@ -13,10 +13,11 @@ import DegreeSelection from "../account/DegreeSelection";
 import * as degreeService from "../../../services/admin/DegreeService";
 import * as timeslotService from "../../../services/admin/TimeslotService";
 import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
-
+import Joi from "joi";
 import TimeslotSelection from "./TimeslotSelection";
 
 const CourseForm = ({ initialValue, courseId }) => {
+  const [errors, setErrors] = useState({});
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const navigate = useNavigate();
   const [degrees, setDegrees] = useState([]);
@@ -40,6 +41,7 @@ const CourseForm = ({ initialValue, courseId }) => {
         }
   );
 
+  console.log(courseForm);
   const { courseCode, courseName, units, degreeId, timeslotId } = courseForm;
 
   const handleChange = (event) => {
@@ -47,6 +49,33 @@ const CourseForm = ({ initialValue, courseId }) => {
       ...courseForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
+
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+  };
+
+  const schema = Joi.object({
+    courseCode: Joi.string().min(3).required(),
+    courseName: Joi.string().min(5).required(),
+    units: Joi.number().required(),
+    degreeId: Joi.optional(),
+    timeslotId: Joi.optional(),
+  });
+
+  const isCourseFormInvalid = () => {
+    const result = schema.validate(courseForm);
+    return !!result.error;
   };
   return (
     <Grid
@@ -58,26 +87,50 @@ const CourseForm = ({ initialValue, courseId }) => {
         event.preventDefault();
         console.log(courseForm);
         if (adminContext.isEditCourse) {
-          adminService.editCourse(courseId, courseForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully edited a Course",
+          adminService
+            .editCourse(courseId, courseForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a Course",
+              });
+              adminContext.onSetIsEditCourse(false);
+              navigate("/admin/course-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
-          adminContext.onSetIsEditCourse(false);
         } else {
-          adminService.addCourse(courseForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Course",
+          adminService
+            .addCourse(courseForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Course",
+              });
+              adminContext.onSetIsEditCourse(false);
+              navigate("/admin/course-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
         }
-        navigate("/admin/course-list");
       }}
     >
       <Grid item xs={10} md={4} sm={6} lg={4}>
@@ -91,6 +144,8 @@ const CourseForm = ({ initialValue, courseId }) => {
                   name="courseCode"
                   onChange={handleChange}
                   value={courseCode}
+                  error={!!errors.courseCode}
+                  helperText={errors.courseCode}
                   label="Course Code"
                   variant="standard"
                   fullWidth
@@ -101,6 +156,8 @@ const CourseForm = ({ initialValue, courseId }) => {
                   name="courseName"
                   onChange={handleChange}
                   value={courseName}
+                  error={!!errors.courseName}
+                  helperText={errors.courseName}
                   label="Course Name"
                   variant="standard"
                   fullWidth
@@ -111,6 +168,8 @@ const CourseForm = ({ initialValue, courseId }) => {
                   name="units"
                   onChange={handleChange}
                   value={units}
+                  error={!!errors.units}
+                  helperText={errors.units}
                   label="Units"
                   variant="standard"
                   fullWidth
@@ -153,7 +212,12 @@ const CourseForm = ({ initialValue, courseId }) => {
             </Grid>
           </CardContent>
           <CardActions>
-            <Button type="submit" fullWidth variant="contained">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={isCourseFormInvalid()}
+            >
               Submit
             </Button>
           </CardActions>

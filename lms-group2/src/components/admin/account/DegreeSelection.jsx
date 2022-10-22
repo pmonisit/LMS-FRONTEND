@@ -13,7 +13,6 @@ const DegreeSelection = ({ list, form, onSetForm, id, label }) => {
       ...form,
       degreeId: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

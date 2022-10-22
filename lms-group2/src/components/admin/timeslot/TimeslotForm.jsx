@@ -10,8 +10,10 @@ import * as adminService from "../../../services/admin/TimeslotService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
 import { useNavigate } from "react-router-dom";
+import Joi from "joi";
 const TimeslotForm = ({ initialValue, timeslotId }) => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const adminContext = useContext(AdminContext);
   const [timeslotForm, setTimeSlotForm] = useState(
@@ -30,6 +32,30 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
       ...timeslotForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+  };
+
+  const schema = Joi.object({
+    timeslotCode: Joi.string().min(3).required(),
+    yearNo: Joi.number().min(1).max(1).required(),
+    semNo: Joi.number().min(1).max(1).required(),
+  });
+
+  const isTimeslotFormInvalid = () => {
+    const result = schema.validate(timeslotForm);
+    return !!result.error;
   };
   return (
     <Grid
@@ -41,27 +67,51 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
         event.preventDefault();
         console.log(timeslotForm);
         if (adminContext.isTimeslotEdit) {
-          adminService.editTimeslot(timeslotId, timeslotForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully edited a Timeslot",
+          adminService
+            .editTimeslot(timeslotId, timeslotForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a Timeslot",
+              });
+              adminContext.onSetIsEdit(false);
+              navigate("/admin/timeslot-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message:
+                    "Please use 1 digit for Year Number and Semester Number",
+                });
+              }
             });
-          });
         } else {
-          adminService.addTimeslot(timeslotForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Timeslot",
+          adminService
+            .addTimeslot(timeslotForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Timeslot",
+              });
+              adminContext.onSetIsEdit(false);
+              navigate("/admin/timeslot-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
         }
-
-        adminContext.onSetIsEdit(false);
-        navigate("/admin/timeslot-list");
       }}
     >
       <Grid item xs={10} md={4} sm={6}>
@@ -75,6 +125,8 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
                   name="timeslotCode"
                   onChange={handleChange}
                   value={timeslotCode}
+                  error={!!errors.timeslotCode}
+                  helperText={errors.timeslotCode}
                   label="Timeslot Code"
                   variant="standard"
                   fullWidth
@@ -85,6 +137,8 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
                   name="yearNo"
                   onChange={handleChange}
                   value={yearNo}
+                  error={!!errors.yearNo}
+                  helperText={errors.yearNo}
                   label="Year Number"
                   variant="standard"
                   fullWidth
@@ -95,6 +149,8 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
                   name="semNo"
                   onChange={handleChange}
                   value={semNo}
+                  error={!!errors.semNo}
+                  helperText={errors.semNo}
                   label="Semester Number"
                   variant="standard"
                   fullWidth
@@ -103,7 +159,12 @@ const TimeslotForm = ({ initialValue, timeslotId }) => {
             </Grid>
           </CardContent>
           <CardActions>
-            <Button type="submit" fullWidth variant="contained">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={isTimeslotFormInvalid()}
+            >
               Submit
             </Button>
           </CardActions>

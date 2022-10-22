@@ -149,8 +149,6 @@ const AdminListPage = () => {
           ) : (
             <div>Search not found</div>
           )}
-
-          <FirstYearScheduleTable />
         </Grid>
       </Grid>
     </>
