@@ -17,6 +17,7 @@ import AdminForm from "./AdminForm";
 import ParentForm from "./ParentForm";
 import { Snackbar, Typography } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
+import Joi from "joi";
 
 import {
   addStudents,
@@ -34,6 +35,7 @@ const GenericForm = ({ initialValue, accountId }) => {
   const accountFormContext = useContext(AccountFormContext);
   const adminContext = useContext(AdminContext);
   const { step, steps } = accountFormContext;
+  const [errors, setErrors] = useState({});
   const { onOpenSnackbar, onCloseSnackbar, snackbarConfig } =
     useContext(UserInterfaceContext);
   const { isAdmin, isProfessor, isStudent, isParent } =
@@ -69,6 +71,48 @@ const GenericForm = ({ initialValue, accountId }) => {
         }
   );
 
+  console.log(accountForm);
+  const schema = Joi.object({
+    role: Joi.optional(),
+    firstName: Joi.string().min(2).required(),
+    middleName: Joi.string().min(2).required(),
+    lastName: Joi.string().min(2).required(),
+    username: Joi.string().min(5).required(),
+    gender: Joi.optional(),
+    birthdate: Joi.optional(),
+    active: Joi.optional(),
+    childId: Joi.optional(),
+    degreeId: Joi.optional(),
+    accountNumber: Joi.optional(),
+    password: Joi.optional(),
+  });
+
+  const handleChange = (event) => {
+    setAccountForm({
+      ...accountForm,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+  };
+
+  const isGenericFormInvalid = () => {
+    const result = schema.validate(accountForm);
+    return !!result.error;
+  };
+
   return (
     <>
       <Grid
@@ -80,6 +124,8 @@ const GenericForm = ({ initialValue, accountId }) => {
 
           //console.log(accountFormContext.accountForm);
           if (accountFormContext.isEdit) {
+            console.log(accountForm);
+            console.log("Edit");
             editAccountBio(accountId, accountForm).then((res) => {
               console.log(res);
               onOpenSnackbar({
@@ -104,6 +150,7 @@ const GenericForm = ({ initialValue, accountId }) => {
 
               accountFormContext.onSetStep(0);
             });
+
             if (accountForm.role === "parent") {
               setChild(accountId, accountForm).then((res) => console.log(res));
               console.log("set child id");
@@ -113,58 +160,99 @@ const GenericForm = ({ initialValue, accountId }) => {
           } else {
             switch (accountForm.role) {
               case "student":
-                return addStudents(accountForm).then((res) => {
-                  console.log("From student");
-                  console.log(res);
-                  onOpenSnackbar({
-                    open: true,
-                    severity: "success",
-                    message: "Successfully added a Student",
+                return addStudents(accountForm)
+                  .then((res) => {
+                    console.log("From student");
+                    console.log(res);
+                    onOpenSnackbar({
+                      open: true,
+                      severity: "success",
+                      message: "Successfully added a Student",
+                    });
+                    navigate("/admin/student-list");
+                    accountFormContext.onSetStep(0);
+                  })
+                  .catch((error) => {
+                    if (error.response.status == 400) {
+                      onOpenSnackbar({
+                        open: true,
+                        severity: "error",
+                        message: "Username already exists",
+                      });
+                    }
                   });
-                  navigate("/admin/student-list");
-                  accountFormContext.onSetStep(0);
-                });
+
                 break;
               case "admin":
                 console.log(accountFormContext.adminForm);
 
-                return addAdminAccount(accountForm).then((res) => {
-                  console.log("From admin");
-                  console.log(res);
-                  onOpenSnackbar({
-                    open: true,
-                    severity: "success",
-                    message: "Successfully added an Administrator",
+                return addAdminAccount(accountForm)
+                  .then((res) => {
+                    console.log("From admin");
+                    console.log(res);
+                    onOpenSnackbar({
+                      open: true,
+                      severity: "success",
+                      message: "Successfully added an Administrator",
+                    });
+                    navigate("/admin/admin-list");
+                    accountFormContext.onSetStep(0);
+                  })
+                  .catch((error) => {
+                    if (error.response.status == 400) {
+                      onOpenSnackbar({
+                        open: true,
+                        severity: "error",
+                        message: "Username already exists",
+                      });
+                    }
                   });
-                  navigate("/admin/admin-list");
-                  accountFormContext.onSetStep(0);
-                });
                 break;
               case "professor":
-                return addProfessorAccount(accountForm).then((res) => {
-                  console.log("From professor");
-                  console.log(res);
-                  onOpenSnackbar({
-                    open: true,
-                    severity: "success",
-                    message: "Successfully added a Professor",
+                return addProfessorAccount(accountForm)
+                  .then((res) => {
+                    console.log("From professor");
+                    console.log(res);
+                    onOpenSnackbar({
+                      open: true,
+                      severity: "success",
+                      message: "Successfully added a Professor",
+                    });
+                    navigate("/admin/professor-list");
+                    accountFormContext.onSetStep(0);
+                  })
+                  .catch((error) => {
+                    if (error.response.status == 400) {
+                      onOpenSnackbar({
+                        open: true,
+                        severity: "error",
+                        message: "Username already exists",
+                      });
+                    }
                   });
-                  navigate("/admin/professor-list");
-                  accountFormContext.onSetStep(0);
-                });
                 break;
               case "parent":
-                return addParentAccount(accountForm).then((res) => {
-                  console.log("From parent");
-                  console.log(res);
-                  onOpenSnackbar({
-                    open: true,
-                    severity: "success",
-                    message: "Successfully added a Parent",
+                return addParentAccount(accountForm)
+                  .then((res) => {
+                    console.log("From parent");
+                    console.log(res);
+                    onOpenSnackbar({
+                      open: true,
+                      severity: "success",
+                      message: "Successfully added a Parent",
+                    });
+                    navigate("/admin/parent-list");
+                    accountFormContext.onSetStep(0);
+                  })
+                  .catch((error) => {
+                    if (error.response.status == 400) {
+                      onOpenSnackbar({
+                        open: true,
+                        severity: "error",
+                        message: "Username already exists",
+                      });
+                    }
                   });
-                  navigate("/admin/parent-list");
-                  accountFormContext.onSetStep(0);
-                });
                 break;
             }
             accountFormContext.onSetIsRole({
@@ -190,6 +278,10 @@ const GenericForm = ({ initialValue, accountId }) => {
             <AccountForm
               accountForm={accountForm}
               onSetAccountForm={setAccountForm}
+              errors={errors}
+              onSetErrors={setErrors}
+              schema={schema}
+              handleChange={handleChange}
             />
           )}
           {accountFormContext.step === 1 && (
@@ -219,7 +311,11 @@ const GenericForm = ({ initialValue, accountId }) => {
             >
               Previous
             </Button>
-            {step === steps.length - 1 && <Button type="submit">Submit</Button>}
+            {step === steps.length - 1 && (
+              <Button type="submit" disabled={isGenericFormInvalid()}>
+                Submit
+              </Button>
+            )}
             {step !== steps.length - 1 && (
               <Button
                 type="button"

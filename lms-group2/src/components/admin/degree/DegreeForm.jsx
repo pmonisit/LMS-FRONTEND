@@ -10,10 +10,11 @@ import Button from "@mui/material/Button";
 import * as adminService from "../../../services/admin/DegreeService";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import { UserInterfaceContext } from "../../../context/shared/UserInterfaceContext";
-
+import Joi from "joi";
 const DegreeForm = ({ initialValue, degreeId }) => {
   const navigate = useNavigate();
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     console.log(initialValue);
     console.log(degreeId);
@@ -36,6 +37,31 @@ const DegreeForm = ({ initialValue, degreeId }) => {
       ...degreeForm,
       [event.currentTarget.name]: event.currentTarget.value,
     });
+
+    const { error } = schema
+      .extract(event.currentTarget.name)
+      .label(event.currentTarget.name)
+      .validate(event.currentTarget.value);
+    if (error) {
+      setErrors({
+        ...errors,
+        [event.currentTarget.name]: error.details[0].message,
+      });
+    } else {
+      delete errors[event.currentTarget.name];
+      setErrors(errors);
+    }
+  };
+
+  const schema = Joi.object({
+    degreeCode: Joi.string().min(3).required(),
+    degreeName: Joi.string().min(5).required(),
+    unitsRequired: Joi.number().required(),
+  });
+
+  const isDegreeFormInvalid = () => {
+    const result = schema.validate(degreeForm);
+    return !!result.error;
   };
   return (
     <Grid
@@ -46,26 +72,50 @@ const DegreeForm = ({ initialValue, degreeId }) => {
       onSubmit={(event) => {
         event.preventDefault();
         if (adminContext.isEdit) {
-          adminService.editDegree(degreeId, degreeForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully edited a Degree",
+          adminService
+            .editDegree(degreeId, degreeForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a Degree",
+              });
+              adminContext.onSetIsEdit(false);
+              navigate("/admin/degree-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Degree already exists",
+                });
+              }
             });
-          });
-          adminContext.onSetIsEdit(false);
         } else {
-          adminService.addDegree(degreeForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Degree",
+          adminService
+            .addDegree(degreeForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Degree",
+              });
+              adminContext.onSetIsEdit(false);
+              navigate("/admin/degree-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Degree already exists",
+                });
+              }
             });
-          });
         }
-        navigate("/admin/degree-list");
       }}
     >
       <Grid item xs={10} sm={4} md={4} xl={3}>
@@ -79,6 +129,8 @@ const DegreeForm = ({ initialValue, degreeId }) => {
                   name="degreeCode"
                   onChange={handleChange}
                   value={degreeCode}
+                  error={!!errors.degreeCode}
+                  helperText={errors.degreeCode}
                   label="Degree Code"
                   variant="standard"
                   fullWidth
@@ -89,6 +141,8 @@ const DegreeForm = ({ initialValue, degreeId }) => {
                   name="degreeName"
                   onChange={handleChange}
                   value={degreeName}
+                  error={!!errors.degreeName}
+                  helperText={errors.degreeName}
                   label="Degree Name"
                   variant="standard"
                   fullWidth
@@ -99,6 +153,8 @@ const DegreeForm = ({ initialValue, degreeId }) => {
                   name="unitsRequired"
                   onChange={handleChange}
                   value={unitsRequired}
+                  error={!!errors.unitsRequired}
+                  helperText={errors.unitsRequired}
                   label="Units Required"
                   variant="standard"
                   fullWidth
@@ -107,7 +163,12 @@ const DegreeForm = ({ initialValue, degreeId }) => {
             </Grid>
           </CardContent>
           <CardActions>
-            <Button variant="contained" type="submit" fullWidth>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              disabled={isDegreeFormInvalid()}
+            >
               SUBMIT
             </Button>
           </CardActions>

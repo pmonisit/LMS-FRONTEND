@@ -51,27 +51,51 @@ const SemesterForm = ({ initialValue, semesterId }) => {
         if (adminContext.isEditSemester) {
           console.log("Edit");
           console.log(semesterForm);
-          adminService.editSemester(semesterId, semesterForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully edited a Semester",
+          adminService
+            .editSemester(semesterId, semesterForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully edited a Semester",
+              });
+              adminContext.onSetIsEditSemester(false);
+              navigate("/admin/semester-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
-          adminContext.onSetIsEditSemester(false);
         } else {
           console.log("Add");
-          adminService.addSemester(semesterForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Semester",
+          adminService
+            .addSemester(semesterForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Semester",
+              });
+              adminContext.onSetIsEditSemester(false);
+              navigate("/admin/semester-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
         }
-        navigate("/admin/semester-list");
       }}
     >
       <Grid item xs={10} md={4} sm={6}>

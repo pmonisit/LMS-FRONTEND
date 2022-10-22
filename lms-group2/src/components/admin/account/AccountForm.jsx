@@ -10,7 +10,14 @@ import MultiStepper from "./MultiStepper";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import RoleSelection from "./RoleSelection";
 
-const AccountForm = ({ accountForm, onSetAccountForm }) => {
+const AccountForm = ({
+  accountForm,
+  onSetAccountForm,
+  errors,
+  onSetErrors,
+  schema,
+  handleChange,
+}) => {
   const accountFormContext = useContext(AccountFormContext);
   // const { role, firstName, middleName, lastName, username, password } =
   //   accountFormContext.accountForm;
@@ -30,12 +37,26 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
     degreeId,
   } = accountForm;
 
-  const handleChange = (event) => {
-    onSetAccountForm({
-      ...accountForm,
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-  };
+  // const handleChange = (event) => {
+  //   onSetAccountForm({
+  //     ...accountForm,
+  //     [event.currentTarget.name]: event.currentTarget.value,
+  //   });
+
+  //   const { error } = schema
+  //     .extract(event.currentTarget.name)
+  //     .label(event.currentTarget.name)
+  //     .validate(event.currentTarget.value);
+  //   if (error) {
+  //     onSetErrors({
+  //       ...errors,
+  //       [event.currentTarget.name]: error.details[0].message,
+  //     });
+  //   } else {
+  //     delete errors[event.currentTarget.name];
+  //     onSetErrors(errors);
+  //   }
+  // };
 
   return (
     <Grid container justifyContent="center">
@@ -65,6 +86,8 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
                   name="firstName"
                   onChange={handleChange}
                   value={firstName}
+                  error={!!errors.firstName}
+                  helperText={errors.firstName}
                   label="First Name"
                   variant="standard"
                   fullWidth
@@ -75,6 +98,8 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
                   name="middleName"
                   onChange={handleChange}
                   value={middleName}
+                  error={!!errors.middleName}
+                  helperText={errors.middleName}
                   label="Middle Name"
                   variant="standard"
                   fullWidth
@@ -85,6 +110,8 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
                   name="lastName"
                   onChange={handleChange}
                   value={lastName}
+                  error={!!errors.lastName}
+                  helperText={errors.lastName}
                   label="Last Name"
                   variant="standard"
                   fullWidth
@@ -96,6 +123,8 @@ const AccountForm = ({ accountForm, onSetAccountForm }) => {
                   name="username"
                   onChange={handleChange}
                   value={username}
+                  error={!!errors.userName}
+                  helperText={errors.userName}
                   label="Username"
                   variant="standard"
                   fullWidth

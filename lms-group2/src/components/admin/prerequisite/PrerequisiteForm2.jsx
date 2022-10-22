@@ -63,20 +63,42 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
                 severity: "success",
                 message: "Successfully edited a Prerequisite",
               });
+              adminContext.onSetIsEditPrerequisite(false);
+              navigate("/admin/prerequisite-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          adminContext.onSetIsEditPrerequisite(false);
         } else {
           console.log("Add");
-          prerequisiteService.addPrerequisite(prerequisiteForm).then((res) => {
-            console.log(res);
-            onOpenSnackbar({
-              open: true,
-              severity: "success",
-              message: "Successfully added a Prerequisite",
+          prerequisiteService
+            .addPrerequisite(prerequisiteForm)
+            .then((res) => {
+              console.log(res);
+              onOpenSnackbar({
+                open: true,
+                severity: "success",
+                message: "Successfully added a Prerequisite",
+              });
+              adminContext.onSetIsEditPrerequisite(false);
+              navigate("/admin/prerequisite-list");
+            })
+            .catch((error) => {
+              if (error.response.status == 400) {
+                onOpenSnackbar({
+                  open: true,
+                  severity: "error",
+                  message: "Please fill up all the fields",
+                });
+              }
             });
-          });
         }
-        navigate("/admin/prerequisite-list");
       }}
     >
       <Grid item xs={10} md={3} sm={6}>

@@ -22,7 +22,7 @@ const SchedulePage = () => {
       <Grid container marginTop={15} marginBottom={15} justifyContent="center">
         <Grid item xs={10} sm={10} md={6}>
           <Typography textAlign="center" variant="h5" mb={3} color="primary">
-            Update Degree Schedule
+            Degree Schedule
           </Typography>
 
           <YearSelection

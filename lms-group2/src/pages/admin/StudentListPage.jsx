@@ -43,7 +43,7 @@ const StudentListPage = () => {
   useEffect(() => {
     const fetchDegree = async () => {
       const res = await degreeService.getDegree();
-      console.log(res.data);
+
       setDegrees(res.data);
     };
     fetchDegree();
@@ -51,13 +51,10 @@ const StudentListPage = () => {
 
   useEffect(() => {
     const fetchStudent = async (degreeId) => {
-      console.log(degreeId);
       const res = await accountService.getStudents();
       if (degreeId == "" || degreeId == "All") {
-        console.log("IF");
         onSetStudentList(res.data);
       } else {
-        console.log("else");
         const students = res.data;
         const studentByDegree = students.filter((student) => {
           if (student.degreeId == degreeId) {
@@ -91,7 +88,7 @@ const StudentListPage = () => {
           //alert("search not found");
         }
       });
-      console.log([filteredStudentList]);
+
       if (filteredStudentList) {
         accountFormContext.onSetStudentList([filteredStudentList]);
       }
