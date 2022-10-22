@@ -39,3 +39,7 @@ export function getPrereqOfCourse(id) {
   // console.log("getPrereqOfCourse(id)");
   return http.get(`/prerequisite/getprereq/${id}`);
 }
+
+export function getPrerequisiteInfo() {
+  return http.get("/prerequisite/all/info");
+}

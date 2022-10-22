@@ -27,7 +27,7 @@ const StudentFilterSelection = ({ list, form, onSetForm, value, label }) => {
             id: "uncontrolled-native",
           }}
         >
-          <option value="all">All</option>
+          <option>All</option>
           {list.map((item) => {
             return (
               <option key={item.degreeId} value={item.degreeId}>

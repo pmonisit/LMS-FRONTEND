@@ -52,18 +52,16 @@ Semi-Urgent
 
 
 Items Left
-Filter By Degree for students - done
-course-list mapping -done
-Search Functions In Lecture - done
-pagination in lecture
-student-list error 
+prerequisite course mapping -done
+pagination in lecture - done
+student-list error -done
 Joi-validation
 error  handling
 UI
 
 
 -searh feature ng student
--register ng prof and parents sa student pumapasok
+-register ng prof and parents sa student pumapasok  -done
 
 
 

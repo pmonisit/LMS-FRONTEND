@@ -18,8 +18,11 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const [courses, setCourses] = useState([]);
   useEffect(() => {
-    courseService.getCourse().then((res) => setCourses(res.data));
-  });
+    courseService.getCourse().then((res) => {
+      console.log(res.data);
+      setCourses(res.data);
+    });
+  }, []);
   const params = useParams();
   const adminContext = useContext(AdminContext);
   const [prerequisiteForm, setPrerequisiteForm] = useState(

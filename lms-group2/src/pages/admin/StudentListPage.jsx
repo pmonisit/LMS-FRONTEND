@@ -51,10 +51,13 @@ const StudentListPage = () => {
 
   useEffect(() => {
     const fetchStudent = async (degreeId) => {
+      console.log(degreeId);
       const res = await accountService.getStudents();
-      if (degreeId == "all") {
+      if (degreeId == "" || degreeId == "All") {
+        console.log("IF");
         onSetStudentList(res.data);
       } else {
+        console.log("else");
         const students = res.data;
         const studentByDegree = students.filter((student) => {
           if (student.degreeId == degreeId) {
