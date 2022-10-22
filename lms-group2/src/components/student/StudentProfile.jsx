@@ -11,19 +11,25 @@ import Grid from "@mui/material/Grid";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 
 // Service
 import * as accountService from "../../services/shared/accounts";
-import { Button } from "@mui/material";
 
 const StudentProfile = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    accountService.getCurrentUser().then((response) => {
-      setUser(response.data[0]);
-      // console.log(response.data[0]);
-    });
+    accountService
+      .getCurrentUser()
+      .then((response) => {
+        setUser(response.data[0]);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Account may have already been deleted.");
+        }
+      });
   }, [user]);
 
   if (user) {
@@ -64,40 +70,27 @@ const StudentProfile = () => {
 
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom color="#b71c1c">
-                    First Name:
+                    Full Name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom>
                     {" "}
-                    {user[2]}
+                    {user[2]} {user[3]} {user[4]}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom color="#b71c1c">
-                    Middle Name:
+                    Degree Name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom>
                     {" "}
-                    {user[3]}
+                    {user[12]}
                   </Typography>
                 </Grid>
-
-                <Grid item xs={6} sm={6}>
-                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
-                    Last Name:
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    {" "}
-                    {user[4]}
-                  </Typography>
-                </Grid>
-
                 <Grid item xs={6} sm={6}>
                   <Typography variant="subtitle2" gutterBottom color="#b71c1c">
                     Gender:
@@ -127,7 +120,22 @@ const StudentProfile = () => {
             <Typography margin={2} variant="h6">
               Account Settings
             </Typography>
-
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={6} sm={6}>
+                  <Typography variant="subtitle2" gutterBottom color="#b71c1c">
+                    Username:
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    {" "}
+                    {user[8]}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
             <Grid margin={3}>
               <Button
                 variant="outlined"

@@ -18,7 +18,7 @@ import AutoStoriesRoundedIcon from "@mui/icons-material/AutoStoriesRounded";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
 
 const Sidebar = () => {
-  const drawerWidth = 175;
+  const drawerWidth = 200;
   return (
     <Drawer
       variant="permanent"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Paper, TableContainer, Table, Typography } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
 import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
@@ -14,9 +15,9 @@ import { EnrolContext } from "../../context/student/EnrolContext";
 import Snackbar from "@mui/material/Snackbar";
 import { UserInterfaceContext } from "../../context/shared/UserInterfaceContext";
 import MuiAlert from "@mui/material/Alert";
-import { Link } from "react-router-dom";
 
 const Courses = () => {
+  const navigate = useNavigate();
   const { onOpenSnackbar, snackbarConfig, onCloseSnackbar } =
     useContext(UserInterfaceContext);
   const { searchTerm, handleTypeSearch } = useContext(EnrolContext);
@@ -491,16 +492,27 @@ const Courses = () => {
         label="Dense padding"
       />
       <Typography align="right">
-        <Link to="/student/enrolment">
-          <Button color="primary" align="right">
-            CHECK YOUR ENROLMENT SUMMARY
-          </Button>
-        </Link>
-        <Link to="/student/schedule">
-          <Button color="primary" align="right">
-            CHECK YOUR SCHEDULE
-          </Button>
-        </Link>
+        <Button
+          onClick={() => {
+            navigate("/student/enrolment");
+          }}
+          variant="outlined"
+          color="primary"
+          align="right"
+        >
+          CHECK YOUR ENROLMENT SUMMARY
+        </Button>
+        {"  "}
+        <Button
+          onClick={() => {
+            navigate("/student/schedule");
+          }}
+          variant="outlined"
+          color="primary"
+          align="right"
+        >
+          CHECK YOUR SCHEDULE
+        </Button>
       </Typography>
     </Box>
   );

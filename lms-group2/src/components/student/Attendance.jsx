@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Grid, Toolbar, Box, Button, Typography } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -7,6 +7,7 @@ import * as attendanceService from "../../services/professor/AttendanceService";
 import * as semesterService from "../../services/admin/Semester";
 
 const Attendance = () => {
+  const navigate = useNavigate();
   const calendarComponentRef = useRef(null);
   const [events, setEvents] = useState({ title: "", start: "" });
   const [currentSem, setCurrentSem] = useState([]);
@@ -41,11 +42,16 @@ const Attendance = () => {
         </h2>
 
         <Typography align="center">
-          <Link to="viewlist">
-            <Button color="primary" type="submit" variant="contained">
-              VIEW ATTENDANCE BY LIST
-            </Button>
-          </Link>
+          <Button
+            onClick={() => {
+              navigate("/student/attendance/viewlist");
+            }}
+            color="primary"
+            type="submit"
+            variant="outlined"
+          >
+            VIEW ATTENDANCE BY LIST
+          </Button>
         </Typography>
         <div className="demo-app">
           <div className="demo-app-calendar">
@@ -54,9 +60,8 @@ const Attendance = () => {
               ref={calendarComponentRef}
               events={events}
               headerToolbar={{
-                left: "prev today",
-                center: "title",
-                right: "next",
+                left: "title",
+                right: "prev today next",
               }}
             />
           </div>

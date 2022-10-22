@@ -1,7 +1,7 @@
 // React
 import * as React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
 // Material Components
 import { CssBaseline } from "@mui/material";
@@ -24,6 +24,7 @@ import StudentAttendancePage from "./pages/student/StudentAttendancePage";
 import StudentCurriculumPage from "./pages/student/StudentCurriculumPage";
 import StudentSchedulePage from "./pages/student/StudentSchedulePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentEditProfileInfo from "./components/student/StudentEditProfileInfo";
 import AttendanceList from "./components/student/AttendanceList";
 import ParentChildAttendanceList from "./components/parent/ParentChildAttendanceList";
 import ProfessorDashboardPage from "./pages/professor/ProfessorDashboardPage";
@@ -597,7 +598,7 @@ const App = () => {
             path="/student/profile/edit/:id"
             element={
               accessToken && role === "student" ? (
-                <EditProfileInfo />
+                <StudentEditProfileInfo />
               ) : (
                 <Navigate to="/login" />
               )
