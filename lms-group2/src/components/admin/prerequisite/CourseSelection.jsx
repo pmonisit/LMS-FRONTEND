@@ -35,7 +35,7 @@ const CourseSelection = ({ list, form, onSetForm, id, label, selectedId }) => {
             if (selectedId != item.courseId) {
               return (
                 <option key={item.courseId} value={item.courseId}>
-                  {item.courseCode}
+                  {item.courseName}
                 </option>
               );
             }

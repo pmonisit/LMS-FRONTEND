@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,14 +8,26 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
 import { Link } from "react-router-dom";
 import { AccountFormContext } from "../../../context/admin/account/AccountFormContext";
 import { AdminContext } from "../../../context/admin/account/adminContext";
 import TablePagination from "@mui/material/TablePagination";
+import * as prerequisiteService from "../../../services/admin/Prerequisite";
 
 const PrerequisiteListTable = ({ details }) => {
   const adminContext = useContext(AdminContext);
+  const [prerequisites, setPrerequisites] = useState([]);
+
+  useEffect(() => {
+    const fetchPrerequisite = async () => {
+      const res = await prerequisiteService.getPrerequisiteInfo();
+      setPrerequisites(res.data);
+      console.log(res.data);
+    };
+    fetchPrerequisite();
+  }, []);
+
   const handleEdit = (detail) => {
     console.log(detail);
   };
@@ -55,11 +67,19 @@ const PrerequisiteListTable = ({ details }) => {
                   {detail.prerequisiteId}
                 </TableCell>
                 <TableCell component="th" scope="row" align="center">
-                  {detail.courseId}
+                  {prerequisites.map((data) => {
+                    if (data[0] == detail.prerequisiteId) {
+                      return data[3];
+                    }
+                  })}
                 </TableCell>
 
                 <TableCell align="center">
-                  {detail.prerequisiteCourseId}
+                  {prerequisites.map((data) => {
+                    if (data[0] == detail.prerequisiteId) {
+                      return data[6];
+                    }
+                  })}
                 </TableCell>
 
                 <TableCell align="center">
