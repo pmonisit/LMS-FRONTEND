@@ -25,14 +25,28 @@ const AttendanceList = () => {
 
   useEffect(() => {
     let attendanceBySem = [];
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-      const semId = response.data.semesterId;
-      attendanceService.getAllMyAtttendancePerSem(semId).then((res) => {
-        attendanceBySem.push(res.data);
-        setAttendanceCurrentSem(...attendanceBySem);
+    semesterService
+      .getCurrentSemester()
+      .then((response) => {
+        setCurrentSem(response.data);
+        const semId = response.data.semesterId;
+        attendanceService
+          .getAllMyAtttendancePerSem(semId)
+          .then((res) => {
+            attendanceBySem.push(res.data);
+            setAttendanceCurrentSem(...attendanceBySem);
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 404) {
+              alert("Attendance may have already been deleted.");
+            }
+          });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
       });
-    });
   }, []);
 
   const columns = [

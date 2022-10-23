@@ -24,16 +24,28 @@ const ParentChildAttendanceList = () => {
 
   useEffect(() => {
     let attendanceBySem = [];
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-      const semId = response.data.semesterId;
-      attendanceService
-        .parentGetAllMyAttendancesBySemesterId(semId)
-        .then((res) => {
-          attendanceBySem.push(res.data);
-          setAttendanceCurrentSem(...attendanceBySem);
-        });
-    });
+    semesterService
+      .getCurrentSemester()
+      .then((response) => {
+        setCurrentSem(response.data);
+        const semId = response.data.semesterId;
+        attendanceService
+          .parentGetAllMyAttendancesBySemesterId(semId)
+          .then((res) => {
+            attendanceBySem.push(res.data);
+            setAttendanceCurrentSem(...attendanceBySem);
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 404) {
+              alert("Attendance may have already been deleted.");
+            }
+          });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
+      });
   }, []);
 
   const columns = [
@@ -193,6 +205,7 @@ const ParentChildAttendanceList = () => {
       return value;
     }
   });
+
   return (
     <Box sx={{ display: "flex" }}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

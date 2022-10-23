@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Grid, Paper, Toolbar, TableRow, Box } from "@mui/material";
 import { TableHead, TableContainer, TableCell } from "@mui/material";
 import { TableBody, Table, IconButton, Tooltip } from "@mui/material";
-import Sidebar from "../../components/shared/Sidebar";
 import * as accountService from "../../services/admin/AccountService";
 import * as courseAssignedService from "../../services/admin/CoursesAssignedService";
 import * as degreeService from "../../services/admin/DegreeService";
@@ -14,15 +13,35 @@ const ParentChildCurriculumPage = () => {
   const [degree, setDegree] = useState([]);
 
   useEffect(() => {
-    accountService.getCurrentChildInfo().then((response) => {
-      console.log(response.data);
-      degreeService.getDegreeById(response.data[0][10]).then((degree) => {
-        setDegree(degree.data);
+    accountService
+      .getCurrentChildInfo()
+      .then((response) => {
+        degreeService
+          .getDegreeById(response.data[0][10])
+          .then((degree) => {
+            setDegree(degree.data);
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 404) {
+              alert("Degree may have already been deleted.");
+            }
+          });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Account may have already been deleted.");
+        }
       });
-    });
-    courseAssignedService.getMyCoursesParent().then((response) => {
-      setMyChildCoursesAssigned(response.data);
-    });
+    courseAssignedService
+      .getMyCoursesParent()
+      .then((response) => {
+        setMyChildCoursesAssigned(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
   }, []);
 
   const handleCurriculum = () => {
@@ -120,7 +139,7 @@ const ParentChildCurriculumPage = () => {
               <TableContainer>
                 <Table size="small" aria-label="a dense table">
                   <TableBody align="center">
-                    <TableRow>
+                    <TableRow sx={{ backgroundColor: "#ff7961" }}>
                       <TableCell align="center" colSpan={2}>
                         <b>Summary</b>
                       </TableCell>
@@ -178,7 +197,7 @@ const ParentChildCurriculumPage = () => {
                                       SEMESTER
                                     </TableCell>
                                   </TableRow>
-                                  <TableRow>
+                                  <TableRow sx={{ backgroundColor: "#ff7961" }}>
                                     <TableCell align="center" width="25%">
                                       Course Code
                                     </TableCell>

@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  Grid,
-  Paper,
-  TableContainer,
-  TableHead,
-  Table,
-  Typography,
-} from "@mui/material";
+import { Grid, Paper, TableContainer, TableHead } from "@mui/material";
+import { Table, Typography } from "@mui/material";
 import { TableBody, TableCell, TableRow, Toolbar, Button } from "@mui/material";
 import * as semesterService from "../../services/admin/Semester";
 import * as gradeService from "../../services/professor/GradeService";
@@ -19,23 +13,36 @@ const StudentGrade = () => {
   useEffect(() => {
     let myGradesWithSem = [];
     let id = 0;
-    semesterService.getMySemestersWithGrades().then((response) => {
-      setMySemestersWithGrades(response.data);
-      response.data.map((resp) => {
-        let semId = resp[0];
-        let merge = [];
-        gradeService.getMyGradesBySemId(semId).then((res) => {
-          res.data.map((a) => {
-            merge = [id++, ...resp, ...a];
-            myGradesWithSem.push(merge);
-            setMyGradesWithSem(myGradesWithSem);
-            return;
-          });
+    semesterService
+      .getMySemestersWithGrades()
+      .then((response) => {
+        setMySemestersWithGrades(response.data);
+        response.data.map((resp) => {
+          let semId = resp[0];
+          let merge = [];
+          gradeService
+            .getMyGradesBySemId(semId)
+            .then((res) => {
+              res.data.map((a) => {
+                merge = [id++, ...resp, ...a];
+                myGradesWithSem.push(merge);
+                setMyGradesWithSem(myGradesWithSem);
+                return;
+              });
+            })
+            .catch((error) => {
+              if (error.response && error.response.status === 404) {
+                alert("Grades may have already been deleted.");
+              }
+            });
           return;
         });
-        return;
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
       });
-    });
   }, []);
 
   const componentRef = useRef(null);

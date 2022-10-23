@@ -37,7 +37,7 @@ const StudentDashboardPage = () => {
                 <TableRow>
                   <TableCell>Full Name</TableCell>
                   <TableCell>
-                    {user[4]}, {user[2]} {user[3]}
+                    {user[2]} {user[3]} {user[4]}
                   </TableCell>
                 </TableRow>
                 <TableRow>

@@ -15,20 +15,34 @@ const ParentChildGrade = () => {
   useEffect(() => {
     let myChildGradesWithSem = [];
     let id = 0;
-    semesterService.getMyChildSemestersWithGrades().then((response) => {
-      setMyChildSemestersWithGrades(response.data);
-      response.data.map((resp) => {
-        let semId = resp[0];
-        let merge = [];
-        gradeService.getChildGradesBySem(semId).then((res) => {
-          res.data.map((a) => {
-            merge = [id++, ...resp, ...a];
-            myChildGradesWithSem.push(merge);
-            setMyChildGradesWithSem(myChildGradesWithSem);
-          });
+    semesterService
+      .getMyChildSemestersWithGrades()
+      .then((response) => {
+        setMyChildSemestersWithGrades(response.data);
+        response.data.map((resp) => {
+          let semId = resp[0];
+          let merge = [];
+          gradeService
+            .getChildGradesBySem(semId)
+            .then((res) => {
+              res.data.map((a) => {
+                merge = [id++, ...resp, ...a];
+                myChildGradesWithSem.push(merge);
+                setMyChildGradesWithSem(myChildGradesWithSem);
+              });
+            })
+            .catch((error) => {
+              if (error.response && error.response.status === 404) {
+                alert("Grade may have already been deleted.");
+              }
+            });
         });
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
       });
-    });
   }, []);
 
   const gradeColumns = [
@@ -95,8 +109,8 @@ const ParentChildGrade = () => {
       </Tooltip>
       {myChildSemestersWithGrades.length > 0 ? (
         myChildSemestersWithGrades.map((semester) => (
-          <Grid key={semester[0]}>
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <Grid key={semester[0]} align="center">
+            <Paper sx={{ width: "90%", overflow: "hidden" }}>
               <h3 align="center">
                 {semester[3]} AY {semester[1]} - {semester[2]}
               </h3>
@@ -106,7 +120,7 @@ const ParentChildGrade = () => {
                   size="small"
                   aria-label="a dense table"
                 >
-                  <TableHead>
+                  <TableHead sx={{ backgroundColor: "#ff7961" }}>
                     <TableRow>
                       {gradeColumns.map((column) => (
                         <TableCell
