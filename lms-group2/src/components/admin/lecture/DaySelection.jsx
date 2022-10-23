@@ -13,7 +13,6 @@ const DaySelection = ({ list, form, onSetForm, id, label, day }) => {
       ...form,
       dayOne: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

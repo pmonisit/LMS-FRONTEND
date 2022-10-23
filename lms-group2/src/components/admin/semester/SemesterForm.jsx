@@ -47,14 +47,11 @@ const SemesterForm = ({ initialValue, semesterId }) => {
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(semesterForm);
+
         if (adminContext.isEditSemester) {
-          console.log("Edit");
-          console.log(semesterForm);
           adminService
             .editSemester(semesterId, semesterForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",
@@ -73,11 +70,9 @@ const SemesterForm = ({ initialValue, semesterId }) => {
               }
             });
         } else {
-          console.log("Add");
           adminService
             .addSemester(semesterForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",

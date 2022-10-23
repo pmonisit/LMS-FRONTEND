@@ -71,7 +71,6 @@ const GenericForm = ({ initialValue, accountId }) => {
         }
   );
 
-  console.log(accountForm);
   const schema = Joi.object({
     role: Joi.optional(),
     firstName: Joi.string().min(2).required(),
@@ -122,12 +121,8 @@ const GenericForm = ({ initialValue, accountId }) => {
         onSubmit={(e) => {
           e.preventDefault();
 
-          //console.log(accountFormContext.accountForm);
           if (accountFormContext.isEdit) {
-            console.log(accountForm);
-            console.log("Edit");
             editAccountBio(accountId, accountForm).then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",
@@ -153,17 +148,13 @@ const GenericForm = ({ initialValue, accountId }) => {
 
             if (accountForm.role === "parent") {
               setChild(accountId, accountForm).then((res) => console.log(res));
-              console.log("set child id");
             }
             accountFormContext.onSetIsEdit(false);
-            console.log(accountId, accountForm);
           } else {
             switch (accountForm.role) {
               case "student":
                 return addStudents(accountForm)
                   .then((res) => {
-                    console.log("From student");
-                    console.log(res);
                     onOpenSnackbar({
                       open: true,
                       severity: "success",
@@ -184,12 +175,8 @@ const GenericForm = ({ initialValue, accountId }) => {
 
                 break;
               case "admin":
-                console.log(accountFormContext.adminForm);
-
                 return addAdminAccount(accountForm)
                   .then((res) => {
-                    console.log("From admin");
-                    console.log(res);
                     onOpenSnackbar({
                       open: true,
                       severity: "success",
@@ -211,8 +198,6 @@ const GenericForm = ({ initialValue, accountId }) => {
               case "professor":
                 return addProfessorAccount(accountForm)
                   .then((res) => {
-                    console.log("From professor");
-                    console.log(res);
                     onOpenSnackbar({
                       open: true,
                       severity: "success",
@@ -234,8 +219,6 @@ const GenericForm = ({ initialValue, accountId }) => {
               case "parent":
                 return addParentAccount(accountForm)
                   .then((res) => {
-                    console.log("From parent");
-                    console.log(res);
                     onOpenSnackbar({
                       open: true,
                       severity: "success",
@@ -290,14 +273,6 @@ const GenericForm = ({ initialValue, accountId }) => {
               onSetAccountForm={setAccountForm}
             />
           )}
-          {/* {accountFormContext.step === 2 && role === "student" && (
-            <StudentForm />
-          )}
-          {accountFormContext.step === 2 && role === "professor" && (
-            <ProfessorForm />
-          )}
-          {accountFormContext.step === 2 && role === "admin" && <AdminForm />}
-          {accountFormContext.step === 2 && role === "parent" && <ParentForm />} */}
         </Grid>
 
         <CardActions>
@@ -305,7 +280,6 @@ const GenericForm = ({ initialValue, accountId }) => {
             <Button
               type="button"
               onClick={(e) => {
-                console.log("prev");
                 accountFormContext.onPrev();
               }}
             >

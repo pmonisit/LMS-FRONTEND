@@ -13,7 +13,6 @@ const CourseSelection = ({ list, form, onSetForm, id, label, selectedId }) => {
       ...form,
       courseId: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

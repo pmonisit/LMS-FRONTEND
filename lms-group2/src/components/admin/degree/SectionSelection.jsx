@@ -8,7 +8,6 @@ import { AccountFormContext } from "../../../context/admin/account/AccountFormCo
 const SectionSelection = ({ list, form, onSetForm, value, label }) => {
   const handleChange = (event) => {
     onSetForm(event.target.value);
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

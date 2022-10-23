@@ -13,7 +13,6 @@ const TimeslotSelection = ({ list, form, onSetForm, id, label }) => {
       ...form,
       timeslotId: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

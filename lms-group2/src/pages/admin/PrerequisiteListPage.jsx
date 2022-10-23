@@ -14,7 +14,6 @@ const PrerequisiteListPage = () => {
   const adminContext = useContext(AdminContext);
   useEffect(() => {
     prerequisiteService.getPrerequisite().then((res) => {
-      console.log(res.data);
       adminContext.onSetPrerequisiteList(res.data);
     });
   }, []);

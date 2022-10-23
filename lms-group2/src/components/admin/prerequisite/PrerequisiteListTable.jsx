@@ -23,7 +23,6 @@ const PrerequisiteListTable = ({ details }) => {
     const fetchPrerequisite = async () => {
       const res = await prerequisiteService.getPrerequisiteInfo();
       setPrerequisites(res.data);
-      console.log(res.data);
     };
     fetchPrerequisite();
   }, []);

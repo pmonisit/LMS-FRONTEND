@@ -10,7 +10,6 @@ import { findAllByDisplayValue } from "@testing-library/react";
 export default function GenderRadioButton({ accountForm, onSetAccountForm }) {
   const handleChange = (event) => {
     onSetAccountForm({ ...accountForm, active: event.target.value });
-    console.log(event.target.value);
   };
 
   return (

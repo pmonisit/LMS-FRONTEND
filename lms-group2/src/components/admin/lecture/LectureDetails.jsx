@@ -50,16 +50,16 @@ const LectureDetails = () => {
         <Grid item xs={10} sm={10} md={6}>
           <Card>
             <CardHeader
-              action={
-                <IconButton onClick={handleOpenMenu}>
-                  <MoreVertIcon />
-                </IconButton>
-              }
+              // action={
+              //   <IconButton onClick={handleOpenMenu}>
+              //     <MoreVertIcon />
+              //   </IconButton>
+              // }
               title={lecture[0][3]}
               subheader={`Section : ${lecture[0][11]}`}
             />
             <CardContent>
-              <Menu
+              {/* <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -71,7 +71,7 @@ const LectureDetails = () => {
                   Edit
                 </MenuItem>
                 <MenuItem>Delete</MenuItem>
-              </Menu>
+              </Menu> */}
               <Grid container spacing={5}>
                 <Grid item xs={6}>
                   <Typography variant="overline">Lecture Id</Typography>

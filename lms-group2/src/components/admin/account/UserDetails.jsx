@@ -54,18 +54,18 @@ const UserDetails = () => {
         <Grid item xs={10} sm={10} md={6}>
           <Card>
             <CardHeader
-              action={
-                <IconButton onClick={handleOpenMenu}>
-                  <MoreVertIcon />
-                </IconButton>
-              }
+              // action={
+              //   <IconButton onClick={handleOpenMenu}>
+              //     <MoreVertIcon />
+              //   </IconButton>
+              // }
               title={`${user.firstName} ${
                 user.middleName ? user.middleName : ""
               } ${user.lastName}`}
               subheader={`@${user.username}`}
             />
             <CardContent>
-              <Menu
+              {/* <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -84,7 +84,7 @@ const UserDetails = () => {
                 >
                   Delete
                 </MenuItem>
-              </Menu>
+              </Menu> */}
               <Grid container spacing={5}>
                 <Grid item xs={6}>
                   <Typography variant="overline">Role</Typography>

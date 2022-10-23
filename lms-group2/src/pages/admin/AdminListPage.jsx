@@ -41,8 +41,6 @@ const AdminListPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
   const handleSearch = () => {
     if (searchText) {
@@ -62,7 +60,7 @@ const AdminListPage = () => {
           //alert("search not found");
         }
       });
-      console.log([filteredList]);
+
       if (filteredList) {
         accountFormContext.onSetAdminList([filteredList]);
       }

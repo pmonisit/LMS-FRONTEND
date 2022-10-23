@@ -20,9 +20,7 @@ const DegreeListPage = () => {
 
   useEffect(() => {
     adminService.getDegree().then((res) => {
-      console.log(res.data);
       adminContext.onSetDegreeList(res.data);
-      console.log(adminContext.degreeList);
     });
   }, []);
 
@@ -34,8 +32,6 @@ const DegreeListPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
   const handleSearch = () => {
     if (searchText) {
@@ -55,7 +51,7 @@ const DegreeListPage = () => {
           //alert("search not found");
         }
       });
-      console.log([filteredList]);
+
       if (filteredList.length > 0) {
         adminContext.onSetDegreeList(filteredList);
       } else {

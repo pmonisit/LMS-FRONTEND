@@ -19,7 +19,6 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
   const [courses, setCourses] = useState([]);
   useEffect(() => {
     courseService.getCourse().then((res) => {
-      console.log(res.data);
       setCourses(res.data);
     });
   }, []);
@@ -49,15 +48,11 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(prerequisiteForm);
-        if (adminContext.isEditPrerequisite) {
-          console.log("Edit");
-          console.log(prerequisiteForm);
 
+        if (adminContext.isEditPrerequisite) {
           prerequisiteService
             .editPrerequisite(prerequisiteId, prerequisiteForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",
@@ -76,11 +71,9 @@ const PrerequisiteForm2 = ({ initialValue, prerequisiteId }) => {
               }
             });
         } else {
-          console.log("Add");
           prerequisiteService
             .addPrerequisite(prerequisiteForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",

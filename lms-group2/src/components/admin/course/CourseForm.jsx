@@ -41,7 +41,6 @@ const CourseForm = ({ initialValue, courseId }) => {
         }
   );
 
-  console.log(courseForm);
   const { courseCode, courseName, units, degreeId, timeslotId } = courseForm;
 
   const handleChange = (event) => {
@@ -85,12 +84,11 @@ const CourseForm = ({ initialValue, courseId }) => {
       component="form"
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(courseForm);
+
         if (adminContext.isEditCourse) {
           adminService
             .editCourse(courseId, courseForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",
@@ -112,7 +110,6 @@ const CourseForm = ({ initialValue, courseId }) => {
           adminService
             .addCourse(courseForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",

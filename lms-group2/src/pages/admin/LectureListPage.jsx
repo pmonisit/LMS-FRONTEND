@@ -35,13 +35,10 @@ const LectureListPage = () => {
 
   useEffect(() => {
     fetchBasicLecture();
-    // lectureService.getAllBasicLectures().then((res) => {
-    //   adminContext.onSetLectureList(res.data);
-    // });
   }, []);
   const fetchLecture = async () => {
     const res = await lectureService.getLecture();
-    console.log(res.data);
+
     setTempList(res.data);
   };
 
@@ -52,8 +49,6 @@ const LectureListPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
 
   const handleSearch = () => {
@@ -68,8 +63,7 @@ const LectureListPage = () => {
           return data[0];
         }
       });
-      console.log(searchResult[0]);
-      console.log(adminContext.lectureList);
+
       let searchResult2 = [];
       tempListObject.map((lecture) => {
         searchResult.map((result) => {
@@ -78,7 +72,7 @@ const LectureListPage = () => {
           }
         });
       });
-      console.log(searchResult2);
+
       adminContext.onSetLectureList(searchResult2);
     } else {
       fetchBasicLecture();

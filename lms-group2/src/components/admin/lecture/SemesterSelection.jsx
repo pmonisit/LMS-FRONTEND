@@ -13,7 +13,6 @@ const SemesterSelection = ({ list, form, onSetForm, id, label }) => {
       ...form,
       semesterId: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

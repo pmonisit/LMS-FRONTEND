@@ -13,10 +13,7 @@ const SchedulePage = () => {
   const [isViewSchedule, setIsViewSchedule] = useState(false);
   const listOfSection = ["A", "B", "C", "D"];
   const listOfYear = ["First Year", "Second Year", "Third Year", "Fourth Year"];
-  console.log(section);
-  //   useEffect(() => {
-  //     degreeService.getLecturesByDegree(1).then((res) => console.log(res.data));
-  //   });
+
   return (
     <>
       <Grid container marginTop={15} marginBottom={15} justifyContent="center">
