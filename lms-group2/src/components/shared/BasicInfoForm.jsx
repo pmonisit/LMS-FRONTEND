@@ -166,7 +166,9 @@ const BasicInfoForm = ({ onSubmit, initialValue }) => {
                 } else if (userInfo[1] === "professor") {
                   navigate(`/professor/dashboard/${userInfo[0]}`);
                 } else if (userInfo[1] === "student") {
-                  navigate(`/dashboard`);
+                  navigate(`/student/dashboard`);
+                } else if (userInfo[1] === "parent") {
+                  navigate(`/parent/dashboard`);
                 } else {
                   navigate(`/`);
                 }

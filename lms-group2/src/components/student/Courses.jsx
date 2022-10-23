@@ -398,7 +398,7 @@ const Courses = () => {
         </MuiAlert>
       </Snackbar>
       <h3 align="center">
-        Enrolment for {currentSem.semOrder} AY {currentSem.startingYear} -
+        Courses for {currentSem.semOrder} AY {currentSem.startingYear} -
         {currentSem.endingYear}
       </h3>
       <>{handleTypeSearch()}</>

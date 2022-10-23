@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Box, Paper, TableContainer, Table } from "@mui/material";
+import { Box, Paper, TableContainer, Table, Typography } from "@mui/material";
 import { TableHead, TableBody, TableCell } from "@mui/material";
-import { TableRow, TablePagination, TableSortLabel } from "@mui/material";
+import { TableRow, TablePagination, TableSortLabel, Grid } from "@mui/material";
 import { Toolbar, FormControlLabel, Switch } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import PropTypes from "prop-types";
@@ -42,6 +42,49 @@ const AttendanceList = () => {
     { id: "1", label: "Course\u00a0Name", minWidth: 100 },
     { id: "7", label: "Remarks", minWidth: 100 },
   ];
+
+  const summaryColumns = [
+    { id: "courseCode", label: "Course\u00a0Code", minWidth: 100 },
+    { id: "present", label: "Present", minWidth: 100 },
+    { id: "late", label: "Late", minWidth: 100 },
+    { id: "absent", label: "Absent", minWidth: 100 },
+  ];
+
+  const handleLectureIds = () => {
+    const lectureIds = attendanceCurrentSem.reduce((a, d) => {
+      if (!a.includes(d[9])) {
+        a.push(d[9]);
+      }
+      return a;
+    }, []);
+
+    return lectureIds;
+  };
+
+  const handleAttendanceSummary = (lectureId) => {
+    const summary = [];
+    const attendancePerLecture = attendanceCurrentSem.filter(
+      (data) => data[9] === lectureId
+    );
+    let present = 0;
+    let late = 0;
+    let absent = 0;
+    attendancePerLecture.map((data) => {
+      summary.splice(0, 1, data[0]);
+      if (data[7] === "PRESENT") {
+        present = present + 1;
+      } else if (data[7] === "LATE") {
+        late = late + 1;
+      } else if (data[7] === "ABSENT") {
+        absent = absent + 1;
+      }
+    });
+    summary.push(present);
+    summary.push(late);
+    summary.push(absent);
+
+    return summary;
+  };
 
   const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
@@ -83,7 +126,6 @@ const AttendanceList = () => {
           {columns.map((headCell) => (
             <TableCell
               key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
@@ -248,6 +290,60 @@ const AttendanceList = () => {
             label="Dense padding"
           />
         </Box>
+        <br />
+
+        <Typography align="center">
+          <strong>Summay of Attendance</strong>
+        </Typography>
+        <Paper
+          sx={{ overflow: "hidden" }}
+          style={{ width: 500, margin: "auto" }}
+        >
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table size="small" aria-label="a dense table">
+              <TableHead sx={{ backgroundColor: "#ff7961" }}>
+                <TableRow>
+                  {summaryColumns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {handleLectureIds().length > 0 ? (
+                  handleLectureIds().map((lecId) => {
+                    return (
+                      <TableRow key={lecId}>
+                        <TableCell>
+                          {handleAttendanceSummary(lecId)[0]}
+                        </TableCell>
+                        <TableCell>
+                          {handleAttendanceSummary(lecId)[1]}
+                        </TableCell>
+                        <TableCell>
+                          {handleAttendanceSummary(lecId)[2]}
+                        </TableCell>
+                        <TableCell>
+                          {handleAttendanceSummary(lecId)[3]}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell align="center" colSpan={10}>
+                      No Available Attendance.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
     </Box>
   );
