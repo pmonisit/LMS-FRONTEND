@@ -12,12 +12,26 @@ const ParentChildSchedulePage = () => {
   const [myChildEnrolledSLoads, setMyChildEnrolledSLoads] = useState([]);
 
   useEffect(() => {
-    semesterService.getCurrentSemester().then((response) => {
-      setCurrentSem(response.data);
-    });
-    studentLoadService.getMyChildSchedule().then((response) => {
-      setMyChildEnrolledSLoads(response.data);
-    });
+    semesterService
+      .getCurrentSemester()
+      .then((response) => {
+        setCurrentSem(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Semester may have already been deleted.");
+        }
+      });
+    studentLoadService
+      .getMyChildSchedule()
+      .then((response) => {
+        setMyChildEnrolledSLoads(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      });
   }, []);
 
   const scheduleColumns = [
@@ -66,33 +80,48 @@ const ParentChildSchedulePage = () => {
       return result;
     };
 
-    return sortedSchedule.map((data) => {
+    if (sortedSchedule.length > 0) {
+      return sortedSchedule.map((data) => {
+        return (
+          <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
+            <TableCell>
+              {data[6]} - {data[7]}
+            </TableCell>
+            {scheduleColumns.map((response) => {
+              return (
+                <TableCell
+                  key={response.id}
+                  sx={{
+                    backgroundColor: conflict(
+                      data[6],
+                      data[7],
+                      data[4],
+                      data[5]
+                    )
+                      ? "#ef9a9a"
+                      : "white",
+                  }}
+                >
+                  {response.id === data[4]
+                    ? data[2] + "-" + data[8]
+                    : response.id === data[5]
+                    ? data[2] + "-" + data[8]
+                    : ""}
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        );
+      });
+    } else {
       return (
-        <TableRow hover role="checkbox" tabIndex={-1} key={data[0]}>
-          <TableCell>
-            {data[6]} - {data[7]}
+        <TableRow>
+          <TableCell align="center" colSpan={9}>
+            No Final Schedule.
           </TableCell>
-          {scheduleColumns.map((response) => {
-            return (
-              <TableCell
-                key={response.id}
-                sx={{
-                  backgroundColor: conflict(data[6], data[7], data[4], data[5])
-                    ? "#ef9a9a"
-                    : "white",
-                }}
-              >
-                {response.id === data[4]
-                  ? data[2] + "-" + data[8]
-                  : response.id === data[5]
-                  ? data[2] + "-" + data[8]
-                  : ""}
-              </TableCell>
-            );
-          })}
         </TableRow>
       );
-    });
+    }
   };
 
   const handleApprovedSchedule = () => {
@@ -112,7 +141,7 @@ const ParentChildSchedulePage = () => {
             </Link>
           </Tooltip>
           <h3 align="center">
-            Approved Schedule for {currentSem.semOrder} AY{" "}
+            Final Schedule for {currentSem.semOrder} AY{" "}
             {currentSem.startingYear} -{currentSem.endingYear}
           </h3>
           <Grid sx={{ flexGrow: 1 }} container spacing={5}>
@@ -122,7 +151,10 @@ const ParentChildSchedulePage = () => {
                   <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer>
                       <Table>
-                        <TableHead align="center">
+                        <TableHead
+                          align="center"
+                          sx={{ backgroundColor: "#ff7961" }}
+                        >
                           <TableRow>
                             <TableCell>Time</TableCell>
                             {scheduleColumns.map((column) => (

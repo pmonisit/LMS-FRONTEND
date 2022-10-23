@@ -127,39 +127,48 @@ const Courses = () => {
   ];
 
   const handleAddToSchedule = async (lectureId) => {
-    let lecture = lecturesBySem.find((data) => data[0] === lectureId);
-    try {
-      await studentLoadService.addClassToSched(lectureId).then((response) => {
-        console.log("success");
-      });
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        alert("Course may have already been deleted.");
-      }
-    }
-    try {
-      await studentLoadService.getMyTempLoad().then((response) => {
-        setMyTempSLoads(response.data);
-      });
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        alert("Course may have already been deleted.");
-      }
-    }
-
-    if (lecture && lecture[16] == 0) {
+    if (enrolledSL.length > 0) {
       onOpenSnackbar({
         open: true,
-        severity: "info",
+        severity: "error",
         message:
-          "There are no more slots for this course. This will be added to your desired schedule.",
+          "You already submitted your final schedule. If you wish to add or remove courses, kindly coordinate with the registrar.",
       });
     } else {
-      onOpenSnackbar({
-        open: true,
-        severity: "success",
-        message: "Added successfully.",
-      });
+      let lecture = lecturesBySem.find((data) => data[0] === lectureId);
+      try {
+        await studentLoadService.addClassToSched(lectureId).then((response) => {
+          console.log("success");
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      }
+      try {
+        await studentLoadService.getMyTempLoad().then((response) => {
+          setMyTempSLoads(response.data);
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          alert("Course may have already been deleted.");
+        }
+      }
+
+      if (lecture && lecture[16] == 0) {
+        onOpenSnackbar({
+          open: true,
+          severity: "info",
+          message:
+            "There are no more slots for this course. This will be added to your desired schedule.",
+        });
+      } else {
+        onOpenSnackbar({
+          open: true,
+          severity: "success",
+          message: "Added successfully.",
+        });
+      }
     }
   };
 

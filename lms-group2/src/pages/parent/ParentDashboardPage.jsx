@@ -10,12 +10,26 @@ const ParentDashboardPage = () => {
   const [childInfo, setChildInfo] = useState([]);
 
   useEffect(() => {
-    accountService.getCurrent().then((response) => {
-      setUser(response.data[0]);
-    });
-    accountService.getCurrentChildInfo().then((response) => {
-      setChildInfo(response.data);
-    });
+    accountService
+      .getCurrent()
+      .then((response) => {
+        setUser(response.data[0]);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Account may have already been deleted.");
+        }
+      });
+    accountService
+      .getCurrentChildInfo()
+      .then((response) => {
+        setChildInfo(response.data);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          alert("Account may have already been deleted.");
+        }
+      });
   }, []);
 
   const handleChildInfo = () => {
