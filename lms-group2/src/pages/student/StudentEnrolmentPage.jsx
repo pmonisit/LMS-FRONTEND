@@ -152,6 +152,7 @@ const StudentEnrolmentPage = () => {
     if (load.length > 0) {
       load.map((data) => {
         sum = sum + data[16];
+        return;
       });
     }
 

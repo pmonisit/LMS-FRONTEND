@@ -697,26 +697,6 @@ const App = () => {
           />
 
           <Route
-            path="/parent/profile/edit/:id"
-            element={
-              accessToken && role === "parent" ? (
-                <EditProfileInfo />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/parent/profile/changePassword/:id"
-            element={
-              accessToken && role === "parent" ? (
-                <ChangePassword />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
             path="/parent/child/grades"
             element={
               accessToken && role === "parent" ? (

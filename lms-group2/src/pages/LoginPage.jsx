@@ -10,6 +10,10 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import FormLabel from "@mui/material/FormLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 // JOI
 import Joi from "joi";
@@ -23,12 +27,22 @@ const LoginPage = ({ onLogin }) => {
     password: "",
   });
 
+  const [visibilityPassword, setVisibilityPassword] = useState(false);
+
   const [errors, setErrors] = useState({});
 
   const schema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().required(),
   });
+
+  const handleClickShowPassword = () => {
+    setVisibilityPassword(!visibilityPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const handleChange = (event) => {
     setForm({ ...form, [event.currentTarget.name]: event.currentTarget.value });
@@ -91,8 +105,25 @@ const LoginPage = ({ onLogin }) => {
                   helperText={errors.password}
                   label="Password"
                   name="password"
-                  type="password"
+                  type={visibilityPassword ? "text" : "password"}
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {visibilityPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>

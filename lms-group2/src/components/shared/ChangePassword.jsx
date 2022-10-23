@@ -31,6 +31,7 @@ const ChangePassword = () => {
   const [form, setForm] = useState({
     oldPassword: "",
     newPassword: "",
+    confirmNewPassword: "",
   });
 
   useEffect(() => {
@@ -85,6 +86,8 @@ const ChangePassword = () => {
           navigate(`/professor/dashboard/${userInfo[0]}`);
         } else if (userInfo[1] === "student") {
           navigate(`/student/dashboard`);
+        } else if (userInfo[1] === "parent") {
+          navigate(`/parent/dashboard`);
         } else {
           navigate(`/`);
         }
