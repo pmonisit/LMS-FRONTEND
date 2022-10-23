@@ -276,7 +276,7 @@ const StudentSchedulePage = () => {
             </Typography>
           </Grid>
           {myEnrolledSLoads.length <= 0 ? (
-            <Grid ref={componentRef}>
+            <Grid>
               <h3 align="center">
                 Desired Schedule for {currentSem.semOrder} AY{" "}
                 {currentSem.startingYear} -{currentSem.endingYear}
@@ -357,7 +357,7 @@ const StudentSchedulePage = () => {
               </Grid>
             </Grid>
           ) : (
-            <Grid>
+            <Grid ref={componentRef}>
               <h3 align="center">
                 Final Schedule for {currentSem.semOrder} AY{" "}
                 {currentSem.startingYear} -{currentSem.endingYear}
