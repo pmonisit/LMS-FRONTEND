@@ -15,10 +15,7 @@ const DegreeForm = ({ initialValue, degreeId }) => {
   const navigate = useNavigate();
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const [errors, setErrors] = useState({});
-  useEffect(() => {
-    console.log(initialValue);
-    console.log(degreeId);
-  });
+
   const adminContext = useContext(AdminContext);
   const [degreeForm, setDegreeForm] = useState(
     initialValue
@@ -75,7 +72,6 @@ const DegreeForm = ({ initialValue, degreeId }) => {
           adminService
             .editDegree(degreeId, degreeForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",
@@ -97,7 +93,6 @@ const DegreeForm = ({ initialValue, degreeId }) => {
           adminService
             .addDegree(degreeForm)
             .then((res) => {
-              console.log(res);
               onOpenSnackbar({
                 open: true,
                 severity: "success",

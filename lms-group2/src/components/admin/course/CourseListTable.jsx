@@ -24,7 +24,6 @@ const CourseListTable = ({ details }) => {
     const fetchCourses = async () => {
       const res = await courseService.getAllCoursesWithDegreeAndTimeSlot();
       setCourses(res.data);
-      console.log(courses);
     };
     fetchCourses();
   }, []);

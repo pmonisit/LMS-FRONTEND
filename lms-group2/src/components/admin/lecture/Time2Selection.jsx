@@ -13,7 +13,6 @@ const Time2Selection = ({ list, form, onSetForm, id, label, time }) => {
       ...form,
       endTime: event.target.value,
     });
-    console.log(event.target.value);
   };
   return (
     <Box sx={{ minWidth: 120 }}>

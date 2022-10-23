@@ -18,8 +18,6 @@ import { AccountFormContext } from "../../../context/admin/account/AccountFormCo
 import { Typography } from "@mui/material";
 
 const LectureFormHolder = ({ initialValue, lectureId }) => {
-  console.log(initialValue);
-
   const navigate = useNavigate();
   const { onOpenSnackbar } = useContext(UserInterfaceContext);
   const params = useParams();
@@ -27,19 +25,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
   const [lectureStep, setLectureStep] = useState(0);
   const lectureSteps = ["Basic Info", "Other Details"];
   const [isEdit, setEdit] = useState(true);
-
-  // const lectureObject = {
-  //   section: initialValue[11],
-  //   courseId: initialValue[1],
-  //   accountId: initialValue[6],
-  //   semesterId: initialValue[19],
-  //   dayOne: initialValue[12],
-  //   dayTwo: initialValue[13],
-  //   startTime: initialValue[14],
-  //   endTime: initialValue[15],
-  //   capacity: initialValue[16],
-  //   desired: initialValue[17],
-  // };
 
   const [lectureForm, setLectureForm] = useState(
     initialValue
@@ -58,7 +43,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
         }
   );
 
-  console.log(lectureForm);
   const handleLectureNext = () => {
     if (lectureStep !== lectureSteps.length - 1) {
       setLectureStep(lectureStep + 1);
@@ -69,7 +53,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
   const handleLecturePrev = () => {
     if (lectureStep > 0) {
       setLectureStep(lectureStep - 1);
-      console.log(lectureStep);
     }
   };
 
@@ -99,14 +82,11 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(lectureForm);
 
           if (adminContext.isEditLecture) {
-            console.log("edit");
             lectureService
               .editLecture(lectureId, lectureForm)
               .then((res) => {
-                console.log(res);
                 onOpenSnackbar({
                   open: true,
                   severity: "success",
@@ -125,7 +105,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
                 }
               });
           } else {
-            console.log("Add");
             handleAddLecture(lectureForm);
             adminContext.onSetIsEditLecture(false);
 
@@ -175,7 +154,6 @@ const LectureFormHolder = ({ initialValue, lectureId }) => {
             <Button
               type="button"
               onClick={(e) => {
-                console.log("prev");
                 handleLecturePrev();
               }}
             >

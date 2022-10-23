@@ -27,7 +27,7 @@ const LectureListTable2 = ({ details }) => {
   useEffect(() => {
     const getLectures = async () => {
       const response = await lectureService.getLecture();
-      console.log(response.data);
+
       setLectures(response.data);
     };
     getLectures();

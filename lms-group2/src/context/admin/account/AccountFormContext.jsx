@@ -109,7 +109,6 @@ export const AccountFormProvider = ({ children }) => {
   const HandlePrev = () => {
     if (step > 0) {
       setStep(step - 1);
-      console.log(step);
     }
   };
 

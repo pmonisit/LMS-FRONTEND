@@ -32,8 +32,6 @@ const CourseListPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
   const handleSearch = () => {
     if (searchText) {
@@ -53,7 +51,7 @@ const CourseListPage = () => {
           //alert("search not found");
         }
       });
-      console.log([filteredList]);
+
       if (filteredList.length > 0) {
         adminContext.onSetCourseList(filteredList);
       } else {

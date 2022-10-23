@@ -12,7 +12,6 @@ const SemesterListPage = () => {
   const adminContext = useContext(AdminContext);
   useEffect(() => {
     adminService.getSemester().then((res) => {
-      console.log(res.data);
       adminContext.onSetSemesterList(res.data);
     });
   }, []);

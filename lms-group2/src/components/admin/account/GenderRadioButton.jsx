@@ -9,7 +9,6 @@ import AccountForm from "./AccountForm";
 export default function GenderRadioButton({ accountForm, onSetAccountForm }) {
   const handleChange = (event) => {
     onSetAccountForm({ ...accountForm, gender: event.target.value });
-    console.log(event.target.value);
   };
 
   return (

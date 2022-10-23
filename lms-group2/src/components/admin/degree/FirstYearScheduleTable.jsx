@@ -28,10 +28,9 @@ const FirstYearScheduleTable = ({
   useEffect(() => {
     const fetchData = async () => {
       const response = await lectureService.getLecturesByDegree(degreeId);
-      console.log(response.data);
+
       setLecturesByDegree(response.data);
 
-      console.log(lecturesByDegree);
       const tempList = lecturesByDegree.filter((data) => {
         if (data[26] == yearNo && data[11] == section) {
           return data;
@@ -43,8 +42,6 @@ const FirstYearScheduleTable = ({
 
     fetchData();
   }, [degreeId, yearNo, section]);
-
-  console.log(adminContext.scheduleList);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

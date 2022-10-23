@@ -39,8 +39,6 @@ const ProfessorListPage = () => {
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
-
-    console.log(searchText);
   };
   const handleSearch = () => {
     if (searchText) {
@@ -60,7 +58,7 @@ const ProfessorListPage = () => {
           //alert("search not found");
         }
       });
-      console.log([filteredList]);
+
       if (filteredList) {
         accountFormContext.onSetProfessorList([filteredList]);
       }
