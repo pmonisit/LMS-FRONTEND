@@ -51,16 +51,17 @@ const AddProfessorForm = () => {
         });
       }}
     >
-      <Grid item xs={12} md={6} sm={6}>
+      <Grid item xs={10} md={3} sm={4}>
         <Card>
-          <CardHeader title="Table" />
+          <CardHeader title="Assign Professor" />
 
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6} sm={6}>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
+              <Grid item xs={10} md={10} sm={10}>
+                <Box>
+                  <FormControl>
                     <InputLabel
+                      fullWidth
                       variant="standard"
                       htmlFor="uncontrolled-native"
                     >
@@ -90,11 +91,12 @@ const AddProfessorForm = () => {
                 </Box>
               </Grid>
             </Grid>
-
-            <CardActions>
-              <Button type="submit">Submit</Button>
-            </CardActions>
           </CardContent>
+          <CardActions>
+            <Button type="submit" fullWidth variant="contained">
+              Submit
+            </Button>
+          </CardActions>
         </Card>
       </Grid>
     </Grid>

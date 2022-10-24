@@ -212,15 +212,45 @@ const Navbar = ({ onLogout }) => {
             <Button color="inherit" LinkComponent={Link} to="/">
               Home
             </Button>
-            <Button color="inherit" LinkComponent={Link} to="/">
-              Announcements
-            </Button>
-            <Button color="inherit" LinkComponent={Link} to="/">
-              About
-            </Button>
-            <Button color="inherit" LinkComponent={Link} to="/">
-              Contact
-            </Button>
+            {role === "admin" ? (
+              <Button
+                color="inherit"
+                onClick={handleCloseUserMenu}
+                LinkComponent={Link}
+                to="/admin/dashboard"
+              >
+                Dashboard
+              </Button>
+            ) : role === "professor" ? (
+              <Button
+                color="inherit"
+                onClick={handleCloseUserMenu}
+                LinkComponent={Link}
+                to={`/professor/dashboard/${user[0]}`}
+              >
+                Dashboard
+              </Button>
+            ) : role === "student" ? (
+              <Button
+                color="inherit"
+                onClick={handleCloseUserMenu}
+                LinkComponent={Link}
+                to="/student/dashboard"
+              >
+                Dashboard
+              </Button>
+            ) : role === "parent" ? (
+              <Button
+                color="inherit"
+                onClick={handleCloseUserMenu}
+                LinkComponent={Link}
+                to="/parent/dashboard"
+              >
+                Dashboard
+              </Button>
+            ) : (
+              ""
+            )}
           </Box>
 
           <Box>
